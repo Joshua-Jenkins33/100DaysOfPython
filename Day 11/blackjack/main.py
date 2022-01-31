@@ -164,30 +164,22 @@ while wantsToPlay == True:
 
     print(f"You cards: {player_points}, current score: {get_score(player_points)}\nComputer's first card: {dealer_points[0]}")
 
-    opponent_blackjack: str = ""
-    player_blackjack: str = ""
-
     continue_game = True
-    if get_score(dealer_points) == 21:
-        opponent_blackjack = "Lose, opponent has Blackjack 😱"
+    if get_score(dealer_points) == 21 or get_score(player_points) == 21:
         continue_game = False
     while continue_game == True:
-        if get_score(player_points) == 21:
-            player_blackjack = "Win with a Blackjack 😎"
-            continue_game = False
-        if input("Type 'y' to get another card, type 'n' to pass: ") == 'y':
-            player_points.append(get_card())
-            calculate_aces(player_points)
-            print(f"You cards: {player_points}, current score: {get_score(player_points)}\nComputer's first card: {dealer_points[0]}")
+        if get_score(player_points) < 21:
+            if input("Type 'y' to get another card, type 'n' to pass: ") == 'y':
+                player_points.append(get_card())
+                calculate_aces(player_points)
+                print(f"You cards: {player_points}, current score: {get_score(player_points)}\nComputer's first card: {dealer_points[0]}")
+            else:
+                continue_game = False
         else:
             continue_game = False
 
     print(f"Your final hand: {player_points}, final score: {get_score(player_points)}")
     print(f"Dealer's final hand: {dealer_points}, final score {get_score(dealer_points)}")
-    if len(opponent_blackjack) > 1:
-        print(opponent_blackjack)
-    if len(player_blackjack) > 1:
-        print(player_blackjack)
     print(get_results(player_points, dealer_points))
 
 
@@ -196,12 +188,3 @@ while wantsToPlay == True:
 
 if wantsToPlay == False:
     print("Come back and play again later!")
-
-""" 
-
-Need to specify what happens when there's a tie. 
-
-Need to autoclose if player goes over.
-- Use the while loop to check the score
-
-"""
