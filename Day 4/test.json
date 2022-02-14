@@ -1,0 +1,724 @@
+[
+    {
+      "Class": "Sorcerer",
+      "subclass": "Blood Sorcery",
+      "counters": [
+        {
+          "name": "Blood is Power",
+          "level": 1,
+          "value": 1,
+          "reset": "long",
+          "display": "bubble",
+          "classLevel": "SorcererLevel",
+          "desc": "Whenever you expend one or more Hit Dice gained from the Sorcerer class, you may regain an equivalent number of Sorcery Points, up to a maximum equal to your Charisma modifier (minimum 1, maximum {charismaMod}). Once you have regained Sorcery Points in this way you must complete a long rest before you can use this feature again. You can never have more sorcery points than shown on the table for your level."
+        },
+        {
+          "name": "Out for Blood",
+          "level": 14,
+          "value": 5,
+          "reset": "long",
+          "display": "bubble",
+          "classLevel": "SorcererLevel",
+          "desc": "Starting at 14th level, whenever you cast a spell that deals damage that is 5th level or lower, you can wound yourself to increase the damage dealt. You may spend HD equal to the spell's level in order to deal maximum damage with that spell.\n\nThe first time you do so, you suffer no adverse effect. If you use this feature again before you finish a long rest, you take 1d12 necrotic damage for each level of the spell, immediately after you cast it. Each time you use this feature again before finishing a long rest, the necrotic damage per spell level increases by 1d12. This damage ignores resistance and immunity."
+        },
+        {
+          "name": "Avatar of Blood",
+          "level": 18,
+          "value": 1,
+          "reset": "long",
+          "display": "bubble",
+          "classLevel": "SorcererLevel",
+          "desc": "At 18th level, your mastery of your own blood allows you to transform, as a bonus action, into a monstrosity of swirling blood. The instant you transform hostile creatures within 60 feet of you that can see you must each succeed on Charisma saving throw (DC 8 + your proficiency bonus + your Charisma modifier) or become frightened of you for the duration of your transformation.\n\nYour transformation lasts for 1 minute or until you end it as a bonus action.\n\nOnce you use this feature, you can’t use it again until you finish a long rest."
+        }
+      ]
+    },
+    {
+      "Class": "Siverain",
+      "hitDie": "d8",
+      "subClassLevel": 1,
+      "counters": [
+        {
+          "name": "Flow Points",
+          "level": 3,
+          "value": "SiverainLevel",
+          "reset": "long",
+          "display": "",
+          "classLevel": "SiverainLevel"
+        }
+      ]
+    },
+    {
+      "Class": "Siverain",
+      "subclass": "Jed'ah",
+      "counters": [
+        {
+          "name": "Tutanimus",
+          "level": 6,
+          "value": "proficiencyBonus",
+          "reset": "long",
+          "display": "bubble",
+          "classLevel": "SiverainLevel"
+        },
+        {
+          "name": "Cleanse The Mind",
+          "level": 11,
+          "value": "proficiencyBonus",
+          "reset": "long",
+          "display": "bubble",
+          "classLevel": "SiverainLevel"
+        },
+        {
+          "name": "Revitalize",
+          "level": 17,
+          "value": 1,
+          "reset": "",
+          "display": "",
+          "classLevel": "SiverainLevel"
+        }
+      ]
+    },
+    {
+      "Class": "Siverain",
+      "subclass": "Sith'ari",
+      "counters": [
+        {
+          "name": "Choking Flow",
+          "level": 1,
+          "value": 1,
+          "reset": "short",
+          "display": "bubble",
+          "classLevel": "SiverainLevel"
+        },
+        {
+          "name": "Smoldering Rage",
+          "level": 6,
+          "value": "proficiencyBonus",
+          "reset": "long",
+          "display": "bubble",
+          "classLevel": "SiverainLevel"
+        },
+        {
+          "name": "Maelstrom of Fury",
+          "level": 17,
+          "value": 1,
+          "reset": "long",
+          "display": "bubble",
+          "classLevel": "SiverainLevel"
+        }
+      ]
+    },
+    {
+      "Class": "Siverain",
+      "subclass": "Matua Ka'i",
+      "counters": []
+    },
+    {
+      "Class": "Siverain",
+      "subclass": "Zeino'sha",
+      "counters": [
+        {
+          "name": "Grit and Determination",
+          "level": 6,
+          "value": 1,
+          "reset": "long",
+          "display": "bubble",
+          "classLevel": "SiverainLevel"
+        },
+        {
+          "name": "Telekinetic Mastery",
+          "level": 17,
+          "value": "proficiencyBonus",
+          "reset": "long",
+          "display": "bubble",
+          "classLevel": "SiverainLevel"
+        }
+      ]
+    },
+    {
+      "Class": "Savant",
+      "hitDie": "d8",
+      "subClassLevel": 3,
+      "counters": [
+        {
+          "name": "Unyielding Mind",
+          "level": 2,
+          "value": "intelligenceMod",
+          "reset": "short",
+          "display": "bubble",
+          "classLevel": "SavantLevel"
+        }
+      ]
+    },
+    {
+      "Class": "Savant",
+      "subclass": "Archaeologist",
+      "counters": []
+    },
+    {
+      "Class": "Savant",
+      "subclass": "Investigator",
+      "counters": [
+        {
+          "name": "Master Investigator",
+          "level": 17,
+          "value": 1,
+          "reset": "short",
+          "display": "bubble",
+          "classLevel": "SavantLevel"
+        }
+      ]
+    },
+    {
+      "Class": "Savant",
+      "subclass": "Naturalist",
+      "counters": [
+        {
+          "name": "Call of the Wild",
+          "level": 13,
+          "value": "intelligenceMod",
+          "reset": "long",
+          "display": "bubble",
+          "classLevel": "SavantLevel"
+        }
+      ]
+    },
+    {
+      "Class": "Savant",
+      "subclass": "Physician",
+      "counters": [
+        {
+          "name": "Advanced Combat Medic",
+          "level": 13,
+          "value": "intelligenceMod",
+          "reset": "long",
+          "display": "bubble",
+          "classLevel": "SavantLevel"
+        }
+      ]
+    },
+    {
+      "Class": "Savant",
+      "subclass": "Tactician",
+      "counters": []
+    },
+    {
+      "Class": "Sorcerer",
+      "subclass": "Stone Sorcery",
+      "counters": []
+    },
+    {
+      "Class": "Sorcerer",
+      "subclass": "Worm Sorcery",
+      "counters": [
+          {
+              "name": "Swarm Form",
+              "level": 1,
+              "value": 1,
+              "reset": "short",
+              "display": "bubble",
+              "classLevel": "SorcererLevel",
+              "desc": "You can discorporate your body into a swarm of worms as a bonus action. You take on the characteristics of a Swarm of Worms (as shown in this document). Some of the swarm form's statistics are based on your Proficiency Bonus (PB), as shown in the [creature stat block](https://www.worldanvil.com/sheet/870943/view). You cannot cast spells while in swarm form, and any equipment you are wearing or carrying merges with your swarm form. You return to your humanoid form when your swarm form is reduced to 0 hit points, and any damage in excess of your swarm form's hit points is deducted from your hit points. You also revert after 10 minutes, or as an action on your turn. Once you have used this feature, you cannot use it again until you finish a short or long rest."
+          },
+          {
+              "name": "Commune with the Hive Mind",
+              "level": 6,
+              "value": 1,
+              "reset": "long",
+              "display": "bubble",
+              "classLevel": "SorcererLevel",
+              "desc": "You can cast [commune with nature](https://www.dndbeyond.com/spells/commune-with-nature) once using a Sorcerer spell slot. You cannot cast it again until you finish a long rest. These spells are Sorcerer spells for you, but do not count toward your spells known."
+          },
+          {
+              "name": "Mutable Form",
+              "level": 14,
+              "value": 1,
+              "reset": "long",
+              "display": "bubble",
+              "classLevel": "SorcererLevel",
+              "desc": "At 14th level, you can dissemble and reassemble the worms that make up your body into new shapes. You can cast [polymorph](https://www.dndbeyond.com/spells/polymorph), targeting yourself, once per long rest without expending a spell slot. More worms are summoned to you to compensate for larger forms, and similarly, some worms are dismissed when you take on a smaller form."
+          }
+      ]
+    },
+    {
+      "Class": "Sorcerer",
+      "subclass": "Possessed Sorcery",
+      "counters": [
+          {
+              "name": "Empty Vessel",
+              "level": 1,
+              "value": 1,
+              "reset": "short",
+              "display": "bubble",
+              "classLevel": "SorcererLevel",
+              "desc": "Starting at 1st level, following a short or long rest you can pull a being from another plane of existence into your body. The being is trapped in your body until you release it, you die, or you capture a new being at which point the previous one dissipates and returns back to where it was taken from. While trapped the being cannot be detected, cannot be targeted or affected by any abilities, and is Unconcious. Occasionally, your disposition may be more similar to the type of being trapped in your body than your own."
+          },
+          {
+              "name": "Empty Vessel: Celestial",
+              "level": 1,
+              "value": 1,
+              "reset": "long",
+              "display": "bubble",
+              "classLevel": "SorcererLevel",
+              "desc": "The Celestial choice for this feature is not limited to true Celestials, but open to any good-aligned being. The power of good allows you to aid those in need. As a bonus action, you can spend one sorcery point for a creature of your choice, within 60 feet of yourself, to regain hit points equal to 1d4 + your spellcasting ability modifier. This ability has no effect on undead or constructs. Once you have used the special ability of one type of possessed being, you cannot use the ability from the same type again until you finish a long rest."
+          },
+          {
+              "name": "Empty Vessel: Fiend",
+              "level": 1,
+              "value": 1,
+              "reset": "long",
+              "display": "bubble",
+              "classLevel": "SorcererLevel",
+              "desc": "When it comes to possession and manipulation, fiends have the most experience of any other beings. When you trap a fiend, choose either Abyssal or Infernal as your bonus language based on the type of Fiend trapped. Whenever you cast a spell from the school of enchantment, you can spend one sorcery point to impose disadvantage on the saving throw of a single target, even if the spell targets more than one creature. Once you have used the special ability of one type of possessed being, you cannot use the ability from the same type again until you finish a long rest."
+          },
+          {
+              "name": "Empty Vessel: Spirit",
+              "level": 1,
+              "value": 1,
+              "reset": "long",
+              "display": "bubble",
+              "classLevel": "SorcererLevel",
+              "desc": "Spirits come in many forms, choose one language that the spirit possessing you would know. As an action, you can consume the spirit within you, destroying it forever. You lose all passive bonuses from the spirit and regain a number of sorcery points equal to your proficiency bonus, never exceeding the maximum allowed as shown in the Sorcery Points column of the Sorcerer table. Once you have used the special ability of one type of possessed being, you cannot use the ability from the same type again until you finish a long rest."
+          },
+          {
+              "name": "Empty Vessel: Horror",
+              "level": 1,
+              "value": 1,
+              "reset": "long",
+              "display": "bubble",
+              "classLevel": "SorcererLevel",
+              "desc": "Horrors are alien in nature and truly insane. You have the ability to temporarily transform into a being of inky shadows and jump to another location before returning to your normal self. As a bonus action, you can spend one sorcery point to teleport up to 30ft to unoccupied space you can see. Once you have used the special ability of one type of possessed being, you cannot use the ability from the same type again until you finish a long rest."
+          },
+          {
+              "name": "Possessed Memory",
+              "level": 6,
+              "value": [0,0,0,0,0,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2],
+              "reset": "short",
+              "display": "bubble",
+              "classLevel": "SorcererLevel",
+              "desc": "Starting at 6th level, you can recall some magic seen by the being within you. Each time you take a new being within you using the Empty Vessel feature, choose a 1st level or higher spell from the Sorcerer, Warlock, or Wizard spell list. A spell you choose must be of a level you can cast, as shown on the Sorcerer table. The chosen spell counts as a sorcerer spell for you but does not count towards your spells known. You learn the spell until the time that the being is released by any means. Once the being is released, the spell is instantly removed from your spells known list. You learn one additional spell at 14th level. Once you cast that spell, you can't cast it again until you finish a long rest."
+          },
+          {
+              "name": "Possessed Memory: Various Spells",
+              "level": 6,
+              "value": [0,0,0,0,0,4,4,4,4,4,4,4,8,8,8,8,8,8,8,8],
+              "reset": "long",
+              "display": "bubble",
+              "classLevel": "SorcererLevel",
+              "desc": "This counter represens each of the spells available to you throughout the day by means of possessing new spirits."
+          },
+          {
+              "name": "Spirit Surge",
+              "level": 14,
+              "value": 1,
+              "reset": "long",
+              "display": "bubble",
+              "classLevel": "SorcererLevel",
+              "desc": "Beginning at 14th level, you are able to manipulate and trick one of the beings trapped in your body into believing that it has a chance to escape. As an action, the being releases horrific screams, and a burst of energy as it desperately fights for it's chance at freedom. Each creature you choose within 60 feet of you must succeed on a Constitution saving throw or take 10d8 damage and be knocked prone. The damage type is based on the Spirit Surge column found on the Possession table. A creature that succeeds it's saving throw takes half damage and isn't knocked prone. All creatures within 60 feet of you are deafened. Roll 1d6, and on a roll of a 1 the spirit escapes. At 18th level, the damage increases to 12d8. Once you use this feature, you can't use it again until you finish a long rest."
+          },
+          {
+              "name": "Spirit Leap",
+              "level": 18,
+              "value": 1,
+              "reset": "long",
+              "display": "bubble",
+              "classLevel": "SorcererLevel",
+              "desc": "Once you use this [feature](https://www.worldanvil.com/w/new-world---dragonsmoke-archipelago-mortambo/a/j25-sorcerer-subclass3A-the-possessed-article#spirit-leap), you can't use it again until you finish a long rest in your own body."
+          }
+      ]
+    },
+    {
+      "Class": "Wizard",
+      "subclass": "Onomancy",
+      "counters": [
+          {
+              "name": "Extract Name",
+              "level": 2,
+              "value": "intelligenceMod",
+              "reset": "long",
+              "display": "bubble",
+              "classLevel": "WizardLevel",
+              "desc": "You can magically compel a creature to divulge its true name. As a bonus action, you target one creature you can see within 60 feet of you. The target must make a Wisdom saving throw against your spell save DC. On a successful save, you discern that this magic failed, and you can't use this feature on the target again. On a failed save, the target is charmed by you until the end of your next turn, and you mentally learn the charmed target's name or the fact that the target lacks a name.   You can use this feature a number of times equal to your Intelligence modifier (minimum of once), and you regain all expended uses of it when you finish a long rest."
+          },
+          {
+              "name": "Fateful Naming",
+              "level": 2,
+              "value": "intelligenceMod",
+              "reset": "long",
+              "display": "bubble",
+              "classLevel": "WizardLevel",
+              "desc": "You can bend magic to assist or hinder creatures through the power of their true names, and even use those names as an anchor to affect others around them. The bane and bless spells are wizard spells for you, and you add them to your spellbook. You always have them prepared, yet they don't count against the number of spells you can prepare.   You can cast either spell without expending a spell slot if you speak the true name of one target of the spell as part of casting it. You can cast the spells in this way a number of times equal to your Intelligence modifier (a minimum of once), and you regain all expended uses when you finish a long rest."
+          },
+          {
+              "name": "Resonant Utterance",
+              "level": 6,
+              "value": [0,0,0,0,0,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10],
+              "reset": "long",
+              "display": "bubble",
+              "classLevel": "WizardLevel",
+              "desc": "**Using a Resonant.** You can use one Resonant when you cast a wizard spell with a spell slot and speak the true name of one creature targeted by the spell. Speaking the name is part of casting the spell. You can use Resonants a number of times equal to half of your wizard level (round down), and you regain all expended uses when you finish a long rest."
+          }
+      ]
+    },
+    {
+      "Class": "Expert4",
+      "hitDie": "d4",
+      "subClassLevel": 0,
+      "counters": []
+    },
+    {
+      "Class": "Expert6",
+      "hitDie": "d6",
+      "subClassLevel": 0,
+      "counters": []
+    },
+    {
+      "Class": "Expert8",
+      "hitDie": "d8",
+      "subClassLevel": 0,
+      "counters": []
+    },
+    {
+      "Class": "Expert10",
+      "hitDie": "d10",
+      "subClassLevel": 0,
+      "counters": []
+    },
+    {
+      "Class": "Spellcaster4",
+      "hitDie": "d4",
+      "subClassLevel": 0,
+      "counters": []
+    },
+    {
+      "Class": "Spellcaster6",
+      "hitDie": "d6",
+      "subClassLevel": 0,
+      "counters": []
+    },
+    {
+      "Class": "Spellcaster8",
+      "hitDie": "d8",
+      "subClassLevel": 0,
+      "counters": []
+    },
+    {
+      "Class": "Spellcaster10",
+      "hitDie": "d10",
+      "subClassLevel": 0,
+      "counters": []
+    },
+    {
+      "Class": "Warrior4",
+      "hitDie": "d4",
+      "subClassLevel": 0,
+      "counters": [
+          {
+              "name": "Second Wind",
+              "level": 2,
+              "value": [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
+              "reset": "short",
+              "display": "bubble",
+              "classLevel": "Warrior4Level",
+              "desc": "The sidekick can use a bonus action on its turn to regain hit points equal to 1d10 + its level in this class. Once it uses this feature, it must finish a short or long restr before it can use it again.\n\nThe sidekick can use this feature twice between rests starting at 20th level."
+          },
+          {
+              "name": "Indomitable",
+              "level": 11,
+              "value": [0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,2,2,2],
+              "reset": "long",
+              "display": "bubble",
+              "classLevel": "Warrior4Level",
+              "desc": "The sidekick can reroll a saving throw that it fails, but it must use the new roll. When it uses this feature, it can't use the feature again until it finishes a long rest.\n\nThe sidekick can use this feature twice between long rests starting at 18th level."
+          }
+      ]
+    },
+    {
+      "Class": "Warrior6",
+      "hitDie": "d6",
+      "subClassLevel": 0,
+      "counters": [
+          {
+              "name": "Second Wind",
+              "level": 2,
+              "value": [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
+              "reset": "short",
+              "display": "bubble",
+              "classLevel": "Warrior6Level",
+              "desc": "The sidekick can use a bonus action on its turn to regain hit points equal to 1d10 + its level in this class. Once it uses this feature, it must finish a short or long restr before it can use it again.\n\nThe sidekick can use this feature twice between rests starting at 20th level."
+          },
+          {
+              "name": "Indomitable",
+              "level": 11,
+              "value": [0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,2,2,2],
+              "reset": "long",
+              "display": "bubble",
+              "classLevel": "Warrior6Level",
+              "desc": "The sidekick can reroll a saving throw that it fails, but it must use the new roll. When it uses this feature, it can't use the feature again until it finishes a long rest.\n\nThe sidekick can use this feature twice between long rests starting at 18th level."
+          }
+      ]
+    },
+    {
+      "Class": "Warrior8",
+      "hitDie": "d8",
+      "subClassLevel": 0,
+      "counters": [
+          {
+              "name": "Second Wind",
+              "level": 2,
+              "value": [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
+              "reset": "short",
+              "display": "bubble",
+              "classLevel": "Warrior8Level",
+              "desc": "The sidekick can use a bonus action on its turn to regain hit points equal to 1d10 + its level in this class. Once it uses this feature, it must finish a short or long restr before it can use it again.\n\nThe sidekick can use this feature twice between rests starting at 20th level."
+          },
+          {
+              "name": "Indomitable",
+              "level": 11,
+              "value": [0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,2,2,2],
+              "reset": "long",
+              "display": "bubble",
+              "classLevel": "Warrior8Level",
+              "desc": "The sidekick can reroll a saving throw that it fails, but it must use the new roll. When it uses this feature, it can't use the feature again until it finishes a long rest.\n\nThe sidekick can use this feature twice between long rests starting at 18th level."
+          }
+      ]
+    },
+    {
+      "Class": "Warrior10",
+      "hitDie": "d10",
+      "subClassLevel": 0,
+      "counters": [
+          {
+              "name": "Second Wind",
+              "level": 2,
+              "value": [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
+              "reset": "short",
+              "display": "bubble",
+              "classLevel": "Warrior10Level",
+              "desc": "The sidekick can use a bonus action on its turn to regain hit points equal to 1d10 + its level in this class. Once it uses this feature, it must finish a short or long restr before it can use it again.\n\nThe sidekick can use this feature twice between rests starting at 20th level."
+          },
+          {
+              "name": "Indomitable",
+              "level": 11,
+              "value": [0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,2,2,2],
+              "reset": "long",
+              "display": "bubble",
+              "classLevel": "Warrior10Level",
+              "desc": "The sidekick can reroll a saving throw that it fails, but it must use the new roll. When it uses this feature, it can't use the feature again until it finishes a long rest.\n\nThe sidekick can use this feature twice between long rests starting at 18th level."
+          }
+      ]
+    },
+    {
+      "Class": "Rager",
+      "hitDie": "d12",
+      "subClassLevel": 0,
+      "counters": [
+          {
+              "name":"Rage",
+              "level":1,
+              "value":[1,1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,4,4,4],
+              "reset":"long",
+              "display":"bubble",
+              "classLevel":"RagerLevel",
+              "desc":"On your turn, you can enter a rage as a bonus action.\n\nWhile raging, you gain the following benefits if you aren't wearing heavy armor:\n\n- You have advantage on Strength checks and Strength saving throws.\n- When you make a melee weapon attack using Strength, you gain a bonus to the damage roll that increases as you gain levels as a rager, as shown in the Rage Damage column of the Rager table.\n- You have resistance to bludgeoning, piercing, and slashing damage.\n\nIf you are able to cast spells, you can't cast them or concentrate on them while raging.\n\nYour rage lasts for 1 minute. It ends early if you are knocked unconscious or if your turn ends and you haven't attacked a hostile creature since your last turn or taken damage since then. You can also end your rage on your turn as a bonus action.\n\nOnce you have raged the number of times shown for your barbarian level in the Rages column of the [Rager](https://discord.com/channels/733841578174447717/759173152689094666/869991000356057100) table, you must finish a long rest before you can rage again."
+          },
+          {
+              "name": "Second Wind",
+              "level": 2,
+              "value": [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
+              "reset": "short",
+              "display": "bubble",
+              "classLevel": "Warrior10Level",
+              "desc": "The sidekick can use a bonus action on its turn to regain hit points equal to 1d10 + its level in this class. Once it uses this feature, it must finish a short or long restr before it can use it again.\n\nThe sidekick can use this feature twice between rests starting at 20th level."
+          },
+          {
+              "name": "Indomitable",
+              "level": 11,
+              "value": [0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,2,2,2],
+              "reset": "long",
+              "display": "bubble",
+              "classLevel": "Warrior10Level",
+              "desc": "The sidekick can reroll a saving throw that it fails, but it must use the new roll. When it uses this feature, it can't use the feature again until it finishes a long rest.\n\nThe sidekick can use this feature twice between long rests starting at 18th level."
+          }
+      ]
+    },
+    {
+      "Class": "Dragoon",
+      "hitDie": "d10",
+      "subClassLevel": 3,
+      "counters": [
+          {
+              "name": "Vault Distance",
+              "level": 1,
+              "value": [10,10,10,20,20,30,30,40,40,50,50,60,60,70,70,80,80,90,90,100],
+              "reset": "none",
+              "display": "default",
+              "classLevel": "DragoonLevel",
+              "desc": "Starting at 1st level, while you are not wearing heavy armor, you may use your bonus action to launch yourself into the air up to a height equal to your Vault Distance. While using Vault, you gain the following benefits:\n\n-You may move up to Vault distance feet horizontally before returning to the ground in an unoccupied space. If there is no unoccupied space you return to your original location.\n-Attacks of opportunity are made at disadvantage if you leave a creatures space when using Vault.\n\nThe maximum height you can Vault increases as you gain levels in this class, as shown in the Dragoon table. Additionally, you take half damage for falls of a distance lower than your Vault Height while you are conscious. At 10th level, you take no fall damage instead of half."
+          },
+          {
+              "name": "Aerial Assault",
+              "level": 3,
+              "value": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,100],
+              "reset": "long",
+              "display": "default",
+              "classLevel": "DragoonLevel",
+              "desc": "Starting at 3rd level, as part of your vault, you may make a melee attack while wielding a polearm at some point during the vault. If you’re able to make multiple attacks with the Attack action, the other attacks resolve as normal after the vault.\n\nOn a hit, you take no fall damage and the target takes an additional 1d4 damage for every 10 feet you fell. This bonus damage increases to 1d6 at 9th level and 1d8 at 14th level.\n\nYou may use this feature a number of times equal to your dragoon level. You regain all expended uses when you finish a long rest."
+          },
+          {
+              "name": "Lancet",
+              "level": 6,
+              "value": [0,0,0,0,0,1,1,1,1,1,1,2,2,2,2,2,2,3,3,3],
+              "reset": "short",
+              "display": "bubble",
+              "classLevel": "DragoonLevel",
+              "desc": "Starting at level 6, when you take the Attack action on your turn using a polearm, you may replace one of the attacks with a Lancet attack. On a hit, the attack deals normal damage, and you recover hit points equal to the polearm's damage + your Dragoon level + Constitution modifier. You have one use of this ability, and you gain an additional use of this ability at 12th level in this class, and a third uses of this ability at 18th level in this class. You regain all uses of this ability after a short or long rest."
+          }
+      ]
+    },
+    {
+      "Class": "Dragoon",
+      "subclass": "Dragon Master",
+      "counters": [
+        {
+          "name": "Spirit Link",
+          "level": 7,
+          "value": 1,
+          "reset": "short",
+          "display": "bubble",
+          "classLevel": "DragoonLevel",
+          "desc": "Your link with your dragon grows stronger enabling you to transfer your spiritual essence into it and its essence to you.\n\nStarting at the 7th level, you gain the following features:\n\nYour dragon companion attacks become fused with magic, and its bite attack now is considered a magic weapon.\nYou can use your bonus action and expend a hit die to have your dragon companion regain hit points equal to 1d10 + your dragoon level. You can use this feature twice. You regain all expended uses when you finish a long rest.\nAs an action, you can use the feature listed in Apendix B based on the type of dragon companion you have.\n\nOnce you use this feature, you must finish a short or long rest before you can use it again."
+        }
+      ]
+    },
+    {
+      "Class": "Dragoon",
+      "subclass": "Dragon's Soul",
+      "counters": [
+        {
+          "name": "Penta Thrust",
+          "level": 7,
+          "value": 1,
+          "reset": "short",
+          "display": "bubble",
+          "classLevel": "DragoonLevel",
+          "desc": "At 7th level You strike all creatures in a 15 foot cone in front of you. Each creature in the targeted area must make a Dexterity saving throw, taking 5d6 damage (type dependent on weapon choice) on a failed save, or half as much on a successful one. At 15th level, this damage is increased to 5d8.\n\nOnce you use this feature, you must finish a short or long rest before you can use it again."
+        }
+      ]
+    },
+    {
+      "Class": "Dragoon",
+      "subclass": "Dragon's Blood",
+      "counters": [
+        {
+          "name": "Ancient Circle",
+          "level": 7,
+          "value": [0,0,0,0,0,0,1,1,1,1,1,1,1,1,2,2,2,2,2,2],
+          "reset": "short",
+          "display": "bubble",
+          "classLevel": "DragoonLevel",
+          "desc": "You have developed defensive magic to protect you and those around you from a dragon's breath attack by drawing out (incomplete)...\n\nBeginning at 7th level, when you are subjected to a spell or ability which you can see that requires a Dexterity saving throw and targets more than one creature, as a reaction, you can grant every creature within ten feet of you resistance to one damage type dealt by the effect until the end of your next turn. This resistance can be applied to the damage dealt by the triggering effect.\n\nOnce you use this feature, you can’t use it again until you finish a short or long rest. Beginning at 15th level, level, the radius increases to 30 feet and you can use your Ancient Circle twice between rests."
+        },
+        {
+            "name": "Dragon Shape",
+            "level": 17,
+            "value": 1,
+            "reset": "long",
+            "display": "bubble",
+            "classLevel": "DragoonLevel",
+            "desc": "At level 17 the you unlease your true potential and are able to take on the from of an Adult Dragon of your chosen dragon type. The transformation lasts for 1 hour, and the following rules apply while using Dragon Shape:\n\nYour game statistics are replaced by the statistics of the dragon, but you retain your alignment, personality, and Intelligence, Wisdom, and Charisma scores. You also retain all of your skill and saving throw proficiencies, in addition to gaining those of the creature. If the creature has the same proficiency as you and the bonus in its stat block is higher than yours, use the creature’s bonus instead of yours. If the creature has any legendary or lair actions, you can’t use them.\nWhen you transform, you assume the dragon’s hit points and Hit Dice. When you revert to your normal form, you return to the number of hit points you had before you transformed. However, if you revert as a result of dropping to 0 hit points, any excess damage carries over to your normal form. For example, if you take 10 damage in dragon form and have only 1 hit point left, you revert and take 9 damage. As long as the excess damage doesn’t reduce your normal form to 0 hit points, you aren’t knocked unconscious.\nYou can cast your dragoon spells while using dragon Shape. You can perform the somatic and verbal components of a dragoon spell while in a beast shape, and the draconic runes are inscribed in your scales.\nYou retain the benefit of any features from your class, race, or other source and can use them if the new form is physically capable of doing so. However, you can’t use any of your special senses, such as darkvision, unless your new form also has that sense.\nYou choose whether your equipment falls to the ground in your space, merges into your dragon form, or is worn by it. Worn equipment functions as normal, but the DM decides whether it is practical for the new form to wear a piece of equipment, based on the creature’s shape and size. Your equipment doesn’t change size or shape to match the new form, and any equipment that the new form can’t wear must either fall to the ground or merge with it. Equipment that merges with the form has no effect until you leave the form.\n\nOnce you use this feature, you must finish a long rest before you can use it again."
+        }
+      ]
+    },
+    {
+      "Class": "Wildkeeper",
+      "hitDie": "d8",
+      "subClassLevel": 1,
+      "counters": [
+          {
+              "name": "Natural Luck",
+              "level": 13,
+              "value": [0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,2,2,2,2],
+              "reset": "long",
+              "display": "bubbble",
+              "classLevel": "WildkeeperLevel",
+              "desc": "You can reroll any roll that your wildbond makes. If you do so, you must use the new roll. Once you use this feature to turn a failure into a sucess, you must finish a long rest before you can do so again.\n\nYou can use this feature twice between long rests starting at 17th level."
+          }
+      ]
+    },
+    {
+      "Class": "Wildkeeper",
+      "subclass": "Spirit of the Dark",
+      "counters": [
+        {
+          "name": "Life Sapper",
+          "level": 14,
+          "value": "wisdomMod",
+          "reset": "long",
+          "display": "bubble",
+          "classLevel": "WildkeeperLevel",
+          "desc": "You have fully bonded with the spirit of the dark. You and your wildbond gain immunity to necrotic damage.\n\nAdditoinally, when you or your wildbond have advantage on an attack, you can choose to forgo that advantage. If the attack hits, it deals an additional 2d8 necrotic damage and you or your wildbond (your choice) regain hit points equal to the necrotic damage dealt.\n\nYou can use this feature a number of times equal to your Wisdom modifier (a minimum of once). You regain any expended uses when you finish a long rest."
+        }
+      ]
+    },
+    {
+      "Class": "Wildkeeper",
+      "subclass": "Spirit of the Elements",
+      "counters": [
+        {
+          "name": "Environmental Fluidity",
+          "level": 14,
+          "value": 1,
+          "reset": "long",
+          "display": "bubble",
+          "classLevel": "WildkeeperLevel",
+          "desc": "You and your wildbond now gain immunity instead of resistance to the damage type you chose as a part of Primordial Defense.\n\nIn addition, you can cast a spell of 1st level or higher once without expending a spell slot if the spell deals the damage type you last chose for Primordial Defense.\n\nOnce you use this feature to cast a spell, you can't use it again until you finish a long rest."
+        }
+      ]
+    },
+    {
+      "Class": "Wildkeeper",
+      "subclass": "Spirit of the Giant",
+      "counters": [
+        {
+          "name": "Grant Power",
+          "level": 14,
+          "value": 1,
+          "reset": "short",
+          "display": "bubble",
+          "classLevel": "WildkeeperLevel",
+          "desc": "As an action, you can command your wildbond to enhance its size and power dramatically for 1 minute. This effect ends early if your wildbond is reduced to 0 hit points or if you dismiss it as a bonus action on your turn. While the transformation is active, your wildbond gains the following benefits:\n\nIts size increases to Gargantuan.\nIt gains temporary hit points equal to your Wisdom modifier (minimum of one) at the start of each of your turns.\nIts AC increases by 2, and it has advantage on Strength and Constitution saving throws.\nIts natural weapon attack's reach increases to 15 feet.\n\nOnce you use this ability, you can't use it again until you finish a short or long rest."
+        }
+      ]
+    },
+    {
+      "Class": "Wildkeeper",
+      "subclass": "Spirit of War",
+      "counters": [
+        {
+          "name": "Ferocious",
+          "level": 1,
+          "value": 1,
+          "reset": "short",
+          "display": "bubble",
+          "classLevel": "WildkeeperLevel",
+          "desc": "You have learned to strike in tandem with your wildbond. If you have advantage on a melee weapon attack, you can choose to forego that advantage to instead allow your wildbond to make one attack at the same time as you.\n\nYou can use this feature once, and regain the ability to do so when you roll initiative again, or when you finish a short or long rest."
+        }
+      ]
+    },
+    {
+      "Class": "Wildkeeper",
+      "subclass": "Spirit of the Wild",
+      "counters": [
+        {
+          "name": "Mark of the Wild",
+          "level": 11,
+          "value": "proficiencyBonus",
+          "reset": "long",
+          "display": "bubble",
+          "classLevel": "WildkeeperLevel",
+          "desc": "When you hit a creature with a weapon attack, you can choose to mark it for your wildbond for 1 minute. The first time your wildbond hits that creature on each of your turns for the duration, you can increase the attack's damage by 1d6.\n\nYou can use this feature to mark an enemy a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest."
+        }
+      ]
+    }
+  ]
+  
