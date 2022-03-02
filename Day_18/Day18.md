@@ -137,3 +137,11 @@ list(my_tuple)
 ```
 
 The above command lets you change your tuple by accessing it.
+
+---
+
+# Day 18 Project: Hirst Painting
+
+Use the `colorgram.py` module found [here](https://pypi.org/project/colorgram.py/).
+
+Search of `hirst spot painting`
