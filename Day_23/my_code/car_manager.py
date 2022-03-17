@@ -22,8 +22,10 @@ class CarManager():
 
     
     def create_car(self):
-      new_car = Car(randint(-300, 300))
-      self.cars.append(new_car)
+      probability = randint(1,5)
+      if probability == 1:
+        new_car = Car(randint(-200, 200))
+        self.cars.append(new_car)
 
 
 class Car(Turtle):
@@ -31,7 +33,7 @@ class Car(Turtle):
     super().__init__()
     self.car_position = position
     self.shape(name="square")
-    self.shapesize(stretch_wid=2)
+    self.shapesize(stretch_wid=1, stretch_len=3)
     self.color(choice(COLORS))
     self.penup()
     self.goto(310, self.car_position)

@@ -21,21 +21,12 @@ while scoreboard.is_game_on:
   car_manager.create_car()
   car_manager.move()
 
-  scoreboard.check_game_over()
-
   if player.check_for_finish_line():
     scoreboard.new_level()
     car_manager.increase_speed()
 
-
-
-
-
-
-
-
-
-
-
+  for car in car_manager.cars:
+    if car.distance(player) < 30:
+      scoreboard.game_over()
 
 screen.exitonclick()

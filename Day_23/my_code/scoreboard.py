@@ -19,16 +19,10 @@ class Scoreboard(Turtle):
       self.write(f"Level {self.level}", align="left", font=FONT)
 
 
-    def detect_collision(self):
-      pass
-
-
-    def check_game_over(self):
-      if self.detect_collision():
-        self.is_game_on = False
-        self.goto(0,0)
-        self.color('green')
-        self.write("GAME OVER", align="center", font=FONT)
+    def game_over(self):
+      self.is_game_on = False
+      self.goto(0,0)
+      self.write("GAME OVER", align="center", font=FONT)
 
 
     def new_level(self):
