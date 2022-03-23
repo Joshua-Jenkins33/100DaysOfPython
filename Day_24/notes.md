@@ -12,9 +12,9 @@ print(a)
 
 Store it in a document using python to read and write to a file!
 
-# How to Open, Read, and Write to Files using "with" KeyWord
+## How to Open, Read, and Write to Files using "with" KeyWord
 
-## Files
+### Files
 
 **Read.** It's as easy as `file = open("fileName")` and `contents = file.read()`!
 
@@ -27,3 +27,38 @@ The `with open('file_path') as file:` block lets us ignore the `file.close()` me
 `w` will write over the entire file. **Adding** to file just requires the `mode` to be `a`!
 
 If you open a file with `write` mode and that file doesn't actually exist, it will create that file for you from scratch.
+
+## Understand Relative and Absolute File Paths
+
+Files can live within folders, some files can be several folders deep or nested in.
+
+**Working Directory.** The current directory we're working in!
+
+**Relative File Path.** Look in the current folder for this file! 
+- `./talk.ppt` — gets a file inside your current working directory
+- `./Projects/talk.ppt` — gets a file inside a folder in your current working directory
+- `../report.doc` — to go up one layer and read a file 
+
+File Path Peculiarity for different Operating Systems. Python doesn't care; woot!
+
+### Get something from the desktop when working in your project
+
+```py
+with open("/Users/angela/Desktop/my_file.txt") as file:
+  contents = file.read()
+  print(contents)
+```
+
+### Relative to our main.py
+
+PyCharm knows what your directory looks like.
+
+```py
+with open("../../Desktop/my_file.txt") as file:
+  contents = file.read()
+  print(contents)
+```
+
+**Absolute File Path.** Relative to your ROOT or C drive.
+
+**Relative File Path.** Relative to your current workind directory.
