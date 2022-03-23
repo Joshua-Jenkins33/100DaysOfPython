@@ -12,11 +12,13 @@ from turtle import Turtle
 
 ALIGNMENT = "center"
 FONT = ("Courier", 24, "normal")
+SCORE_FILE_PATH = r'C:\repos\100DaysOfPython\Day_24\my_code\snake_high_score\data.txt'
 
 class Scoreboard(Turtle):
     def __init__(self):
         super().__init__()
         self.score = 0
+        self.high_score = self._get_score()
         self.ht()
         self.penup()
         self.sety(260)
@@ -29,8 +31,24 @@ class Scoreboard(Turtle):
 
     def display_score(self):
         self.clear()
-        self.write(f"Score = {self.score}", False, align=ALIGNMENT, font=FONT)
+        self.write(f"Score = {self.score} High Score = {self.high_score}", False, align=ALIGNMENT, font=FONT)
 
-    def game_over(self):
-        self.sety(0)
-        self.write("GAME OVER", align=ALIGNMENT, font=FONT)
+    # def game_over(self):
+    #     self.sety(0)
+    #     self.write("GAME OVER", align=ALIGNMENT, font=FONT)
+
+    def reset(self):
+        if self.score > self.high_score:
+            self._set_score()
+        self.score = 0
+        self.display_score()
+
+    def _get_score(self):
+        with open(SCORE_FILE_PATH) as file:
+            persistant_high_score = int(file.read())
+            return persistant_high_score
+
+    def _set_score(self):
+        self.high_score = self.score
+        with open(SCORE_FILE_PATH, mode='w') as file:
+            file.write(str(self.high_score))
