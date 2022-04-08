@@ -319,8 +319,288 @@ Other more pythonic modules, you'll see more box-standard type of code with defa
 ```
 ## Buttons, Entry, and Setting Component Options
 
+[Documentation for Tkinter](docs.python.org/3/library/tkinter.html)
+
+Under **Handy Reference** we learn that there are several ways to change the properties of things like Buttons. You can do it at instantiation, access the object's properties and change after instantiation, or access the `.config()` method and pass in the relevant arguments. All of the options are listed [here](tcl.tk/man/tcl8.6/TkCmd/label.htm).
+
+```py
+import tkinter
+
+window = tkinter.Tk()
+window.title("My First GUI Program")
+window.minsize(width=500, height=300)
+
+#Label
+
+my_label = tkinter.Label(text="I Am a Label", font=("Arial", 24, "bold"))
+# my_label.pack(side="left")
+
+######################### OLD STUFF ABOVE #########################
+
+my_label.pack()
+
+my_label["text"] = "New Text"
+my_label.config(text="New Text") # this is how we configure or change the properties of a particular component that we've created
+
+#Button
+
+button = tkinter.Button(text="Click Me") # often, folks will do from tkinter import * to skip the `tkinter.` prefaces
+button.pack()
+```
+
+### Event Listeners
+
+```py
+my_label["text"] = "New Text"
+my_label.config(text="New Text") 
+
+#Button
+
+def button_clicked():
+  print("I got clicked")
+
+button = tkinter.Button(text="Click Me", command=button_clicked) # It's the name of the function, not calling the function
+button.pack()
+```
+
+### Challenge: Make the Label Read "Button got clicked" when I click the button.
+
+```py
+my_label["text"] = "New Text"
+
+def button_clicked():
+  my_label["text"] = "Button got clicked"
+
+button = tkinter.Button(text="Click Me", command=button_clicked) # It's the name of the function, not calling the function
+button.pack()
+```
+
+### Entry Component
+
+```py
+# Entry
+input = Entry(width=10)
+input.pack()
+input.get() # this won't actually get anything as this code is ran before the user has a chance to type any text.
+
+```
+
+#### Challenge: Entry Component
+```py
+from tkinter import *
+
+my_label = tkinter.Label(text="I Am a Label")
+my_label.pack()
+
+input = Entry(width=10)
+input.pack()
+
+def get_input():
+  my_label.config(text=input.get())
+
+button = Button(text="Submit", command=get_input)
+button.pack()
+```
+
 ## Other Tkinter Widgets: Radiobuttons, Scales, Checkbuttons and more
+
+At this point, we've covered the following:
+- Labels
+- Buttons
+- Entries
+
+Now we'll cover:
+- Text Entry
+- Spinbox
+- Scale
+- Checkbutton
+- Radiobuttons
+- Listbox
+
+### Example Code tkinter Widget Demo
+
+This code has default text in the text entry/entries. Focused the text cursor in the box. 
+
+The `entry.insert(END` has that `END` keyword, which is just an index that allows tkinter to figure out which particular item you're referring to.
+
+The `print(text.get("1.0",` is referring to getting a hold of the text starting at the first line, character 0.
+
+The `spinbox` can have a min and max and call a function by passing it a `command=`
+
+The `checkbox` is tied to a variable parameter. `variable=checked_state` where `checked_state=IntVar()` (`IntVar()` is a Class).
+
+The `listbox` uses a `bind` function to call a particular callback.
+
+```py
+
+from tkinter import *
+
+#Creating a new window and configurations
+window = Tk()
+window.title("Widget Examples")
+window.minsize(width=500, height=500)
+
+#Labels
+label = Label(text="This is old text")
+label.config(text="This is new text")
+label.pack()
+
+#Buttons
+def action():
+    print("Do something")
+  
+#calls action() when pressed
+button = Button(text="Click Me", command=action)
+button.pack()
+
+#Entries
+entry = Entry(width=30)
+#Add some text to begin with
+entry.insert(END, string="Some text to begin with.")
+#Gets text in entry
+print(entry.get())
+entry.pack()
+
+#Text
+text = Text(height=5, width=30)
+#Puts cursor in textbox.
+text.focus()
+#Adds some text to begin with.
+text.insert(END, "Example of multi-line text entry.")
+#Get's current value in textbox at line 1, character 0
+print(text.get("1.0", END))
+text.pack()
+
+#Spinbox
+def spinbox_used():
+    #gets the current value in spinbox.
+    print(spinbox.get())
+spinbox = Spinbox(from_=0, to=10, width=5, command=spinbox_used)
+spinbox.pack()
+
+#Scale
+#Called with current scale value.
+def scale_used(value):
+    print(value)
+scale = Scale(from_=0, to=100, command=scale_used)
+scale.pack()
+
+#Checkbutton
+def checkbutton_used():
+    #Prints 1 if On button checked, otherwise 0.
+    print(checked_state.get())
+#variable to hold on to checked state, 0 is off, 1 is on.
+checked_state = IntVar()
+checkbutton = Checkbutton(text="Is On?", variable=checked_state, command=checkbutton_used)
+checked_state.get()
+checkbutton.pack()
+
+#Radiobutton
+def radio_used():
+    print(radio_state.get())
+#Variable to hold on to which radio button value is checked.
+radio_state = IntVar()
+radiobutton1 = Radiobutton(text="Option1", value=1, variable=radio_state, command=radio_used)
+radiobutton2 = Radiobutton(text="Option2", value=2, variable=radio_state, command=radio_used)
+radiobutton1.pack()
+radiobutton2.pack()
+
+
+#Listbox
+def listbox_used(event):
+    # Gets current selection from listbox
+    print(listbox.get(listbox.curselection()))
+  
+listbox = Listbox(height=4)
+fruits = ["Apple", "Pear", "Orange", "Banana"]
+for item in fruits:
+    listbox.insert(fruits.index(item), item)
+listbox.bind("<<ListboxSelect>>", listbox_used)
+listbox.pack()
+window.mainloop()
+```
 
 ## Tkingter Layout Managers: pack(), place(), and grid()
 
+These layout managers will tell the program how to lay out our components.
+
+**Pack.** Packs each widgets next to each other in a vaguely logical format. Starts at the top and packs it just below the previous one. You can pass in a `side=` variable. It is difficulty to specify a precise position, however. This is why there are others.
+
+**Place.** All about precise positioning. If a widget gets created and is not placed by pack, place, or grid, it won't show up. You've got to keep it within the size of your window, however.
+- `my_label.place(x=100,y=200)`
+- Downside: It is so specific. Can become a nightmare to manage each widget.
+
+**Grid.** Imagines that your entire project is a grid. This grid system is relative to other components. It will be the first in the grid even if it's on column 5 but it's the only component visible. This is preferred; easies to understand. You can't mix up `grid` and `pack` in the same program.
+- `my_label.grid(column=0, row=0)`
+
+```py
+from tkinter import *
+
+def button_clicked():
+  print("I got clicked")
+  new_text = input.get()
+  my_label.config(text=new_text)
+
+window = Tk()
+window.title("My First GUI Program")
+window.minsize(width=500, height=300)
+
+#Label
+my_label = Label(text="I am a label", font=("Arial", 24, "bold"))
+my_label.config(text="new Text")
+my_label.pack()
+
+#Button
+button = Button(text="Click Me", command=button_clicked)
+button.pack()
+
+#Entry
+input = Entry(width=10)
+print(input.get())
+input.pack()
+```
+
+### Challenge: Grid Placement, Label 0,0 | Button 1,1 | New Button 2,0 | Entry 3,3
+
+```py
+from tkinter import *
+
+def button_clicked():
+  print("I got clicked")
+  new_text = input.get()
+  my_label.config(text=new_text)
+
+window = Tk()
+window.title("My First GUI Program")
+window.minsize(width=500, height=300)
+
+#Label
+my_label = Label(text="I am a label", font=("Arial", 24, "bold"))
+my_label.config(text="new Text")
+my_label.grid(column=0, row=0)
+
+#Button
+button = Button(text="Click Me", command=button_clicked)
+button.grid(column=1, row=1)
+
+#NewButton
+new_button = Button(text="New Button")
+button.grid(column=2,row=0)
+
+#Entry
+input = Entry(width=10)
+print(input.get())
+input.grid(column=3, row=2)
+```
+
+### Adding Padding
+
+Easiest way to do this is for each component in their config.
+```py
+window.config(padx=20, pady=20)
+my_label.config(padx=50, pady=50)
+```
+
 ## Mile to Kilometers Converter Project
+
+See `.\converter` folder.
