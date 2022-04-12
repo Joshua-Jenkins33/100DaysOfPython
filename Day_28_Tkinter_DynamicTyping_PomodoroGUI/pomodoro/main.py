@@ -41,7 +41,7 @@ def start_timer():
     timer_label.config(text="Break", fg=PINK) 
   #If it's the 1st/3rd/5th/7th rep:
   else:
-    count_down(WORK_MIN)
+    count_down(work_sec)
     timer_label.config(text="Work", fg=GREEN) 
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
