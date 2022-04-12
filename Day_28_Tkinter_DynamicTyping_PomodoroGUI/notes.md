@@ -215,22 +215,117 @@ reps = 0
 TEST_MIN = 1*60
 def start_timer():
   global reps
+  reps += 1
   work_sec = WORK_MIN * 60
   short_break_sec = SHORT_BREAK_MIN * 60
   long_break_sec = LONG_BREAK_MIN * 60
 
-  #If it's the 1st/3rd/5th/7th rep:
-  if reps == 0 or reps % 2 != 0:
-    count_down(TEST_MIN)
-    reps += 1
   #If it's the 8th rep:
-  elif reps % 8 == 0:
+  if reps % 8 == 0:
     count_down(long_break_sec)
-    reps += 1
+    timer_label.config(text="Long Break", color=RED) 
   #if it's the 2nd/4th/6th rep:
-  else:
+  elif reps % 2 == 0:
     count_down(short_break_sec)
-    reps += 1
+    timer_label.config(text="Break", color=PINK) 
+  #If it's the 1st/3rd/5th/7th rep:
+  else:
+    count_down(TEST_MIN)
+    timer_label.config(text="Work", color=GREEN) 
+
+# ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
+import math
+def count_down(count):
+  count_min = math.floor(count / 60)
+  count_sec = count % 60
+  if count_sec < 10:
+    count_sec = f"0{count_sec}"
+
+  canvas.itemconfig(timer_text, text=f"{count_min}:{count_sec}")
+  if count > 0:
+    window.after(1000, count_down, count - 1)
+  else:
+    start_timer()
 ```
 
 ## Adding Checkmarks and Resetting the Application
+I want to have the checkmark label start off empty.
+
+```py
+# ✔
+check_label = Label(fg=GREEN, bg=YELLOW)
+check_label.grid(column=1, row=3)
+```
+
+### Challenge: Add one checkmark for every two `reps`
+
+```py
+# ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
+
+import math
+def count_down(count):
+  count_min = math.floor(count / 60)
+  count_sec = count % 60
+  if count_sec < 10:
+    count_sec = f"0{count_sec}"
+
+  canvas.itemconfig(timer_text, text=f"{count_min}:{count_sec}")
+  if count > 0:
+    window.after(1000, count_down, count - 1)
+  else:
+    start_timer()
+    successful_sessions = math.floor(reps/2)
+    check_string = int(successful_sessions)*"✔"
+    check_label.config(text=check_string)
+```
+
+### Reset Button
+
+```py
+timer = None # I have to create this as a global variable
+# ---------------------------- TIMER RESET ------------------------------- # 
+
+def reset_timer():
+  window.after_cancel(timer)
+  #timer_text 00:00
+  #title_label "Timer"
+  #reset check_marks
+
+# ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
+
+import math
+def count_down(count):
+  count_min = math.floor(count / 60)
+  count_sec = count % 60
+  if count_sec < 10:
+    count_sec = f"0{count_sec}"
+
+  canvas.itemconfig(timer_text, text=f"{count_min}:{count_sec}")
+  if count > 0:
+    global timer
+    timer = window.after(1000, count_down, count - 1) # in order to cancel this we need to store it in a variable
+  else:
+    start_timer()
+    successful_sessions = reps/2
+    check_string = int(successful_sessions)*"✔"
+    check_label.config(text=check_string)
+
+# ---------------------------- UI SETUP ------------------------------- #
+
+reset_button = Button(text="Reset", highlightthickness=0, command=reset_timer)
+reset_button.grid(column=2, row=2)
+```
+
+### Challenge: Change the `title_label` to "Timer", reset the checkmarks and pause the timer
+
+```py
+# ---------------------------- TIMER RESET ------------------------------- # 
+
+def reset_timer():
+  global reps
+  window.after_cancel(timer)
+  canvas.itemconfig(timer_text, text="00:00")
+  timer_label.config(text="Timer")
+  reps = 0
+  check_label.config(text="")
+```

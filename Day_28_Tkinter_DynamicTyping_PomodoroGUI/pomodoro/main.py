@@ -1,4 +1,5 @@
 from tkinter import *
+from turtle import color
 # ---------------------------- CONSTANTS ------------------------------- #
 PINK = "#e2979c"
 RED = "#e7305b"
@@ -10,29 +11,38 @@ SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
 TOMATO_ART = r"C:\repos\100DaysOfPython\Day_28_Tkinter_DynamicTyping_PomodoroGUI\pomodoro\art\tomato.png"
 reps = 0
-TEST_MIN = 1*60
+timer = None
 # ---------------------------- TIMER RESET ------------------------------- # 
+
+def reset_timer():
+  global reps
+  window.after_cancel(timer)
+  canvas.itemconfig(timer_text, text="00:00")
+  timer_label.config(text="Timer")
+  reps = 0
+  check_label.config(text="")
 
 # ---------------------------- TIMER MECHANISM ------------------------------- # 
 
 def start_timer():
   global reps
+  reps += 1
   work_sec = WORK_MIN * 60
   short_break_sec = SHORT_BREAK_MIN * 60
   long_break_sec = LONG_BREAK_MIN * 60
 
-  #If it's the 1st/3rd/5th/7th rep:
-  if reps == 0 or reps % 2 != 0:
-    count_down(TEST_MIN)
-    reps += 1
   #If it's the 8th rep:
-  elif reps % 8 == 0:
+  if reps % 8 == 0:
     count_down(long_break_sec)
-    reps += 1
+    timer_label.config(text="Long Break", fg=RED) 
   #if it's the 2nd/4th/6th rep:
-  else:
+  elif reps % 2 == 0:
     count_down(short_break_sec)
-    reps += 1
+    timer_label.config(text="Break", fg=PINK) 
+  #If it's the 1st/3rd/5th/7th rep:
+  else:
+    count_down(WORK_MIN)
+    timer_label.config(text="Work", fg=GREEN) 
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
 
@@ -45,7 +55,13 @@ def count_down(count):
 
   canvas.itemconfig(timer_text, text=f"{count_min}:{count_sec}")
   if count > 0:
-    window.after(1000, count_down, count - 1)
+    global timer
+    timer = window.after(1000, count_down, count - 1)
+  else:
+    start_timer()
+    successful_sessions = reps/2
+    check_string = int(successful_sessions)*"✔"
+    check_label.config(text=check_string)
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
@@ -65,10 +81,10 @@ timer_label.grid(column=1, row=0)
 start_button = Button(text="Start", highlightthickness=0, command=start_timer)
 start_button.grid(column=0, row=2)
 
-reset_button = Button(text="Reset", highlightthickness=0)
+reset_button = Button(text="Reset", highlightthickness=0, command=reset_timer)
 reset_button.grid(column=2, row=2)
 
-check_label = Label(text="✔", fg=GREEN, bg=YELLOW)
+check_label = Label(fg=GREEN, bg=YELLOW)
 check_label.grid(column=1, row=3)
 
 
