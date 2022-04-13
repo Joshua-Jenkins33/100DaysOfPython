@@ -1,5 +1,5 @@
 from tkinter import *
-from turtle import color
+import winsound
 # ---------------------------- CONSTANTS ------------------------------- #
 PINK = "#e2979c"
 RED = "#e7305b"
@@ -9,7 +9,8 @@ FONT_NAME = "Courier"
 WORK_MIN = 25
 SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
-TOMATO_ART = r"C:\repos\100DaysOfPython\Day_28_Tkinter_DynamicTyping_PomodoroGUI\pomodoro\art\tomato.png"
+TOMATO_ART = r"C:\repos\100DaysOfPython\Day_28_Tkinter_DynamicTyping_PomodoroGUI\pomodoro\media\tomato.png"
+SOUND_FILE = r"C:\repos\100DaysOfPython\Day_28_Tkinter_DynamicTyping_PomodoroGUI\pomodoro\media\mixkit-sci-fi-confirmation-914.wav"
 reps = 0
 timer = None
 # ---------------------------- TIMER RESET ------------------------------- # 
@@ -27,7 +28,7 @@ def reset_timer():
 def start_timer():
   global reps
   reps += 1
-  work_sec = WORK_MIN * 60
+  work_sec = 5#WORK_MIN * 60
   short_break_sec = SHORT_BREAK_MIN * 60
   long_break_sec = LONG_BREAK_MIN * 60
 
@@ -62,6 +63,7 @@ def count_down(count):
     successful_sessions = reps/2
     check_string = int(successful_sessions)*"✔"
     check_label.config(text=check_string)
+    winsound.PlaySound(SOUND_FILE,winsound.SND_FILENAME | winsound.SND_ASYNC)
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
