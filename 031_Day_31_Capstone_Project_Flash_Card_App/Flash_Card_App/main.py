@@ -14,7 +14,7 @@ french_list_dict = french_df.to_dict(orient="records")
 
 def get_random_word():
     new_word = random.choice(french_list_dict)
-    canvas.itemconfig(word_text, text=f"{new_word}['French']")
+    canvas.itemconfig(word_text, text=f"{new_word['French']}")
     canvas.itemconfig(language_text, text=f"French")
     print(new_word['French'])
 
