@@ -259,3 +259,5 @@ if today_tuple in birthdays_dict:
 ## Run Your Python Code in the Cloud!
 
 I can head to [this link](https://www.pythonanywhere.com/user/glynyon/) to automate and schedule executions of my scripts.
+
+Unfortunately, I was unable to install the `dotenv` module on the terminal there.
