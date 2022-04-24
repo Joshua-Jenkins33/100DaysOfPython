@@ -14,6 +14,7 @@ EMAIL_TEMPLATE_PATHS_LIST = [r'032_Day_32_Send_Email_and_Manage_Dates\Birthday_W
 
 birthdays_today = []
 now = dt.datetime.now()
+# could've stored this in a tuple
 day = now.day
 month = now.month
 
@@ -36,6 +37,7 @@ def read_in_file_to_dataframe(path):
 def get_birthdays_today(dataframe):
     dataframe.reset_index()
     for index, row in dataframe.iterrows():
+        # could've done dictionary comprehension here
         if row['month'] == month and row['day'] == day:
             birthdays_today.append(
                 {
