@@ -43,22 +43,22 @@ class QuizInterface:
             q_text = self.quiz.next_question()
             self.canvas.itemconfig(self.question_text, text=q_text)  
         else:
+            self.canvas.itemconfig(self.question_text, text="You've reached the end of the quiz.")
             self.true_button.config(state="disabled")
             self.false_button.config(state="disabled")
     
     def true_input(self):
-        self.give_feedback(self.quiz.check_answer(True))
+        self.give_feedback(self.quiz.check_answer("True"))
 
 
     def false_input(self):
-        self.give_feedback(self.quiz.check_answer(False))
+        self.give_feedback(self.quiz.check_answer("False"))
 
 
     def give_feedback(self, is_right: bool):
         if is_right:
-            self.canvas.config(fill="green") # can't mess with the time because of the mainloop
+            self.canvas.config(bg="green") # can't mess with the time because of the mainloop
         else:
-            self.canvas.config(fill="red")
-        self.window.after(1000, command=self.get_next_question)
-        self.canvas.config(fill="white")
+            self.canvas.config(bg="red")
+        self.window.after(1000, self.get_next_question)
 
