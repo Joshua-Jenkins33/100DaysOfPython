@@ -295,5 +295,57 @@ Change the canvas' background color to green if `is_right` is `True` and change 
 When a button has been pressed, display the next question after 1000 milliseconds, but make sure to change the background back to white.
 
 ```py
+    def give_feedback(self, is_right: bool):
+        if is_right:
+            self.canvas.config(fill="green") # can't mess with the time because of the mainloop
+        else:
+            self.canvas.config(fill="red")
+        self.window.after(1000, command=self.get_next_question)
+        self.canvas.config(fill="white")
 
 ```
+
+### Scorekeeping
+**ui.py**
+```py
+# def get_next_question(self):
+    # self.canvas.config(bg="white")
+    self.score_label.config(text=f"Score: " {self.quiz.score})
+    # q_text = self.quiz.next_question()
+    # self.canvas.itemconfig(self.question_text, text=q_text)
+```
+
+### Ending the Quiz
+Without the below updates, it fails at the end of the quiz (index out of range).
+
+```py
+# def get_next_question(self):
+    if self.quiz.still_has_questions():
+        # self.canvas.config(bg="white")
+        # self.score_label.config(text=f"Score: " {self.quiz.score})
+        # q_text = self.quiz.next_question()
+        # self.canvas.itemconfig(self.question_text, text=q_text)
+    else:
+        self.canvas.itemconfig(self.question_text, text="You've reached the end of the quiz.")
+```
+
+### A Few Ending Bugs
+The buttons still change he color when pressed; we want to disable them at the end of the quiz and also make sure the background returns to white.
+
+**Prevent Red/Green Colors from Persisiting.**
+```py
+# def get_next_question(self):
+    self.canvas.config(bg="white") # moving this here makes sure the next question always makes it white.
+    # if self.quiz.still_has_questions():
+        # self.score_label.config(text=f"Score: " {self.quiz.score})
+        # q_text = self.quiz.next_question()
+        # self.canvas.itemconfig(self.question_text, text=q_text)
+    # else:
+        # self.canvas.itemconfig(self.question_text, text="You've reached the end of the quiz.")
+        self.true_button.config(state="disabled")
+        self.false_button.config(state="disabled")
+```
+
+### Finally, get Categorical Questions!
+
+Change `data.py` to get only computer science related questions! We can do this by adding to our API call, a parameter called `category` and set it equal to `18`!

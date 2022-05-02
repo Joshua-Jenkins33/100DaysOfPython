@@ -37,9 +37,14 @@ class QuizInterface:
 
 
     def get_next_question(self):
-        q_text = self.quiz.next_question()
-        self.canvas.itemconfig(self.question_text, text=q_text)  
-
+        self.canvas.config(bg="white")
+        if self.quiz.still_has_questions():
+            self.score_label.config(text=f"Score: {self.quiz.score}")
+            q_text = self.quiz.next_question()
+            self.canvas.itemconfig(self.question_text, text=q_text)  
+        else:
+            self.true_button.config(state="disabled")
+            self.false_button.config(state="disabled")
     
     def true_input(self):
         self.give_feedback(self.quiz.check_answer(True))
@@ -51,9 +56,9 @@ class QuizInterface:
 
     def give_feedback(self, is_right: bool):
         if is_right:
-            self.canvas.itemconfig(fill="green") # can't mess with the time because of the mainloop
+            self.canvas.config(fill="green") # can't mess with the time because of the mainloop
         else:
-            self.canvas.itemconfig(fill="red")
-        
-        self.get_next_question()
+            self.canvas.config(fill="red")
+        self.window.after(1000, command=self.get_next_question)
+        self.canvas.config(fill="white")
 
