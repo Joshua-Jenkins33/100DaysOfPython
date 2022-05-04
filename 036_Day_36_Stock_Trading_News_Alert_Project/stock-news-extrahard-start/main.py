@@ -76,15 +76,39 @@ day_before_yesterday = yesterday - timedelta(days=1)
 
 print(f"\nYesterday was: {yesterday}\nAnd the day before yesterday was: {day_before_yesterday}\n")
 
+print(ALPHA_ADVANTAGE_API_KEY)
 day_1_data, day_2_data = handle_market_closures(data['Time Series (Daily)'], yesterday, day_before_yesterday)
 
 print((check_stock_for_significant_delta(day_1_data, day_2_data)))
 
-
-
-
 ## STEP 2: Use https://newsapi.org
 # Instead of printing ("Get News"), actually get the first 3 news pieces for the COMPANY_NAME. 
+
+# ===================================www.newsapi.org API CALL================================================================
+from_date = list(day_2_data.keys())[0]
+to_date = list(day_1_data.keys())[0]
+
+def get_news(from_date: str, to_date: str):
+    parameters = {
+        "q": COMPANY_NAME,
+        "from": from_date,
+        "to": to_date,
+        "language": 'en',
+        # "sortBy": "publishedAt",
+        "apikey": NEWS_API_KEY
+    }
+
+    url = 'https://newsapi.org/v2/everything'
+    response = requests.get(url=url, params=parameters)
+    response.raise_for_status()
+    news_data = response.json()
+
+    return news_data['articles'][0:3]
+# ===========================================================================================================================
+
+if check_stock_for_significant_delta(day_1_data, day_2_data):
+    articles = get_news(from_date=from_date, to_date=to_date)
+    print(articles)
 
 ## STEP 3: Use https://www.twilio.com
 # Send a seperate message with the percentage change and each article's title and description to your phone number. 
