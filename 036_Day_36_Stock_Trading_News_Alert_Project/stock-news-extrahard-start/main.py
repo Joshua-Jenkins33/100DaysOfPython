@@ -59,6 +59,16 @@ def handle_market_closures(data: dict, date1: date, date2: date):
 
 
 def check_stock_for_significant_delta(most_recent_data: dict, older_data: dict) -> bool:
+    """Take the difference between two dates from the alphavantage api using the value at closing time and use that different to get the percentage change.
+    If that percentage change is greater than our determined value, then it's considered a significant change.
+
+    Args:
+        most_recent_data (dict): alphavantage api object, drilled down to the date key's value
+        older_data (dict): alphavantage api object, drilled down to the date key's value
+
+    Returns:
+        bool: whether or not the delta between the two prices of the stock is significant
+    """
     difference = float(most_recent_data['4. close']) - float(older_data['4. close'])
     delta: float = abs(difference)/float(older_data['4. close'])
     print(f"\nDelta: {delta}")
@@ -76,7 +86,6 @@ day_before_yesterday = yesterday - timedelta(days=1)
 
 print(f"\nYesterday was: {yesterday}\nAnd the day before yesterday was: {day_before_yesterday}\n")
 
-print(ALPHA_ADVANTAGE_API_KEY)
 day_1_data, day_2_data = handle_market_closures(data['Time Series (Daily)'], yesterday, day_before_yesterday)
 
 print((check_stock_for_significant_delta(day_1_data, day_2_data)))
@@ -88,7 +97,16 @@ print((check_stock_for_significant_delta(day_1_data, day_2_data)))
 from_date = list(day_2_data.keys())[0]
 to_date = list(day_1_data.keys())[0]
 
-def get_news(from_date: str, to_date: str):
+def get_news(from_date: str, to_date: str)->list:
+    """hit newsapi.org and get the first three articles related to the pre-set company
+
+    Args:
+        from_date (str): used in the api call to dynamically assign the oldest articles to consider in the news search
+        to_date (str): used i nthe api call to dynamically assign the newest articles to consider in the news search
+
+    Returns:
+        list: returns a list of three article dictionaries
+    """
     parameters = {
         "q": COMPANY_NAME,
         "from": from_date,
