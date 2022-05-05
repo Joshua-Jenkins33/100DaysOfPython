@@ -2,15 +2,20 @@ import requests
 from dotenv import load_dotenv
 from os import getenv
 from datetime import date, timedelta
-# from twilio.rest import Client
+from twilio.rest import Client
+import re
 
 load_dotenv(r'036_Day_36_Stock_Trading_News_Alert_Project\stock-news-extrahard-start\.env')
 ALPHA_ADVANTAGE_API_KEY=getenv('ALPHAADVANTAGEAPIKEY')
 NEWS_API_KEY=getenv('NEWSAPIKEY')
+TWILIO_SID=getenv('TWILIOSID')
+TWILIO_AUTH_TOKEN=getenv('TWWILIOAUTHTOKEN')
+TWILIO_NUMBER=getenv('TWILIOPHONE')
+DESTINATION_NUMBER=getenv('DESTINATIONPHONE')
 
 STOCK = "TSLA"
 COMPANY_NAME = "Tesla Inc"
-DELTA = 0.05
+DELTA = 0.02
 
 ## STEP 1: Use https://www.alphavantage.co
 # When STOCK price increase/decreases by 5% between yesterday and the day before yesterday then print("Get News").
@@ -42,23 +47,23 @@ def handle_market_closures(data: dict, date1: date, date2: date):
         day_2_data: the value of the associated date key from the alphavantage api, using date2 as the key
     """
     while str(date1) not in data:
-        print(f"The market was closed on {date1}. Going back 1 day.")
+        # print(f"The market was closed on {date1}. Going back 1 day.")
         date1 -= timedelta(days=1)
 
     while str(date2) not in data:
-        print(f"The market was closed on {date2}. Going back 1 day.")
+        # print(f"The market was closed on {date2}. Going back 1 day.")
         date2 -= timedelta(days=1)
 
     if date1 == date2:
         date2 -= timedelta(days=1)
 
-    print(f"\nWe are using the following date as \"yesterday's\" date: {date1}")
-    print(f"We are using the following date as \"the day before yesterday's\" date: {date2}")
+    # print(f"\nWe are using the following date as \"yesterday's\" date: {date1}")
+    # print(f"We are using the following date as \"the day before yesterday's\" date: {date2}")
 
     return data[str(date1)], data[str(date2)]
 
 
-def check_stock_for_significant_delta(most_recent_data: dict, older_data: dict) -> bool:
+def get_daily_stock_delta(most_recent_data: dict, older_data: dict) -> float:
     """Take the difference between two dates from the alphavantage api using the value at closing time and use that different to get the percentage change.
     If that percentage change is greater than our determined value, then it's considered a significant change.
 
@@ -70,25 +75,20 @@ def check_stock_for_significant_delta(most_recent_data: dict, older_data: dict) 
         bool: whether or not the delta between the two prices of the stock is significant
     """
     difference = float(most_recent_data['4. close']) - float(older_data['4. close'])
-    delta: float = abs(difference)/float(older_data['4. close'])
-    print(f"\nDelta: {delta}")
+    delta: float = difference/float(older_data['4. close'])
+    # print(f"\nDelta: {delta}")
     
-    is_significant: bool = False
-    if delta > DELTA:
-        print("Get News")
-        is_significant = True
-
-    return is_significant
+    return delta
 
 
 yesterday = date.today() - timedelta(days=1)
 day_before_yesterday = yesterday - timedelta(days=1)
 
-print(f"\nYesterday was: {yesterday}\nAnd the day before yesterday was: {day_before_yesterday}\n")
+#print(f"\nYesterday was: {yesterday}\nAnd the day before yesterday was: {day_before_yesterday}\n")
 
 day_1_data, day_2_data = handle_market_closures(data['Time Series (Daily)'], yesterday, day_before_yesterday)
 
-print((check_stock_for_significant_delta(day_1_data, day_2_data)))
+delta: float = get_daily_stock_delta(day_1_data, day_2_data)
 
 ## STEP 2: Use https://newsapi.org
 # Instead of printing ("Get News"), actually get the first 3 news pieces for the COMPANY_NAME. 
@@ -124,13 +124,38 @@ def get_news(from_date: str, to_date: str)->list:
     return news_data['articles'][0:3]
 # ===========================================================================================================================
 
-if check_stock_for_significant_delta(day_1_data, day_2_data):
-    articles = get_news(from_date=from_date, to_date=to_date)
-    print(articles)
-
 ## STEP 3: Use https://www.twilio.com
 # Send a seperate message with the percentage change and each article's title and description to your phone number. 
 
+def clean_brief(brief: str) -> str:
+    CLEAN_REGEX = re.compile('<.*?>')
+    clean_text = re.sub(CLEAN_REGEX, '', brief)
+    clean_text = clean_text.split('.')[0]
+    return clean_text
+
+if abs(delta) > DELTA:
+    articles = get_news(from_date=from_date, to_date=to_date)
+    print_delta: str = f"{'🔺' if delta > 0 else '🔻'}{str(round(delta*100, 0))}%"
+
+    headline1 = articles[0]['title']
+    brief1 = clean_brief(articles[0]['description'])
+
+    headline2 = articles[1]['title']
+    brief2 = clean_brief(articles[1]['description'])
+
+    headline3 = articles[2]['title']
+    brief3 = clean_brief(articles[2]['description'])
+
+
+
+    client = Client(TWILIO_SID, TWILIO_AUTH_TOKEN)
+    message = client.messages \
+        .create(
+            body=f"{STOCK}: {print_delta}\nHeadline: {headline1}\nBrief: {brief1}\n\nHeadline: {headline2}\nBrief: {brief2}\n\nHeadline: {headline3}\nBrief: {brief3}",
+            from_=TWILIO_NUMBER,
+            to=DESTINATION_NUMBER
+        )
+    print(message.status)
 
 #Optional: Format the SMS message like this: 
 """
