@@ -72,8 +72,56 @@ requests.post(url=graph_endpoint, json=graph_config, headers=headers)
 ```
 
 Now we can view it by navigating to the link contained on step 3 and replacing the username with our own and add a `.html` at the end.
+
 ## Challenge: Add a Pixel to the Habit Tracker using a Post Request
+Comment out the code where you create the graph. Then use the documentation to post a Pixel to your habit graph for the date when you are taking this lesson. You should see your new pixel displayed when you refresh the website.
+
+```py
+pixel_creation_endpoint = f"{pixela_endpoint}/{USERNAME}/graphs/{GRAPH_ID}"
+
+body = {
+    "date": "20220504",
+    "quantity": "1400"
+}
+
+# requests.post(url=pixel_creation_endpoint, json=body, headers=headers)
+print(response.text)
+
+requests.delete(url=f'{pixel_creation_endpoint}/20200504', headers=headers)
+```
 
 ## Autofilling today's date using strftime
 
+```py
+from datetime import date
+
+today = datetime.now()
+today = datetime(year=2020, month=7, day=23)
+print(today) # not in the format I need it to be
+
+pixel_data = {
+  "date": today.strftime("%Y%m%d"),
+  "quantity": "1400"
+}
+```
+
+### Challenge
+Make sure you have posted at least two data points to the graph already (e.g., today and yesterday). Updated yesterday's data point to a new value using an HTTP put request. Refresh the chart on your website to check that your update was successful.
+
+**PUT/UPDATE**
+```py
+update_data = {
+  "quantity": 800
+}
+
+endpoint = f"{pixela_endpoint}/{USERNAME}/graphs/{GRAPH_ID}/20220506"
+
+requests.put(url=endpoint, json=updated_data, headers=headers)
+```
 ## How to use HTTP Put and Delete Requests
+
+```py
+delete_endpoint = f"{pixela_endpoint}/{USERNAME}/graphs/{GRAPH_ID}/20220506"
+requests.delete(url=delete_endpoint, header=headers)
+print(requests.text)
+```
