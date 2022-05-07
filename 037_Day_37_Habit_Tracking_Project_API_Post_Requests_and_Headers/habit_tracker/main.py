@@ -3,6 +3,9 @@ from dotenv import load_dotenv
 import os
 from datetime import datetime
 
+# TODO: Separate out into functions
+# TODO: Create user prompts for information
+
 load_dotenv(r'037_Day_37_Habit_Tracking_Project_API_Post_Requests_and_Headers\habit_tracker\.env')
 
 USERNAME=os.getenv("USERNAME")
