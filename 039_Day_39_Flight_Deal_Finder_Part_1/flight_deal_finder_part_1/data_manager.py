@@ -25,7 +25,14 @@ class DataManager:
 
         response = requests.put(url=put_endpoint, json=row_input, headers=self.headers)
         response.raise_for_status()
-        print(response.text)
+        # print(response.text)
+
+
+    def get_price_by_location(self, location):
+        for row in self.data.json()['prices']:
+            if row['city'] == location:
+                return row['lowestPrice']
+
 
 
 """
