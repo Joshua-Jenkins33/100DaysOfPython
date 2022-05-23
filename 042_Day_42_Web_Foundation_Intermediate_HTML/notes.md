@@ -50,10 +50,110 @@ Taboo—using the table tag attributes for styling...
 ```
 
 ## HTML Tables Code Challenge
+Create a table where you have an h3 for a title of Skills. You've got your skill on left and the number of stars (emojis) for how familiar you are with it. Have two columns.
 
 ## How to Type Emojis
+You can utilize the `WIN+.` shortcut to pull up the emojis keyboard. Wild.
 
 ## HTML Tables Solution Walkthrough
+Nested tables. Ick. I did it right.
+
+```html
+<table>
+    <tbody>
+        <tr>
+            <td>
+                <table>
+                    <tr>
+                        <td>Python</td>
+                        <td>⭐⭐⭐⭐</td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table>
+                    <tr>
+                        <td>Gimp</td>
+                        <td>⭐</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table>
+                    <tr>
+                        <td>Object-oriented Programming (OOP)</td>
+                        <td>⭐⭐⭐</td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table>
+                    <tr>
+                        <td>Cartography (Fantasy)</td>
+                        <td>⭐⭐</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table>
+                    <tr>
+                        <td>JavaScript</td>
+                        <td>⭐⭐⭐</td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table>
+                    <tr>
+                        <td>Databricks</td>
+                        <td>⭐⭐⭐⭐</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table>
+                    <tr>
+                        <td>CRM Automation</td>
+                        <td>⭐⭐</td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table>
+                    <tr>
+                        <td>React</td>
+                        <td>⭐⭐</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table>
+                    <tr>
+                        <td>Linux</td>
+                        <td>⭐⭐</td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table>
+                    <tr>
+                        <td>HTML & CSS</td>
+                        <td>⭐⭐</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+```
 
 ## HTML Forms
 
