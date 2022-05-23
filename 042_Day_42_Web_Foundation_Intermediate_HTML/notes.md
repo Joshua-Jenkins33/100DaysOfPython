@@ -199,5 +199,42 @@ Along with some edits for the names of each label/textarea
 The above builds out an email body that assigns the names of the inputs to values submitted.
 
 ## Coding Exercise 1: HTML Challenge
+This is really easy and not super worth my time. 
+
+"Write some HTML in the index.html file below. You are aiming to create a page that looks like: 
+1. Level 1 Heading
+2. Horizontal Rule
+3. Hyperlink to MDN docs
+4. A table with two columns and two rows
+
+```html
+<h1>Here's my Level 1 Heading</h1>
+<hr>
+<a href="some_link.com">Link to MDN Documentation</a>
+<table>
+    <tbody>
+        <tr>
+            <td>Cell 1</td>
+            <td>Cell 2</td>
+        </tr>
+        <tr>
+            <td>Cell 3</td>
+            <td>Cell 4</td>
+        </tr>
+    </tbody>
+</table>
+```
 
 ## Publish Your Website!
+
+There are lots of hosting sites, but we don't want to pay for things (because we're learning!).
+
+GitHub lets you do things like this for free!
+
+1. Create repository
+2. Upload your files
+3. Give it a commit/version message
+4. Go to Settings
+5. GitHub Pages
+6. Select `main` as your branch
+7. This spits out a https url! Save this address.
