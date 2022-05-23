@@ -156,8 +156,47 @@ Nested tables. Ick. I did it right.
 ```
 
 ## HTML Forms
+Forms require an opening and closing `<form>` tag. It has two very important elements:
+1. The `<label>` open and closing tags, wrapped around text
+2. An `<input>` tag; these have various types
+
+Various types: text, submit, file, date, radio, range, etc
 
 ## Forms in Practice - Create a Contact Me Form
+```html
+<form class="" action="index.html" method="post">
+    <label>Your Name:</label>
+    <input type="text" name="" value=""><br>
+    <label>Your Email:</label>
+    <input type="email" name="" value=""><br>
+    <label>Your Message:</label><br>
+    <textarea name="name" rows="10" cols="30"></textarea>
+    <input type="submit" name="">
+</form>
+```
+
+The form attribute `action` means that, when the `submit` button is clicked, we'll be redirected back to the `index.html` page. 
+
+We're going to change this action to `mailto:<someemailaddress>`
+
+Then we're going to delete the empty class and add an `enctype="text/plain"` (encoding type)
+
+Along with some edits for the names of each label/textarea
+```html
+<form class="" action="mailto:some_email@email.com" method="post" enctype="text/plain">
+    <label>Your Name:</label>
+    <input type="text" name="yourName" value=""><br>
+    <label>Your Email:</label>
+    <input type="email" name="yourEmail" value=""><br>
+    <label>Your Message:</label><br>
+    <textarea name="yourMessage" rows="10" cols="30"></textarea>
+    <input type="submit" name="">
+</form>
+```
+
+\*Note: some validation is built into these input types!
+
+The above builds out an email body that assigns the names of the inputs to values submitted.
 
 ## Coding Exercise 1: HTML Challenge
 
