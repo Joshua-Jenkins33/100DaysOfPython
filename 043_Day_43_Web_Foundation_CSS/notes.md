@@ -28,8 +28,76 @@ Go to [colorhunt.co](colorhunt.co) for sweet colors.
 ```
 
 ## Internal CSS
+Go to [devdocs.io](devdocs.io) for lots of documentation.
+
+How to implement CSS code across the entire web page so we won't have to copy and paste the style attribute each time we want to change a particular element. 
+
+In the `<head>` section of the HTML page, we're going to create open and closing `<style>` tags.
+
+```html
+<style>
+    body {
+        background-color: #F1EEE9;
+    }
+</style>
+```
+
+Now we can delete the in-line style CSS.
+
+Now I want to make the `hr` white.
+
+```html
+<style>
+    body {
+        background-color: #F1EEE9;
+    }
+    hr {
+        background-color: white;
+    }
+</style>
+```
+
+But this changes nothing... Browser is setting some CSS by default!
+
+Change the border-style to none!
+```html
+<style>
+    body {
+        background-color: #F1EEE9;
+    }
+    hr {
+        background-color: white;
+        border-style: none;
+        height: 2px;
+    }
+</style>
+```
+
+She likes to use a chrome plug-in called [Pesticide](https://chrome.google.com/webstore/detail/pesticide-for-chrome/bakpbgckdnepkmkeaiomhmfcnejndkbi). Her company developed it!
+
+You can use percentages (good for x-device styling) or pixels.
+
+### Challenge: Make a dotted line 10% of the screen
+```html
+<style>
+hr {
+    width: 10%;
+    border-style: dotted none none;
+    border-width: 5px;
+    border-color: #15133C;
+}
+</style>
+```
+
+The downside of this is... you have to change it in every single place. Easier than doing in-line styling, but repetitive nonetheless.
 
 ## External CSS
+Going to change our personal site to use internal CSS and migrate to external CSS.
+
+1. Create a new folder called `css`. In the newly created folder, create a file called `styles.css`
+2. Cut out everything in your `<style>` tags and remove the tags
+3. Paste the values in `styles.css`
+4. Create a link in your pages to the css folder: `<link rel="stylesheet" href="/css/styles.css">`
 
 ## How to Debug CSS Code
 
