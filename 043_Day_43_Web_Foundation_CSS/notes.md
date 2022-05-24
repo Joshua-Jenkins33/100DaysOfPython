@@ -97,9 +97,31 @@ Going to change our personal site to use internal CSS and migrate to external CS
 1. Create a new folder called `css`. In the newly created folder, create a file called `styles.css`
 2. Cut out everything in your `<style>` tags and remove the tags
 3. Paste the values in `styles.css`
-4. Create a link in your pages to the css folder: `<link rel="stylesheet" href="/css/styles.css">`
+4. Create a link in your pages to the css folder: `<link rel="stylesheet" href="css/styles.css">`
+
+### Challenge: Modify the `<h1>` and `<h3>` tags to be a different color
+```css
+h1 {
+    color: #15133C;
+}
+
+h3 {
+    color: #15133C;
+}
+```
 
 ## How to Debug CSS Code
+TLDR; Use the browser dev tools to see granular details and remove/add things.
+
+### Debugging Problem 1
+`<link rel="stylesheet" href="/css/styles.css">`
+
+The forward slash needed to be removed.
+
+### Debugging Problem 2
+`<body style="background-color: white">`
+
+Our style overrode our css file.
 
 ## The Anatomy of CSS Syntax
 
