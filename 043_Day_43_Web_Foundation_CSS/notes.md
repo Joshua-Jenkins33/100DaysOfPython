@@ -125,8 +125,51 @@ Our style overrode our css file.
 
 ## The Anatomy of CSS Syntax
 
+Keep all of your properties in alphabetical order.
+
+Anatomy:
+- Who (tag)
+- What (properties)
+    - How do you know what keywords and attributes you can use? [developer.mozilla.org](https://developer.mozilla.org/en-US/docs/Web/CSS)
+
 ## CSS Selectors
 
+If we wanted to add a broccoli image with a different background color, then we can't just used tag selectors. We'll need to use **class** selectors.
+
+```html
+  <img class="" src="https://emojipedia-us.s3.amazonaws.com/thumbs/240/apple/118/bacon_1f953.png" alt="bacon-img">
+  <img class="" src="https://emojipedia-us.s3.amazonaws.com/thumbs/240/apple/118/broccoli_1f966.png" alt="broccoli-img">
+```
+
+```css
+/*****************************TAG SELECTORS*****************************/
+
+h1 {
+    color: red;
+    font-size: 200px;
+}
+
+/*
+img {
+    background-color: red;
+}
+*/
+
+/*****************************CLASS SELECTORS*****************************/
+
+.bacon {
+    background-color: green;
+}
+
+.broccoli {
+    background-color: red;
+}
+```
+
+It's rare you'll want to style paragraphs and images exactly the same way. Classes enable you to do that!
+
 ## Classes vs. Ids
+
+
 
 ## Quiz 16: CSS Quiz
