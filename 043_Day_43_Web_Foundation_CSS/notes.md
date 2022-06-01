@@ -170,6 +170,102 @@ It's rare you'll want to style paragraphs and images exactly the same way. Class
 
 ## Classes vs. Ids
 
+The `id` selector is different but similar. 
 
+```html
+<h1 id="heading">I Love Bacone</h1>
+```
+
+```css
+/*****************************TAG SELECTORS*****************************/
+
+h1 {
+    color: red;
+    font-size: 200px;
+}
+
+/*
+img {
+    background-color: red;
+}
+*/
+
+/*****************************CLASS SELECTORS*****************************/
+
+.bacon {
+    background-color: green;
+}
+
+.broccoli {
+    background-color: red;
+}
+
+/*****************************ID SELECTORS*****************************/
+#heading {
+    color: blue;
+}
+```
+
+`id`s are more specific than class selectors, so it'll override the values!
+
+`class`es are more specific than tag selectors.
+
+### When Should You Use Classes / IDs?
+
+You can only have a single instance of one particular id name inside a single page. I can't go into another paragraph `<p>` tag and give it the same `id` as the `<p>` tag above it. You *can* use classes for all of the different `<p>` tags, though. A group of related items. Name versus passport!
+
+You can't have more than 1 ID per element.
+
+### Pseudo Class
+
+These have `:` (colons) in front of them. I can get the state to change if I hover over an image. `a:hover{}`.
+
+```css
+/*****************************TAG SELECTORS*****************************/
+
+h1 {
+    color: red;
+    font-size: 200px;
+}
+
+
+img:hover {
+    background-color: gold;
+}
+
+/*****************************CLASS SELECTORS*****************************/
+
+.bacon {
+    background-color: green;
+}
+
+.broccoli {
+    background-color: red;
+}
+
+/*****************************ID SELECTORS*****************************/
+#heading {
+    color: blue;
+}
+```
 
 ## Quiz 16: CSS Quiz
+
+1. What is the correct HTML for referring to an external CSS stylesheet?
+`<link rel="stylesheet" type="text/css" href="mystles.css">`
+
+2. Where in an HTML document is the correct place to refer to an internal style sheet?
+`In the <head> section`
+
+3. Which HTML attribute is used to define inline styles?
+``style`
+
+4. Which HTML tag is used to define an internal style sheet?
+`<style>`
+
+5. Which is the correct CSS syntax?
+`body {color:black;}`
+
+6. Which is more specific as a selector?
+`id`
+
