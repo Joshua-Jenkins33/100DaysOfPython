@@ -301,6 +301,7 @@ What if I want them to see the design I intended? How can I ensure everyone has 
 
 Then just call out those fonts in `font-family` attribute values.
 
+[Flaticon](https://www.flaticon.com) is a great place to get art.
 ## Adding Content to Our Website
 
 ## CSS Sizing
