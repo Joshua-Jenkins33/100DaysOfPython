@@ -276,6 +276,30 @@ Position the cloud relative to the top container.
 ```
 
 ## Font Styling in Our Personal Site
+Sans-serif does **not** contains feet, or serifs.
+
+No font is 100% websafe. You can minimize such issues, however, by using the **CSS Web Safe Fonts** recommended by w3schools.
+
+Create a set of fallbacks for your font!
+```css
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
+}
+```
+
+Gives the same feel regardless of what font the user has.
+
+What if I want them to see the design I intended? How can I ensure everyone has the same viewing experience?
+
+**Font Embedding.** You can go to google fonts. 
+
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300&family=Montserrat:wght@300&family=Sacramento&display=swap" rel="stylesheet"> 
+```
+
+Then just call out those fonts in `font-family` attribute values.
 
 ## Adding Content to Our Website
 

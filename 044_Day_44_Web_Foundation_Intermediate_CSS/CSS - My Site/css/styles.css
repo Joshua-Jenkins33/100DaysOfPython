@@ -1,11 +1,22 @@
 body {
   margin: 0px;
   text-align: center;
+  font-family: 'Merriweather', serif;
 }
 
 h1 {
-  width: 10%; /* This value prevents the body text-align: center from centering it; get around that with margin below */
-  margin: 0 auto;
+  /* width: 10%; /* This value prevents the body text-align: center from centering it; get around that with margin below */
+  /* margin: 0 auto; */
+  margin-top: 0;
+  font-family: 'Sacramento', cursive;
+}
+
+h2 {
+  font-family: 'Montserrat', sans-serif;
+}
+
+h3 {
+  font-family: 'Montserrat', sans-serif;
 }
 
 .top-container {
