@@ -184,6 +184,71 @@ These three rules determine how things gets rendered on the screen.
 ```
 
 ## Absolute Positioning
+```css
+img {
+  position: absolute
+  right: 30px /*This actually shifts the elemet towards the right of the screen 30 pixels, in contrast to relative positioning pushing it towards the left edge of the screen*/
+}
+```
+**We are positioning the element relative to its parent.** 
+
+It also **does** affect the positioning of your HTML flow. You are taking your element out of the flow of your document. But now I can move the absolute element to anywhere on the screen relative to its parent. 
+
+### Absolute Position Challenge
+```css
+body {
+  margin: 0px;
+}
+
+.parent {
+  height: 300px;
+  width: 300px;
+  position: absolute;
+}
+
+.red {
+  height: 100px;
+  width: 100px;
+  background-color: red;
+  position: absolute;
+  bottom: 100px;
+  right: 100px;
+}
+
+.blue {
+  height: 100px;
+  width: 100px;
+  background-color: blue;
+  position: absolute;
+  top: 200px;
+  left: 200px;
+}
+
+.green {
+  height: 100px;
+  width: 100px;
+  background-color: green;
+  position: absolute;
+}
+```
+
+Traditionally an easier way to think about for beginners. You're moving everything relative to the position of the parent as opposed to relative to where it *used to be*. 
+
+
+Containers are awesome for finetuning and visualizing. 
+```css
+.container {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  background-color: grey;
+}
+```
+
+### The Fixed Position
+`position: fixed`
+
+The element doesn't move if you scroll. 
 
 ## The Dark Art of Centering Elements with CSS
 
