@@ -124,6 +124,64 @@ Another type of display! The **inline-block** which is the best of both worlds! 
 **visibility** can be set to *hidden*. It makes the element disappear but keeps its original position. All other elements display around as if it were, the content is simply hidden.
 
 ## CSS Static and Relative Positioning
+HTML elements already have pre-defined rules of how things are displayed by default before you add any CSS. It's helpful to understand how and why it works the way that it does.
+
+1. Content is everything
+  - Height is determined by the content for block displays
+  - In-line widths and heights are determined by content
+2. Order comes from Code
+  - Changing the order of these tags, our website displays accordingly
+3. Children Sit on Parents
+  - Add an h1 in a div; The header is more toward the user than the div is, effectively a `z-axis` or a `<span>` is *on top of* the `<h1>`
+
+These three rules determine how things gets rendered on the screen.
+
+**Position** gives you added flexibility.
+1. Static
+  - All HTML elements are static by default
+  - Go along with the HTML rules and keep to the default HTML flow
+2. Relative
+  - Position the element we select relative to the position it would have been had it been static
+  - If we change a position property to relative and additionally we add `left: 30px;` it will be pushed 30 pixels **from the left** of where it would have been
+  - Coordinate Properties
+    - Top
+    - Bottom
+    - Left
+    - Right
+  - It doesn't affect the position of anything else downscreen (its ghost remains and acts as if it maintained its original position)
+  - These are basically another way of doing margins
+3. Absolute
+4. Fixed
+
+### Relative Challenge
+```css
+.red {
+  height: 100px;
+  width: 100px;
+  background-color: red;
+  position: relative;
+  left: 200px;
+  display: inline-block;
+}
+
+.blue {
+  height: 100px;
+  width: 100px;
+  background-color: blue;
+  display: inline-block;
+  position: relative;
+  right: 100px;
+}
+
+.green {
+  height: 100px;
+  width: 100px;
+  background-color: green;
+  display: inline-block;
+  position: relative;
+  right: 200px;
+}
+```
 
 ## Absolute Positioning
 
