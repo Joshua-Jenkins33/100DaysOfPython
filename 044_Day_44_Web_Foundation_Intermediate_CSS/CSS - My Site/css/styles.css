@@ -1,13 +1,17 @@
 body {
   margin: 0px;
+  text-align: center;
 }
 
 h1 {
-  margin: 0px;
+  width: 10%; /* This value prevents the body text-align: center from centering it; get around that with margin below */
+  margin: 0 auto;
 }
 
 .top-container {
   background-color: #D5D8B5;
+  padding-top: 100px;
+  position: relative;
 }
 
 .middle-container {
@@ -24,4 +28,16 @@ h1 {
 
 .data {
   text-decoration: underline;
+}
+
+.top-cloud {
+  position: absolute;
+  right: 300px;
+  top: 50px;
+}
+
+.bottom-cloud {
+  position: absolute;
+  left: 300px;
+  bottom: 300px;
 }

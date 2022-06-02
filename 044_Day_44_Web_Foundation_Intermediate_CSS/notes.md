@@ -252,6 +252,29 @@ The element doesn't move if you scroll.
 
 ## The Dark Art of Centering Elements with CSS
 
+### Challenge: Cloud Positioning
+Position the cloud relative to the top container.
+
+```css
+/* .top-container {
+  background-color: #D5D8B5; */
+  padding-top: 100px;
+  position: relative;
+}
+
+.top-cloud {
+  position: absolute;
+  right: 300px;
+  top: 50px;
+}
+
+.bottom-cloud {
+  position: absolute;
+  left: 300px;
+  bottom: 300px;
+}
+```
+
 ## Font Styling in Our Personal Site
 
 ## Adding Content to Our Website
