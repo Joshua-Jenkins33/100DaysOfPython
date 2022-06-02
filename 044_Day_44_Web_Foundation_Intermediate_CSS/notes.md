@@ -496,6 +496,14 @@ Think of it as the "anti-float". Make sure the left margin is clear and *not wra
 
 ## CSS Challenge
 
+Turn **CONTACT ME** into a button. She uses [this site resource](https://css3buttongenerator.com/) to generate the shmanciness for button appearance.
+
+She provides colors, eyeballing spacing, `<hr>` tags to be modified, beautifying of `<a>` tags, etc.
+
 ## Stylized Personal Site Solution Walkthrough
 
+I ran into some issues with the button. I had to set its `display` to `display: inline-block` and then provide a margin buffer. Other than that, everything else went smoothly!
+
 ## Get More Practice HTML and CSS
+
+[Front-end Challenges!](https://www.frontendmentor.io/challenges/space-tourism-multipage-website-gRWj1URZ3)
