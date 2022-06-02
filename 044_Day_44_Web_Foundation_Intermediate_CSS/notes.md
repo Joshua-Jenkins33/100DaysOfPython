@@ -64,6 +64,64 @@ The **margin** is a buffer zone between the current element and everything else.
 ```
 
 ## CSS Display Property
+Let's add images!
+
+```html
+<div class="top-container">
+  <img src="images/cloud.png" alt="cloud-img">
+  <h1 class="main_header">I'm Joshua.</h1>
+  <p>a data engineer.</p>
+  <img src="images/cloud.png" alt="cloud-img">
+  <img src="images/mountain.png" alt="mountain-img">
+</div>
+```
+
+Looks kind of weird because the cloud is on its own line. We can handle that with **display**.
+
+This has 4 different values:
+1. Block
+2. Inline
+3. Inline-Block
+4. None
+
+By default, some elements are block display (h1 and p tags take up the whole width of the page; blocks out any other elements from being on the left or right). Divs, lists, and forms are also included in default block display elements.
+
+### Span Tag
+I want to underline a portion of text inside a `<p>` tag. 
+
+```html
+<!-- <div class="top-container">
+  <img src="images/cloud.png" alt="cloud-img">
+  <h1 class="main_header">I'm Joshua.</h1> -->
+  <p>a <span class="data">data</span> engineer.</p>
+  <!-- <img src="images/cloud.png" alt="cloud-img">
+  <img src="images/mountain.png" alt="mountain-img"> -->
+</div>
+```
+
+```css
+.data {
+  text-decoration: underline;
+}
+```
+
+A part of the block display has been selected separately via a `<span>`. This is an in-line display element. It only takes up as much space as it needs to in its height and width. 
+
+### Common Inline Elements
+- Spans (`<span>`)
+- Images (`<img>`)
+- Anchors (`<a>`)
+
+> Why would we ever use block elements when we can use inline elements?
+
+With inline elements, you **cannot change the width**. Block elements comply with width changes. You can also change the display of any element. That makes all of our paragraphs (instert element here) inline!
+
+What should I do if I want an element that can occupy the same line but I also want to set the width?
+
+Another type of display! The **inline-block** which is the best of both worlds! `<img>` elements are *kind of* like this by default.
+
+**None** removes the element from the website as if it didn't exist.
+**visibility** can be set to *hidden*. It makes the element disappear but keeps its original position. All other elements display around as if it were, the content is simply hidden.
 
 ## CSS Static and Relative Positioning
 
