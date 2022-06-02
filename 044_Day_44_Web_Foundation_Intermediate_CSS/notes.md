@@ -324,14 +324,175 @@ Convert first paragraph tag to h2 with rem-sizing.
 
 Add a 50px top margin to the h1. We want less space between h2 and h1.
 ## Font Properties Challenge 1 -- Change the Font Color
+```css
+h1 {
+  /* width: 10%; /* This value prevents the body text-align: center from centering it; get around that with margin below */
+  /* margin: 0 auto; */
+  margin: 50px auto 0 auto;
+  font-family: 'Sacramento', cursive;
+  font-size: 5.625rem;
+  color: #A25B5B;
+}
+
+h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.5rem;
+  color: #A25B5B;
+}
+
+h3 {
+  font-family: 'Montserrat', sans-serif;
+  color: #809A6F;
+}
+```
 
 ## Font Properties Challenge 2 -- Change the Font Weight
+```css
+h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.5rem;
+  color: #A25B5B;
+  font-weight: normal;
+}
+```
 
 ## Font Properties Challenge 3 -- Change the Line Height
-
-## CSS Font Property Challene Solutions
+```css
+h1 {
+  /* width: 10%; /* This value prevents the body text-align: center from centering it; get around that with margin below */
+  /* margin: 0 auto; */
+  margin: 50px auto 0 auto;
+  font-family: 'Sacramento', cursive;
+  font-size: 5.625rem;
+  color: #A25B5B;
+  line-height: 2;
+}
+```
 
 ## CSS Float and Clear
+Our **skills** div has 2 **skill-rows**. We want each of those skill-rows divs to only take up half of the screen. (It's a block element).
+
+### 50% Div Challenge
+```css
+.skill-row {
+  width: 50%;
+}
+```
+
+Because the width is no longer 100%, it is no longer centered. How do we fix this?
+
+### Center Div Challenge
+```css
+.skill-row {
+  width: 50%;
+  margin: auto;
+}
+```
+
+### 100 pixel top and bottom margin while still auto centering Challenge
+```css
+.skill-row {
+  width: 50%;
+  margin: 100px auto 100px auto;
+}
+```
+
+### Left Align Skill Title and Text Challenge
+```css
+.skill-row {
+  width: 50%;
+  margin: 100px auto 100px auto;
+  text-align: left;
+}
+```
+
+### Line Height Challenge (for paragraph tags in skills)
+```css
+.skill-row {
+  width: 50%;
+  margin: 100px auto 100px auto;
+  text-align: left;
+  line-height: 2;
+}
+```
+
+### Change Skill Image Sizes to 25% Challenge
+```css
+.python-image {
+  width: 25%;
+}
+
+.databricks-image {
+  width: 25%;
+}
+```
+
+### Wrapping Text Around an Image
+
+Here's what it currently looks like and how we want it to change:
+
+![Skills Screenshot Image](note_screenshot.png "Skills Sreenshot")
+
+We can resolve this by **floating**.
+
+```css
+.python-image {
+  width: 25%;
+  float: left;
+}
+
+.databricks-image {
+  width: 25%;
+  float: left;
+}
+```
+
+This should spit out something like: 
+
+![Float Screenshot Image](float_screenshot.png "Float Screenshot")
+
+### Space Between Text and Image Challenge
+```css
+.python-image {
+  width: 25%;
+  float: left;
+  margin-right: 30px;
+}
+
+.databricks-image {
+  width: 25%;
+  float: left;
+  margin-right: 30px;
+}
+```
+
+### Second Image Float Right with 30px Border Challenge
+```css
+.python-image {
+  width: 25%;
+  float: right;
+  margin-left: 30px;
+}
+```
+
+Another property to make sure the text does not wrap and ends up below the image is called the `clear` property.
+```html
+<p class="code-skill-description">I started...</p>
+```
+
+```css
+.code-skill-description {
+  clear: left;
+}
+```
+
+This pushes the text below the image that is floating but the heading remains.
+
+![Clear Screenshot Image](clear_property.png "Clear Property Screenshot")
+
+Think of it as the "anti-float". Make sure the left margin is clear and *not wrapped around anything*. 
+
+**Float** is one of the most commonly used and abused CSS properties. Remember that it has a whole bunch of corner cases. Only use float when really *really* necessary. Only use it for what it's meant for: wrapping text around a certain element. Don't use it for positioning. Instead, use positioning, relative, absolute, padding, etc. You'll get into less trouble/problems using float as explained.
 
 ## CSS Challenge
 
