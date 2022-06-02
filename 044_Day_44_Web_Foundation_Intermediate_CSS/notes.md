@@ -46,6 +46,23 @@ The **margin** is a buffer zone between the current element and everything else.
 - 200x200px squares
 - Each with different background colors
 
+### Challenge: Diagonal Div Boxes
+```css
+.top-container {
+  border: solid 10px;
+}
+
+.middle-container {  
+  border: solid 20px;
+  margin-left: 260px;
+}
+
+.bottom-container {
+  border: solid 10px;
+  margin-left: 500px;
+}
+```
+
 ## CSS Display Property
 
 ## CSS Static and Relative Positioning
