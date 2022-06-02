@@ -1,7 +1,23 @@
-div {
-  background-color: #D5D8B5
+body {
+  margin: 0px;
 }
 
-.no_margin {
-  margin: 0px 0px 0px 0px
+h1 {
+  margin: 0px;
+}
+
+.top-container {
+  background-color: #D5D8B5;
+}
+
+.middle-container {
+  height: 200px;
+  width: 200px;
+  background-color: #A25B5B;
+}
+
+.bottom-container {
+  height: 200px;
+  width: 200px;
+  background-color: #809A6F
 }

@@ -30,9 +30,21 @@ These have **margins**, **borders**, and **padding**.
 
 There are default rules for the divs contents, like `<h1>` tags. These have preset margins and can create gaps even when your div has these set to 0.
 
-
-
 ## The Box Model of Website Styling
+Simple div with background color blue, 300px x 300px. If we expand it to 600px, other stuff gets pushed out of the way. We can use pixels or percentages. You can also specify a **border**. The blue area is still 300x300 with a border. The border expands its size.
+
+**Circle shorthand**, clockwise, specifies all four sides starting at the time.
+
+Content in the div/box; let's say it's text. We want there to be space between the text and the border. This is **padding**. 
+
+The **margin** is a buffer zone between the current element and everything else. We can use these to affect the layout and appearance of all of our html elements (which we've learned at this point, all html elements are boxes)!
+
+### Challenge: Make Div Boxes
+- 2 Divs
+- Called middle-container & bottom-container
+- First div a class of top-container
+- 200x200px squares
+- Each with different background colors
 
 ## CSS Display Property
 
