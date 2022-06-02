@@ -303,9 +303,26 @@ Then just call out those fonts in `font-family` attribute values.
 
 [Flaticon](https://www.flaticon.com) is a great place to get art.
 ## Adding Content to Our Website
+Added lorem ipsum and other things to website.
 
 ## CSS Sizing
+Increase the font-size! And **Dynamic Font Size.**
 
+`font-size: 100%;` is equivalent to 16px. So 90px/16 = 562.5%
+
+### `em`
+The phonetic pronunciation of `M`. You want it the element to be 1-size equal to the width of a capital M. `2em` is the size of the width of two `M`s. 16px = 1em. You can achieve whatever size you want using either percentages or `em`.
+
+### When to Use `em`, `%`, or `px`
+Accessibility issues; `px` doesn't allow for auto-scaling. But not a big deal because they can just zoom in on the screen.
+
+`em` and `%` **do** inherit and change in size based on the parent. It gets added on top of whatever its parent was.
+
+`rem` exists to ignore parent font-sizes. This is the most adaptable, reliable, and least error-prone
+
+Convert first paragraph tag to h2 with rem-sizing.
+
+Add a 50px top margin to the h1. We want less space between h2 and h1.
 ## Font Properties Challenge 1 -- Change the Font Color
 
 ## Font Properties Challenge 2 -- Change the Font Weight
