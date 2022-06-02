@@ -1,3 +1,7 @@
-body {
-  background-color: blue;
+div {
+  background-color: #D5D8B5
+}
+
+.no_margin {
+  margin: 0px 0px 0px 0px
 }

@@ -13,8 +13,24 @@ We've gotten pretty far in our journey of creating our personal website, but we 
 
 
 ## What Are Favicons
+"Favorite Icon"
+
+An icon that would show up in your browser bar if you were on a website you favorited. Browsers try to display a favicon whether the site has one or not. 
+
+[www.favicon.cc](www.favicon.cc)
+
+```html
+<link rel="icon" href="favicon.ico">
+```
 
 ## HTML Divs
+Divs allow us to structure elements differently. Divs, amongst other things, don't do anything unless you use css with it. It stands for a content-division element. It allows you to split up or divide content into separate containers or boxes so you can affect its layout separately. You can structure and style things separately from other content in your website. It'll have height if you specify it **or** if it has content. 
+
+These have **margins**, **borders**, and **padding**. 
+
+There are default rules for the divs contents, like `<h1>` tags. These have preset margins and can create gaps even when your div has these set to 0.
+
+
 
 ## The Box Model of Website Styling
 
