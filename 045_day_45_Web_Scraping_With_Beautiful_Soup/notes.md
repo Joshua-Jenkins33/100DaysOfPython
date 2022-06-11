@@ -108,6 +108,50 @@ headings = soup.select(".heading") # this returns a list
 
 ## Quiz 17: Beautiful Soup Exercises
 
+### Question 1:
+
+This is an unordered list (`<ul>`) extracted from the BeautifulSoup Home Page. What's the code to get all the anchor tags (`<a>`) if we have already made soup from the HTML?
+```html
+    <ul class="simple">
+        <li><p><a class="reference external" href="https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/">这篇文档当然还有中文版.</a></p></li>
+        <li><p>このページは日本語で利用できます(<a class="reference external" href="http://kondou.com/BS4/">外部リンク</a>)</p></li>
+        <li><p><a class="reference external" href="https://www.crummy.com/software/BeautifulSoup/bs4/doc.ko/">이 문서는 한국어 번역도 가능합니다.</a></p></li>
+        <li><p><a class="reference external" href="https://www.crummy.com/software/BeautifulSoup/bs4/doc.ptbr">Este documento também está disponível em Português do Brasil.</a></p></li>
+        <li><p><a class="reference external" href="https://www.crummy.com/software/BeautifulSoup/bs4/doc.ru/">Эта документация доступна на русском языке.</a></p></li>
+    </ul>
+```
+
+`soup.find_all("a")`
+
+### Question 2: 
+Below is a simplified version of the Beautiful Soup Hall of Fame. The HTML code comes from the Beautiful Soup home page.
+
+If soup was made from the HTML below, how would you extract only the anchor tags from inside the unordered list? (So excluding the first anchor tag `<a name="HallOfFame"><h2>Hall of Fame</h2></a>`?
+
+```html
+    <a name="HallOfFame"><h2>Hall of Fame</h2></a>
+    <p>Over the years, Beautiful Soup has been used in hundreds of different projects.</p>
+    <ul>
+    <li>Alexander Harrowell uses Beautiful Soup to <a href="http://www.harrowell.org.uk/viktormap.html">track the business activities</a> of an arms merchant.</li>
+    <li>The developers of Python itself used Beautiful Soup to <ahref="http://svn.python.org/view/tracker/importer/">migrate the Pythonbug tracker from Sourceforge to Roundup</a>.</li>
+    </ul>
+```
+`soup.select("li a")`
+
+### Question 3:
+If we make `soup` with the HTML code below, how would you get hold of the value of `maxlength`?
+```html
+    <form method="get" action="/search/">
+     <input type="text" name="q" maxlength="255" value=""></input>
+    </form> 
+```
+There's no shame in looking at the [documentation](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)!
+
+```py
+form_tag = soup.find("input")
+max_length = form_tag.get("maxlength")
+```
+
 ## Scraping a Live Website
 
 ## Is Web Scraping Legal?  
