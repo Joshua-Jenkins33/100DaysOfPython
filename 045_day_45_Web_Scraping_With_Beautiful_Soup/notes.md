@@ -44,6 +44,36 @@ We are drilling down into the HTML file, finding the tags we're interested in, a
 
 ## Finding and Selecting Particular Elements with BeautifulSoup
 
+```py
+all_anchor_tags = soup.find_all(name="a")
+print(all_anchor_tags)
+
+for tag in all_anchor_tags:
+  print(tag.getText())
+```
+
+What if I didn't want to get the text but instead I wanted to get a hold of the actual `href` (link)?
+
+```py
+for tag in all_anchor_tags:
+  print(tag.get("href")) # Gives me all of the links and nothing else; just got what I'm interested in
+```
+
+We can also get a hold of things by the attribute names. I can isolate it by the `id`
+
+```py
+heading = soup.find(name="h1", id="name")
+print(heading)
+```
+ Now I've just isolated the lone h1 above.
+
+```py
+section_heading = soup.find(name="h3", class_="heading") # class is a keyword, special, and only to be used for creating classes; change the name to class_
+print(section_heading) # use getText() to get the text from the h3 tag
+print(section_heading.name) # get the name of the tag
+print(section_heading.get("class"))
+```
+
 ## Quiz 17: Beautiful Soup Exercises
 
 ## Scraping a Live Website
