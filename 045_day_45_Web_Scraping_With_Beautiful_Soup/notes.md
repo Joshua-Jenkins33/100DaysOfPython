@@ -74,6 +74,38 @@ print(section_heading.name) # get the name of the tag
 print(section_heading.get("class"))
 ```
 
+We want to have a way to drill down into a particular element. In our html code we have the following:
+```html
+<body>
+	<h1 id="name">Angela Yu</h1>
+	<p><em>Founder of <strong><a href="https://www.appbrewery.co/">The App Brewery</a></strong>.</em></p>
+	<p>I am an iOS and Web Developer. I ❤️ coffee and motorcycles.</p>
+	<hr>
+```
+
+No where else in our code do we have an `<a>` tag inside a `<p>` tag. We can use css selectors to narrow down on a particular element to specify it's style. That would look something like this:
+```html
+<style>
+  p a {
+    /* style here */
+  }
+```
+
+When we're using BeautifulSoup, we can also use the css selector.
+```py
+company_url = soup.select_one(selector="p a") # this means we'll be able to get that anchor tag!
+print(company_url)
+```
+
+We can also use `id`s or `class`es in our selectors. Those would look like the following:
+```py
+name = soup.select_one(selector="#name")
+print(name)
+
+# all elements that have a class of "heading"
+headings = soup.select(".heading") # this returns a list
+```
+
 ## Quiz 17: Beautiful Soup Exercises
 
 ## Scraping a Live Website
