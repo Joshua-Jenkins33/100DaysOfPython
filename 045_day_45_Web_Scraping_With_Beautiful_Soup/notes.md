@@ -153,7 +153,81 @@ max_length = form_tag.get("maxlength")
 ```
 
 ## Scraping a Live Website
+It's much more fun to scrape from something life on the internet! We're going to pull from [y.combinator hacker news website](news.ycombinator.com).
+
+```py
+from bs4 import BeautifulSoup
+import requests
+
+response = requests.get("https://news.ycombinator.com/news")
+
+print(response.text) # this is equivalent to what we did when we read our `website.html` file!
+
+# We're not interested in this entire output, however. We want pieces of each article posting. Shows by default 30 articles. It doesn't order them by # of upvotes and that's what we are going to track. Without having to manually search through it.
+
+yc_web_page = response.text
+
+soup = BeautifulSoup(yc_web_page, "html.parser")
+print(soup.title) # this is what you see in the tab bar.
+```
+
+### Challenge: Get the Title of the Article
+```py
+title_text = soup.find_all("a", class="storylink").getText()
+```
+
+### The Rest
+```py
+from bs4 import BeautifulSoup
+import requests
+
+response = requests.get("https://news.ycombinator.com/news")
+
+yc_web_page = response.text
+
+soup = BeautifulSoup(yc_web_page, "html.parser")
+
+articles = soup.find_all(name="a", class_="titlelink")
+article_texts = []
+article_links = []
+
+for article_tag in articles:
+    text = article_tag.getText()
+    article_texts.append(text)
+
+    link = article_tag.get("href")
+    article_links.append(link)
+
+article_upvotes = [upvote.getText() for upvote in soup.find_all(name="span", class_="score")]
+
+print(article_texts)
+print(article_links)
+print(article_upvotes)
+
+article_upvotes = [int(point.split(" ")[0]) for point in article_upvotes]
+
+print("\n")
+
+largest_number = max(article_upvotes)
+most_upvotes_index = article_upvotes.index(largest_number)
+
+print(article_upvotes.index(largest_number))
+print(article_texts[most_upvotes_index])
+print(article_links[most_upvotes_index])
+```
 
 ## Is Web Scraping Legal?  
+What is the Law on Webscraping? The Law seems to favor webscraping as long as you think about a few things. It's not a blanket statement; only data that is publicly available and not copyrighted, it's fair game for web crawlers.
+
+1. **You can't commercialize copyrighted content.**
+2. **You can't scrape data behind authentication.**
+
+Just because it's legal doesn't mean you can actually do it. `reCAPTCHA`s can prevent this. 
+
+**ETHICS**
+1. Public API First (Apply for the application to their data!)
+2. Respect the Web Owner (Don't DDOS) (`.com/robots.txt` are endpoints they don't want bots using these endpoints; crawl delay is number of seconds)
+3. Limit your rate (don't scrape more than once per minute)
+
 
 ## 100 Movies that You Must Watch
