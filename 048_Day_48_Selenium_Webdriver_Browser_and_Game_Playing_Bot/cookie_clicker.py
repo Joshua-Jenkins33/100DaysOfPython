@@ -1,70 +1,162 @@
+# ====================================IMPORTS==================================== #
+
+
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import NoSuchElementException        
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 import time
+
+
+
+# ====================================WEBDRIVER VARIABLES==================================== #
+
+
 
 chrome_driver_path = "chromedriver.exe"
 driver = webdriver.Chrome(executable_path=chrome_driver_path)
 
 driver.get("http://orteil.dashnet.org/experiments/cookie/")
 
+
+
+# ====================================CLASSES==================================== #
+
+
+
 class Store:
     def __init__(self) -> None:
-        self.store_ids = ['buyCursor', 'buyGrandma', 'buyFactory', 'buyMine', 'buyShipment', 'buyAlchemy\ lab', 'buyPortal', 'buyTime\ machine']
-        self.cursor_price = self.get_prices()[0]
-        self.grandma_price = self.get_prices()[1]
-        self.factory_price = self.get_prices()[2]
-        self.mine_price = self.get_prices()[3]
-        self.shipment_price = self.get_prices()[4]
-        self.alchemy_lab_price = self.get_prices()[5]
-        self.portal_price = self.get_prices()[6]
-        self.time_machine_price = self.get_prices()[7]
+        self.stock = [
+            {
+                'id': 'buyCursor',
+                'price': 0
+            },
+            {
+                'id': 'buyGrandma',
+                'price': 0
+            },
+            {
+                'id': 'buyFactory',
+                'price': 0
+            },
+            {
+                'id': 'buyMine',
+                'price': 0
+            },
+            {
+                'id': 'buyShipment',
+                'price': 0
+            },
+            {
+                'id': 'buyAlchemy\ lab',
+                'price': 0
+            },
+            {
+                'id': 'buyPortal',
+                'price': 0
+            },
+            {
+                'id': 'buyTime\ machine',
+                'price': 0
+            }
+        ]
+        self.update_stock_prices()
 
 
-    def get_prices(self):
-        prices = []
-        for store_id in self.store_ids:
-            prices.append(driver.find_element(By.CSS_SELECTOR, f"div#{store_id} b").text.split(" ")[-1].replace(',',''))
-        return prices
+    # ====================================STORE METHODS==================================== #
 
+    def update_stock_prices(self):
+        for stock_item in self.stock:
+            stock_item['price'] = int(driver.find_element(By.CSS_SELECTOR, f"div#{stock_item['id']} b").text.split(" ")[-1].replace(',',''))
         
-def fresh_store():
-    return Store()
 
-def get_money():
-    return int(driver.find_element(By.ID, "money").text.replace(",",""))
+class User:
+    def __init__(self) -> None:
+        self._money = 0
+        
+    # ====================================USER METHODS==================================== #
 
-def click_cookie():
+    @property
+    def money(self):
+        return self._money
+    
+    @money.setter
+    def money(self, new):
+        self._money = new
+    
+
+
+# ====================================FUNCTIONS==================================== #
+
+
+
+def click_cookie(user):
     driver.find_element(By.ID, "cookie").click()
-    print(get_money())
+    user.money = int(driver.find_element(By.ID, "money").text.replace(",",""))
+    print(user.money)
+
 
 def get_cps():
     return driver.find_element(By.ID, "cps").text
 
-def shop():
-    driver.find_element(By.ID, "buyCursor").click()
-    print("Bought a cursor")
-    number_of_cursors = driver.find_element(By.CSS_SELECTOR, 'div#buyCursor, div.amount').text.split("\n")[0].split(" ")[-1] # this doesn't exist until you buy one otherwise it gets the cost of the cursor
-    print(f"Cursors: {number_of_cursors}")
 
-money = get_money()
+def buy_item(id):
+    # purchase = driver.find_element(By.CSS_SELECTOR, f"#{id}")
+    # purchase.click()
+    wait = WebDriverWait(driver, 10)
+    element = wait.until(EC.element_to_be_clickable((By.ID, id)))
+    #TODO: This isn't working; there is a bug here. Element doesn't exist on the page yet for some reason
+    print(f"======================================================{element.text}======================================================")
+    element.click()
+
+
+def get_most_expensive_affordable_item(user: User, store: Store):
+    for item in reversed(store.stock):
+        if user.money >= item['price']:
+            print(item['id'])
+            buy_item(item['id'])
+            # money should be subtracted with the next click of the cookie
+
+
+def tally_assets(store):
+    assets = []
+    for item in store.stock:
+        print(item)
+        try:
+            assets.append({'id': item['id'], 'amount': driver.find_element(By.CSS_SELECTOR, f"#{item['id']} amount").text.replace(",","")})
+        except NoSuchElementException:
+            print(f"Your assets do not include {item['id']}")
+    [print(item) for item in assets]
+
+
+
+# ====================================MAIN LOGIC==================================== #
+
+
+
+user = User()
 
 play_game = True
 
-timeout = time.time() + 10 #60*5   # 5 minutes from now
+timeout = time.time() + 60*5   # 5 minutes from now
 time_to_shop = time.time() + 5
 
 while play_game:
-    click_cookie()
+    click_cookie(user)
 
     if time.time() > time_to_shop:
-        store = fresh_store()
-        shop()
+        store = Store()
+        get_most_expensive_affordable_item(user, store)
         time_to_shop = time.time() + 5
     if time.time() > timeout:
         play_game = False
      
-print(f"The final score was: {get_cps()}")
+#TODO: For a later date
+#tally_assets(store)
     
+print("=======================================================")
+print(f"The final score was: {get_cps()} Cookies per Second")
+print("=======================================================")
 driver.quit()
-#     pass
