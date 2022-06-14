@@ -149,8 +149,114 @@ for n in range(len(event_times)):
 
 ## Challenge: Use Selenium in a Blank Project and Scrape a Difference Piece of Data
 
-## How to Automate Filling Out Forms and Clicking Buttons with Selenium
+Create a blank file called interaction.py. Use Selenium to print the total number of articles from the Wikipedia homepage to the console.
 
+```py
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+chrome_driver_path = r"chromedriver.exe"
+driver = webdriver.Chrome(executable_path=chrome_driver_path)
+
+driver.get("https://en.wikipedia.org/wiki/Main_Page")
+english_article_count = driver.find_element(By.CSS_SELECTOR, "div#articlecount a").text.replace(',',"")
+
+print(english_article_count)
+
+driver.quit()
+```
+
+### Instructor Code
+```py
+from selenium import webdriver
+
+chrom_driver_path = "yada"
+driver = webdriver.Chrome(chrome_driver_path)
+
+driver.get("https://en.wikipedia.org/wiki/Main_Page")
+article_count = driver.find_element_by_css_selector("#articlecount a")
+print(article_count.text)
+```
+## How to Automate Filling Out Forms and Clicking Buttons with Selenium
+How to interact with the elements we find!
+
+```py
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+
+chrome_driver_path = r"chromedriver.exe"
+driver = webdriver.Chrome(executable_path=chrome_driver_path)
+
+driver.get("https://en.wikipedia.org/wiki/Main_Page")
+english_article_count = driver.find_element(By.CSS_SELECTOR, "div#articlecount a")
+english_article_count.click()
+
+driver.quit()
+```
+
+**Finding by Text**
+Deprecated\*
+`all_portals = driver.find_element_by_link_text("All portals")`
+
+Supported
+`all_portals = driver.find_element(By.LINK_TEXT, 'All portals')`
+`all_portals.click()`
+
+### Populating a Search Bar
+```py
+# from selenium import webdriver
+# from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+
+# chrome_driver_path = r"chromedriver.exe"
+# driver = webdriver.Chrome(executable_path=chrome_driver_path)
+
+# driver.get("https://en.wikipedia.org/wiki/Main_Page")
+
+search = driver.find_element(By.NAME, "search")
+search.send_keys("python")
+search.send_keys(Keys.ENTER)
+# driver.quit()
+```
+
+### Challenge 3
+Practice using Selenium to fill in [this form](http://secure-retreat-92358.herokuapp.com/) and clicking Sign Up (this is not a real registration page).
+
+```py
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+
+chrome_driver_path = r"chromedriver.exe"
+driver = webdriver.Chrome(executable_path=chrome_driver_path)
+
+driver.get("http://secure-retreat-92358.herokuapp.com/")
+
+
+first_name = driver.find_element(By.NAME, "fName")
+first_name.send_keys("Jimmy")
+last_name = driver.find_element(By.NAME, "lName")
+last_name.send_keys("Purdue")
+email = driver.find_element(By.NAME, "email")
+email.send_keys("jimmypurdue@gmail.com")
+send_keys(Keys.ENTER)
+
+# driver.quit()
+```
+
+Instructor Code
+```py
+first_name = driver.find_element(By.NAME, "fName")
+first_name.send_keys("Jimmy")
+last_name = driver.find_element(By.NAME, "lName")
+last_name.send_keys("Purdue")
+email = driver.find_element(By.NAME, "email")
+email.send_keys("jimmypurdue@gmail.com")
+
+submit = driver.find_element(By.CSS_SELECTOR, "form button")
+submit.click()
+```
 ## Cookie Clicker Project
 
 ## Challenge: Create an Automated Game Playing Bot
