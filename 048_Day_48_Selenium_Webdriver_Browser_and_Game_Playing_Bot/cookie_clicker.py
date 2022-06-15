@@ -103,21 +103,17 @@ def get_cps():
 
 
 def buy_item(id):
-    # purchase = driver.find_element(By.CSS_SELECTOR, f"#{id}")
-    # purchase.click()
-    wait = WebDriverWait(driver, 10)
-    element = wait.until(EC.element_to_be_clickable((By.ID, id)))
-    #TODO: This isn't working; there is a bug here. Element doesn't exist on the page yet for some reason
-    print(f"======================================================{element.text}======================================================")
-    element.click()
+    time.sleep(.1)
+    driver.find_element(By.CSS_SELECTOR, f"#{id}").click()
 
 
 def get_most_expensive_affordable_item(user: User, store: Store):
+    # this works but the algorithm needs addressed; currently ends in 38.6 cookies per second which is pitiful
     for item in reversed(store.stock):
         if user.money >= item['price']:
             print(item['id'])
             buy_item(item['id'])
-            # money should be subtracted with the next click of the cookie
+            print("test")
 
 
 def tally_assets(store):
@@ -147,9 +143,11 @@ while play_game:
     click_cookie(user)
 
     if time.time() > time_to_shop:
+        print(f"SHOP TIME! Current time is: {time.time()} and Shop Time is: {time_to_shop}")
         store = Store()
         get_most_expensive_affordable_item(user, store)
         time_to_shop = time.time() + 5
+        print(f"New Shop Time is: {time_to_shop}")
     if time.time() > timeout:
         play_game = False
      
