@@ -97,6 +97,7 @@ try:
 except:
     print("Didn't need to click location buttons.")
 
+# start swiping
 for _ in range(1, 20):
     time.sleep(1)
     buttons = driver.find_elements(By.CSS_SELECTOR, "button.button")
