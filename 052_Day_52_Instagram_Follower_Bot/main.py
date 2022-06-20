@@ -55,9 +55,13 @@ class InstaFollower:
 
         time.sleep(8)
 
-        remember_creds_not_now_button = self.driver.find_element(By.CSS_SELECTOR, "div.cmbtv button")
-        print(f"{remember_creds_not_now_button.text} Button Pressed.")
-        remember_creds_not_now_button.click()
+        remember_creds_button = self.driver.find_element(By.CSS_SELECTOR, "button.sqdOP")
+        print(f"{remember_creds_button.text} Button Pressed.")
+        remember_creds_button.click()
+
+        # remember_creds_not_now_button = self.driver.find_element(By.CSS_SELECTOR, "div.cmbtv button")
+        # print(f"{remember_creds_not_now_button.text} Button Pressed.")
+        # remember_creds_not_now_button.click()
 
         time.sleep(5)
 
@@ -69,43 +73,39 @@ class InstaFollower:
 
 
     def find_followers(self):
+        time.sleep(5)
         self.driver.get(SIMILAR_ACCOUNT)
 
         time.sleep(2)
+        followers=self.driver.find_element(By.PARTIAL_LINK_TEXT,'followers')
+        followers.click()
 
-        followers_link = self.driver.find_element(By.PARTIAL_LINK_TEXT, "followers")
-        print(f"{followers_link.text} Link Clicked.")
-        followers_link.click()
-
-        time.sleep(1)
+        time.sleep(2)
+        modal = self.driver.find_element(By.CSS_SELECTOR, 'div.qg4pu3sx.flebnqrf.kzt5xp73.h98he7qt.e793r6ar.pi61vmqs.od1n8kyl.h6an9nv3.j4yusqav')
+        for i in range(10):
+            #In this case we're executing some Javascript, that's what the execute_script() method does. 
+            #The method can accept the script as well as a HTML element. 
+            #The modal in this case, becomes the arguments[0] in the script.
+            #Then we're using Javascript to say: "scroll the top of the modal (popup) element by the height of the modal (popup)"
+            self.driver.execute_script("arguments[0].scrollTop + arguments[0].offsetHeight;", modal)
+            time.sleep(2)
 
         
     def follow(self):
-        #successfully executes up to here
-        pop_up_window = WebDriverWait(self.driver, 2).until(EC.element_to_be_clickable(
-            (By.CSS_SELECTOR, "div._a3gq")))
-
-        while True:
-            follower_list = self.driver.find_elements(By.CSS_SELECTOR, "div._aae- li")
-            for follower in follower_list:
-                self.follow(follower)
-        
-            follower_account = self.driver.find_element(By.CSS_SELECTOR, 'a[role="link"] span._aac1').text
-            follower_account = follower.text
-            print(f"Testing {follower_account}...")
-            
-            follow_button = self.driver.find_element(By.CSS_SELECTOR, "li button._acan")
-            if follow_button.text.strip().lower() == 'follow':
-                follow_button.click()
-                print(f"{follow_button.text} Button Pressed.")
+        max_follows = 150
+        current_follows = 0
+        all_buttons = self.driver.find_elements(By.CSS_SELECTOR, "li button")
+        for button in all_buttons:
+            if current_follows >= max_follows:
+                break
             else:
-                print("You're already following this account.")
-            
-            self.driver.execute_script(
-                'arguments[0].scrollTop = arguments[0].scrollTop + arguments[0].offsetHeight;',
-                pop_up_window
-                )
-            time.sleep(1)
+                if button.text.strip().lower() == 'follow':
+                    button.click()
+                    print(f"{button.text} Button Pressed.")
+                    time.sleep(1)
+                    current_follows += 1
+                else:
+                    print("You're already following this account.")
 
 
 
