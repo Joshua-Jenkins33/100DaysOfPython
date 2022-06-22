@@ -18,11 +18,12 @@ import re
 
 
 
-# ====================================CONSTANTS==================================== #
+# ====================================CONSTANTS AND ENVIRONMENT VARIABLES==================================== #
 
 
 
 FORM_LINK = "https://docs.google.com/forms/d/e/1FAIpQLSftMVw-f6kPBYdlk7evZesod-3YGrojaIwhI28kS5Holf2ayg/viewform?usp=sf_link"
+FORM_RESPONSES = "https://docs.google.com/forms/d/1NPtoHX6R2f89C_5oHrLdE7FbV93n6V5FwNg7VqF5i6w/edit#responses"
 ZILLOW_LINK = "https://www.zillow.com/homes/for_rent/1-_beds/?searchQueryState=%7B%22pagination%22%3A%7B%7D%2C%22usersSearchTerm%22%3Anull%2C%22mapBounds%22%3A%7B%22west%22%3A-122.56276167822266%2C%22east%22%3A-122.30389632177734%2C%22south%22%3A37.69261345230467%2C%22north%22%3A37.857877098316834%7D%2C%22isMapVisible%22%3Atrue%2C%22filterState%22%3A%7B%22fr%22%3A%7B%22value%22%3Atrue%7D%2C%22fsba%22%3A%7B%22value%22%3Afalse%7D%2C%22fsbo%22%3A%7B%22value%22%3Afalse%7D%2C%22nc%22%3A%7B%22value%22%3Afalse%7D%2C%22cmsn%22%3A%7B%22value%22%3Afalse%7D%2C%22auc%22%3A%7B%22value%22%3Afalse%7D%2C%22fore%22%3A%7B%22value%22%3Afalse%7D%2C%22pmf%22%3A%7B%22value%22%3Afalse%7D%2C%22pf%22%3A%7B%22value%22%3Afalse%7D%2C%22mp%22%3A%7B%22max%22%3A3000%7D%2C%22price%22%3A%7B%22max%22%3A872627%7D%2C%22beds%22%3A%7B%22min%22%3A1%7D%7D%2C%22isListVisible%22%3Atrue%2C%22mapZoom%22%3A12%7D"
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:101.0) Gecko/20100101 Firefox/101.0"
 ACCEPT_LANGUAGE = "en-US,en;q=0.5"
@@ -30,6 +31,10 @@ HEADERS = {
     "User-Agent": USER_AGENT,
     "Accept-Language": ACCEPT_LANGUAGE
 }
+
+load_dotenv(r'C:\repos\100DaysOfPython\053_Day_53_Web_Scraping_Capstone_Data_Entry_Job_Automation\.env')
+GMAIL_USERNAME = os.getenv("GMAIL_USERNAME")
+GMAIL_PASSWORD = os.getenv("GMAIL_PASSWORD")
 
 
 
@@ -65,6 +70,8 @@ chrome_driver_path = r"C:\repos\100DaysOfPython\053_Day_53_Web_Scraping_Capstone
 driver = webdriver.Chrome(executable_path=chrome_driver_path)
 
 driver.get(FORM_LINK)
+
+time.sleep(1)
 
 
 
@@ -115,10 +122,40 @@ for property in properties:
   submit_button.click()
   print("Property posted! Next Property...\n")
 
-  time.sleep(2)
+  time.sleep(1)
 
-  # should have some logic to check if this is the last element
-  new_form_link = driver.find_element(By.CSS_SELECTOR, "div.c2gzEf a")
-  new_form_link.click()
-  print("Filling in a new form...")
-  
+  if property != properties[-1]:
+    new_form_link = driver.find_element(By.CSS_SELECTOR, "div.c2gzEf a")
+    new_form_link.click()
+    print("Filling in a new form...")
+  else:
+    print("===ALL SCRAPED PROPERTIES HAVE BEEN SUBMITTED===")
+    
+
+# ------------------------------------CONVERTING TO SPREADSHEET------------------------------------ #
+# This is all unnecessary; Google's Sign-in Page is proving a pain to deal. Instructions didn't intend to include automating this piece
+"""
+driver.get(FORM_RESPONSES)
+
+sign_in_to_google_link = driver.find_element(By.CSS_SELECTOR, 'div#SMMuxb a')
+sign_in_to_google_link.click()
+print(f"{sign_in_to_google_link} Link Clicked")
+
+time.sleep(2)
+
+google_user_field = driver.find_element(By.CSS_SELECTOR, 'class.Xb9hP input[type="email"]')
+google_user_field.send_keys(GMAIL_USERNAME, Keys.ENTER)
+
+time.sleep(1)
+
+google_pw_field = driver.find_element(By.CSS_SELECTOR, 'input[type="password"]')
+google_pw_field.send_ekys(GMAIL_PASSWORD, Keys.ENTER)
+
+driver.get(FORM_RESPONSES)
+
+time.sleep(1)
+
+convert_to_spreadsheet_button = driver.find_element(By.CSS_SELECTOR, "div.foqfDc")
+convert_to_spreadsheet_button.click()
+print(f"{convert_to_spreadsheet_button.text()} Button Clicked")
+"""
