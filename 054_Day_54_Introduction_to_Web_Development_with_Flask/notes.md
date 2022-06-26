@@ -22,7 +22,13 @@ The server fetches relevenat ingredients from the database (fetches information 
 For Windows, you need to set the Flask environment variable to your file:
 `set FLASK_APP=hello.py`
 
+(in bash it is `export FLASK_APP=app.py` and you can verify it's there by doing `printenv FLASK_APP`)
+
 Followed by `flask run` in the terminal.
+
+Click on the link and it'll launch your site in the browser. 
+
+Flask converts the string into full html (inspect element and see your string in a tag!)
 
 ### Flask
 > "One of the most popular web development frameworks." 
@@ -34,6 +40,33 @@ Biggest difference:
 **Frameworks:** The code never calls into a framework; instead the framework calls you
 
 ## Understand the Command Line on Windows and Mac
+
+The terminal is a powerful tool! Type in commands in the terminal/command line/shell to control your computer.
+
+The Kernal is the core of your operating system. The shell of your operating system refers to your user interface to allow you to interact with the kernal. There are GUI and CLI (command line interface). 
+
+**Why Use the Command Line?** 
+- Greater control.
+- Easier and faster to do common things
+
+`pwd` = Print Working Directory
+`ls`= List (Display contents of directory)
+`cd` = Change Directory
+
+Creating a new folder:
+`mkdir <name>`
+
+Creating a new file:
+`touch <name of file>`
+
+deletes file:
+`rm <name of file>` 
+
+Remove Directory:
+`rm -rf <name of folder>`; recursively and forcibly removes it. Deletes all subfolders in the folder
+The terminal is *very* powerful.
+Double check you're in the right folder.
+
 
 ## `__name__` and `__main__`: Special Attributes built into Python
 
