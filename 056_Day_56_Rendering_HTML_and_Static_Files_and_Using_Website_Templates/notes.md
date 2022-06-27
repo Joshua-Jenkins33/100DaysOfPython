@@ -126,7 +126,7 @@ We're going to be using one of the templates on HTML 5 Up to create a web-based 
 
 2. Create a new PyCharm project called name-card and create a new Flask Application from scratch.
 - [x] Oops. Overwrote my previous stuff. 
-- [ ] Recreate my old website with Flask
+- [x] Recreate my old website with Flask
 
 3. Create the necessary folders and move the relevant files from the download in step1.
 - [x] Donezo
