@@ -141,3 +141,5 @@ We're going to be using one of the templates on HTML 5 Up to create a web-based 
 - [ ] Make it Your Own
 
 ## Solution and Walkthrough for the Name Card Final Project
+
+You can use [unsplash.com](unsplash.com) for beautiful pictures for commercial use.
