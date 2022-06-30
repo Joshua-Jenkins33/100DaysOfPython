@@ -31,35 +31,43 @@ class Store:
         self.stock = [
             {
                 'id': 'buyCursor',
-                'price': 0
+                'price': 0,
+                'code': 1
             },
             {
                 'id': 'buyGrandma',
-                'price': 0
+                'price': 0,
+                'code': 2
             },
             {
                 'id': 'buyFactory',
-                'price': 0
+                'price': 0,
+                'code': 3
             },
             {
                 'id': 'buyMine',
-                'price': 0
+                'price': 0,
+                'code': 4
             },
             {
                 'id': 'buyShipment',
-                'price': 0
+                'price': 0,
+                'code': 5
             },
             {
                 'id': 'buyAlchemy\ lab',
-                'price': 0
+                'price': 0,
+                'code': 6
             },
             {
                 'id': 'buyPortal',
-                'price': 0
+                'price': 0,
+                'code': 7
             },
             {
                 'id': 'buyTime\ machine',
-                'price': 0
+                'price': 0,
+                'code': 8
             }
         ]
         self.update_stock_prices()
@@ -95,7 +103,7 @@ class User:
 def click_cookie(user):
     driver.find_element(By.ID, "cookie").click()
     user.money = int(driver.find_element(By.ID, "money").text.replace(",",""))
-    print(user.money)
+    #print(user.money)
 
 
 def get_cps():
@@ -103,17 +111,34 @@ def get_cps():
 
 
 def buy_item(id):
-    time.sleep(.1)
+    # time.sleep(.1)
     driver.find_element(By.CSS_SELECTOR, f"#{id}").click()
+     
+    
+def compare_prices(affordable_item: object, store: Store):
+    for stock_item in store.stock:
+        if stock_item['code']-1 == affordable_item['code']:
+            print(f"Comparing {affordable_item['id']} (price {affordable_item['price']}) with {stock_item['id']} (price {stock_item['price']})")
+            if affordable_item['price'] > stock_item['price']*.6:
+                print("Waiting until the next item is affordable.")
+            else:
+                if affordable_item['id'] == 'buyCursor' and affordable_item['price'] > 20:
+                    print(f"WHAT?! Cursor's cost {affordable_item['price']}?! Too expensive. Move on.")
+                elif affordable_item['id'] == 'buyGrandma' and affordable_item['price'] > 400:
+                    print("No more grandmas")
+                else:
+                    buy_item(affordable_item['id'])
+                    print(f"========================Buying {affordable_item['id']}========================")
 
 
 def get_most_expensive_affordable_item(user: User, store: Store):
     # this works but the algorithm needs addressed; currently ends in 38.6 cookies per second which is pitiful
+    affordable_options = []
     for item in reversed(store.stock):
         if user.money >= item['price']:
-            print(item['id'])
-            buy_item(item['id'])
-            print("test")
+            affordable_options.append(item)
+            compare_prices(item, store)
+            break
 
 
 def tally_assets(store):
