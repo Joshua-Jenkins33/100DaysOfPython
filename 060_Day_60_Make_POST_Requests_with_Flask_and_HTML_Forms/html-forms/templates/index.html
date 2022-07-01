@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  </head>
+  <body>
+    <h1>It Works!</h1>
+    {% block content %}
+    <form action="{{ url_for('receive_data') }}" method="post">
+      <!-- Name name Password password Ok -->
+      <label for="name">Name: </label>
+      <input type="text" id="name" name="name">
+      <label for="password">Password: </label>
+      <input type="text" id="password" name="password">
+      <input type="submit" value="Submit">
+    </form>
+    {% endblock %}
+  </body>
+</html>
+
+
