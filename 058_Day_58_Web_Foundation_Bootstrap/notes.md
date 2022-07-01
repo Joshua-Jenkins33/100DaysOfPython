@@ -498,23 +498,399 @@ Just did the prep styling for the testimonial and press sections.
 ```
 
 ## Bootstrap Cards
+Bootstrap has a "[Pricing Page](https://getbootstrap.com/docs/5.0/examples/pricing/)" example.
+
+She also recommends heading to [bootsnipp](https://bootsnipp.com) for a bunch of pre-made components.
+
+They are using a bootstrap component to build the pricing page: bootstrap **cards**. That's how you can make sense of what's going on in the code.
+
+```css
+/* Pricing Section */
+
+#pricing {
+  padding: 100px;
+  text-align: center;
+}
+
+.pricing-column {
+  padding: 3% 2%;
+}
+```
+
+```html
+  <!-- Pricing -->
+
+  <section id="pricing">
+
+    <h2>A Plan for Every Dog's Needs</h2>
+    <p>Simple and affordable price plans for your and your dog.</p>
+
+    <div class="row row-cols-1 row-cols-lg-3 row-cols-md-2 g-4">
+      <div class="pricing-column col">
+        <div class="card h-100">
+          <div class="card-header">
+            <h3>Chihuahua</h3>
+          </div>
+          <div class="card-body">
+            <h2>Free</h2>
+            <p>5 Matches Per Day</p>
+            <p>10 Messages Per Day</p>
+            <p>Unlimited App Usage</p>
+            <button class="w-100 btn btn-lg btn-outline-dark" type="button">Sign Up</button>
+          </div>
+        </div>
+      </div>
+      <div class="pricing-column col">
+        <div class="card h-100">
+          <div class="card-header">
+            <h3>Labrador</h3>
+          </div>
+          <div class="card-body">
+            <h2>$49 / mo</h2>
+            <p>Unlimited Matches</p>
+            <p>Unlimited Messages</p>
+            <p>Unlimited App Usage</p>
+            <button class="w-100 btn btn-lg btn-dark" type="button">Sign Up</button>
+          </div>
+        </div>
+      </div>
+      <div class="pricing-column col col-lg-4 col-md-12">
+        <div class="card h-100">
+          <div class="card-header">
+            <h3>Mastiff</h3>
+          </div>
+          <div class="card-body">
+            <h2>$99 / mo</h2>
+            <p>Pirority Listing</p>
+            <p>Unlimited Matches</p>
+            <p>Unlimited Messages</p>
+            <p>Unlimited App Usage</p>
+            <button class="w-100 btn btn-lg btn-dark" type="button">Sign Up</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+```
 
 ## CSS Z-Index and Stacking Order
+Out top title section is bigger than it needs to be. We want the phone image to hide behind the bottom section. We can handle this by the **Z-Index** (or position) whether it's more towards you or away from you. This is an advanced CSS element.
+
+Absolute / Relative / Static Positioning.
+- Absolute takes HTML elements out of the HTML flow
+
+Z-Order naturally happens from top to bottom of the actual HTML document's text. There are other ways of changing the stacking order. We can use CSS by utilizing the property `z-index`.
+
+Setting the `z-index` to 1 will bring it to the front. -1 will send it to the back. The default `z-index` of elements are 0. If all have the same `z-index`, then stacking order will be maintained by the order in which it is written in the file.
+
+`z-index` only works if it has a position. Static, for example, will make it appear that it is not working.
+
+This was a bit wild.
+
+```css
+#features {
+  padding: 7% 15%;
+  background-color: white;
+  position: relative;
+}
+
+.title-image {
+  width: 20%;
+  transform: rotate(25deg);
+  position: absolute;
+  right: 22%;
+}
+```
+
+I'm not sure why, but my `.title-image width` had to be adjusted when her's did not need it.
 
 ## Advanced CSS - Media Query Breakpoints
+Weirdness with image scaling for desktop to mobile. 
+
+Mobile-First! Why can't I just have 1 design have it be looking good on the web? Since 2016 mobile browsers surpassed desktop browsers. 
+
+Google Rankings are affected by whether or not it's mobile-friendly for Google Search Rankings.
+
+I only want my text to be red when they print... Going to use `@media print`
+`@speech` and `@screen` are other options.
+
+```html
+<h1>Hello World</h1>
+```
+
+```css
+@media print {
+h1 {
+  color: red;
+}
+}
+```
+
+### Media Query Structure
+`@media <type> <feature>`
+
+Checking to see if something is true or false. If the media is a screen and the feature is that it's minimum width is 900 pixels, then change something.
+```css
+@media screen (min-width: 900px) {
+  //change something
+}
+```
+
+Continuing Demo:
+```html
+<h1>Hello World</h1>
+```
+
+```css
+h1 {
+  font-size: 30px;
+}
+
+@media (max-width: 900px) {
+h1 {
+  /* color: red; */
+  font-size: 60px;
+}
+}
+```
+
+We created a media query breakpoint at 900 pixels that will override our font size for smaller devices. 
+
+We need the image to be displayed as `static` when it's on a smaller screen and not be rotated. It also needs its width change. Text will need to be center aligned instead of left.
+
+Solution:
+```css
+@media (max-width: 1028px) {
+  #title {
+    text-align: center;
+  }
+  .title-image {
+    position: static;
+    transform: rotate(0);
+    width: 60%;
+  }
+}
+```
 
 ## Bootstrap Challenge 2
+In this challenge, you are going to complete the layout and design of our TinDog website. Similar to the previous challenge, below is a specification. Use what you have learnt about CSS and Bootstrap to format the appearance of your website's last two sections to look the same as the specification. The fonts and colours have been specified by you should use your judgement and create the margins/padding by eye.
+
+- [x] Font Awesome Button Icons
+- [x] Section Background COlor of #ff4c68
+- [x] Large Bootstrap Buttons (Dark Themed)
+- [x] Montserrat Black Text
+- [x] Bottom section background #fff
+- [x] Font Awesome: Twitter, Facebook, Instagram, Envelope
 
 ## Solution to Bootstrap Challenge 2
 
+### CTA Section
+
+```html
+  <!-- Call to Action -->
+  
+  <section id="cta">
+    
+    <h3 class="cta-heading">Find the True Love of Your Dog's Life Today.</h3>
+    <button type="button" class="btn btn-dark btn-lg download-button"><i class="fa-brands fa-apple"></i> Download</button>
+    <button type="button" class="btn btn-outline-light btn-lg download-button"><i class="fa-brands fa-google-play"></i> Download</button>
+
+  </section>
+```
+
+```css
+/* CTA Section */
+
+#cta {
+  background-color: #ff4c68;
+  color: #fff;
+  padding: 7% 15%;
+  text-align: center;
+}
+
+.cta-heading {
+  font-weight: 900;
+  font-size: 3.5rem;
+  line-height: 1.5rem;
+}
+```
+
+### Footer Section
+
+```html
+  <!-- Footer -->
+
+  <footer id="footer">
+
+    <i class="social-icon fa-brands fa-twitter footer-icons"></i>
+    <i class="social-icon fa-brands fa-facebook-f footer-icons"></i>
+    <i class="social-icon fa-brands fa-instagram footer-icons"></i>
+    <i class="social-icon fa-solid fa-envelope footer-icons"></i>
+    <p>© Copyright 2018 TinDog</p>
+
+  </footer>
+```
+```css
+/* Footer Section */
+
+#footer {
+  padding: 7% 15%;
+  text-align: center;
+}
+
+.social-icon {
+  margin: 20px 10px;
+}
+```
+
+### Update Navbar
+```html
+      <!-- Nav Bar -->
+      <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="">tindog</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#footer">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#pricing">Pricing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#cta">Download</a>
+                </li>
+            </ul>
+        </div>
+      </nav>
+```
+
 ## Code Refactoring
+Our `styles.css` is atrocious.
+
+We want to be DRY: Do Not Repeat Yourself
+
+We want to keep it performant and easy to read.
+
+Suitcase packing anecdote. 
+
+### Guiding Principles
+1. Readability
+2. Modularity
+3. Efficiency
+4. Length
 
 ## Refactoring Our Website: Part 1
+We shouldn't be applying styles to things like `<h1>` tags if we aren't planning on using it for *every* tag.
+
+Condensed our CSS and added a few new classes. Adhering to DRY.
 
 ## Advanced CSS - Combining Selectors
 
+### Multiple Selectors: 
+
+```css
+selector1, selector2 {
+
+}
+```
+
+### Hierarchical Selectors
+This is a bad example though, because ids are unique. So if you're going to change the css of an id, there's not much reason to select deeper things.
+```css
+#title .container-fluid {
+  padding-top: 3%;
+  text-align: left;
+}
+```
+
+The below is a good example, however.
+```css
+div .container-fluid {
+
+}
+```
+
+You read selectors from right to left.
+
+### Combined Selectors
+```css
+selector1.selector2 {
+
+}
+
+selector1#selector2 {
+
+}
+
+h1#title {color: red}
+```
+
+The following doesn't work (if you don't have that set in your html)
+```css
+div#title {color: red}
+```
+```html
+<div class="container-fluid">
+  <h1 id="title">Hello World</h1>
+</div>
+```
+
+Combined Selectors don't utilizie spaces, so it's pretty much direct inheritance from the parent. If that path doesn't exist, it won't do anything.
+
+Example:
+```html
+<div class="container">
+  <h1 class="title">Hello World</h1>
+</div>
+<div class="container-fluid">
+  <h1 calss="title">Good Bye World!</h1>
+</div>
+```
+
+Look for a class of container but also a class of title. This isolates the **Hello World.**
+```css
+.container .title {
+  color: red;
+}
+```
+
 ## Refactoring Our Website: Part 2
+After looking at combining selectors, we can continue our refactor.
+
+White Background = Black Text
+Red Background = White Text
+
+Going to create classes for **Colored** and **white** sections.
+
+```css
+/* Sections */
+
+.colored-section {
+  background-color: #ff4c68;
+  color: #fff;
+}
+
+.white-section {
+  background-color: white;
+}
+```
+
 
 ## Advanced CSS - Selector Priority
+in-line styles > `#ids` > `.class` > `raw html elements`
+
+Last definition receives priority.
+
+Prevent conflicting rules; use `ids` sparingly. Just because you have one of something isn't a good enough reason to use an id rather than a class for CSS.
+
+Try using only 1 class.
+
+Avoid in-line styles at all costs.
 
 ## Completing the Website
+
+It's all done!
