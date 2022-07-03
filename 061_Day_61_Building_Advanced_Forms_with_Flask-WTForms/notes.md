@@ -98,13 +98,159 @@ def login():
 ```
 
 ## Code Improvements for Our WTForms
+We can improve the code we wrote in the previous section, which was written mostly the standard expectation that students and those with 60 days of Python under their belts should be able to manage.
+
+1. Change the `password` input to use a `PasswordField` from WTForms to obscure the text typed in the input
+  - [Documentation for Other Field Types](https://wtforms.readthedocs.io/en/2.3.x/fields/#basic-fields)
+2. Arugments given when creating a `String` or `PasswordField` is for the `label` property of the form field. Add the keyword argument for this so it is clear what this parameter is associated with. See `login.html` to see how this parameter attribute relates to the field attribute.
+3. The Quickstart set the form action to the hardcoded path of `"/"`. It's a good idea to use dynamically built urls; swap it for `url_for()`.
+4. We can also better format the layout of the labels and inputs in our WTForms generated form by using normal HTML elements
+5. `SubmitField`s are a thing; no button necessary!
 
 ## Adding Validation to Forms with Flask-WTF
+One of the major reasons to use WTForms over HTML Forms is validation. These validation rules come straight out of the WTForms box.
+
+1. Add validator objects when we create each field in our form (`, validators=[DataRequired()])`) remember to import from `from wtforms.validators import DataRequired`
+  - [Documentation](https://wtforms.readthedocs.io/en/2.3.x/crash_course/#validators)
+  - `validators` accepts a **List** of validator **Objects**. DataRequired makes the two fields required fields, so the user must type something, otherwise an error will be generated.
+  - When a form is submitted, there may be a number of erros, so a List of `errors` can be generated and passed over to our form HTML as a property on the field which generated the error (`form.<field>.errors`)
+2. Utilize these errors and loop through them to show some text when an error appears
+  - [Documentation](https://wtforms.readthedocs.io/en/2.3.x/crash_course/#displaying-errors)
+
+```html
+  {% for err in form.email.errors %}
+    <span style="color:red">{{ err }}</span>
+  {% endfor %}
+```
+
+3. The final step is to tell our form to validate the user's entry when they hit submit. Edit our route and make sure it is able to respond to `POST` requests and then to `validate_on_submit()`.
+  - Some browsers have built form detection things that supply validation pop-ups; this isn't coming from our code and will vary accross browsers
+4. To switch it off, we give the `form` tag an attribute of `novalidate` and now our validation efforts should work.
+
+### Challenge: Email Validation
+Using the [documentation](https://wtforms.readthedocs.io/en/2.3.x/validators/#module-wtforms.validators) on WTForm validators, add `Email` validation to the email field so that you must type a **valid email** (with `"@"` and `"."`) otherwise you get an error. Also add `Length` validation to the password so you must type at least **8 characters**.
+
+*Hint:* Pay close attention if the documentation mentions anything about installing an additional package to get email validation to work. If so, you may want to pip isntall the package through the terminal.
+
+```py
+from wtforms.validators import DataRequired, Email, Length
+
+class LoginForm(FlaskForm):
+    email = StringField(label='email', validators=[DataRequired(), Email(message="You must enter a valid email address.", check_deliverability=True)])
+    password = PasswordField(label='Password', validators=[DataRequired(), Length(min=8, message="Password must be at least 8 characters long.")])
+```
 
 ## Receiving Form Data with WTForms
+With basic HTML we could use the `request` object from Flask to access the key-value pairs that were entered into the form when the `POST` request was made.
+
+It's easier with WTForms; tap into the `<form_object>.<form_field>.data`.
+- [Documentation](https://wtforms.readthedocs.io/en/2.3.x/crash_course/#how-forms-get-data)
+- `print(login_form.email.data)`
+
+One thing to check before printing is whether the form has been submitted (POST request) or if it's a GET request when the form is being rendered.
+
+Previously, we used `if request.method == "POST"`
+
+No we're going to check the return value of `validate_on_submit()` which will be `True` if validation was successful **after the user submitted the form**, or `False` if it failed.
+
+```py
+if login_form.validate_on_submit():
+  print(login_form.email.data)
+```
+
+### Challenge
+Update the `/login` route in **main.py** so that if the form was **submitted** and **validated** and their **credentials** matched the following:
+- email: **admin@email.com**
+- password: **12345678**
+
+Then show them the **success.html** page, otherwise show them the **denied.html** page.
+
+```py
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    login_form = LoginForm()
+    if login_form.validate_on_submit():
+        print(f"Email: {login_form.email.data}")
+        print(f"Password: {login_form.password.data}")
+        if login_form.email.data == "admin@email.com" and login_form.password.data == "12345678":
+            return render_template('success.html')
+        else:
+            return render_template('denied.html')
+    return render_template('login.html', form=login_form)
+```
 
 ## Inheriting Templates Using Jinja2
+We've injected `header.html` and `footer.html` code using Jinja like this:
+```html
+{% include "header.html" %}
+Web Page Content
+{% include "footer.html" %}
+```
+
+Which makes for a flexible way of using Jinja to Template a website. It means that your header and footer can stay the same and you can easily insert them into all of your webpages.
+
+### Template Inheritance
+You might find that you want to use the same design template for your entire website, but you might need to change some code in your header or footer. In these cases, it's better to use **Template Inheritance**.
+
+It's similar to Class Inheritance in that you can take parent templates and extend its styling to your child web pages.
+
+i.e. **base.html**
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    {% block content %}{% endblock %}
+</body>
+</html>
+```
+This has predefined areas (or blocks) where new content can be inserted by a child webpage inheriting from this template.
+
+1. Rewrite the `success.html` page to inherit from this `base.html` template
+```html
+#1.
+{% extends "base.html" %}
+#2.
+{% block title %}Success{% endblock %}
+#3.
+{% block content %}
+    <div class="container">
+      <h1>Top Secret </h1>
+      <iframe src="https://giphy.com/embed/Ju7l5y9osyymQ" width="480" height="360" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+      <p><a href="https://giphy.com/gifs/rick-astley-Ju7l5y9osyymQ">via GIPHY</a></p>
+    </div>
+{% endblock %}
+```
+- #1: This line of code tells the templating engine (Jinja) to use **base.thml** as the template for this page
+- #2: This block inserts a custom title into the header of the template
+- #3: This block provides the content of the website. The part that is going to vary between webpages
+
+### Challenge
+Try doing the same thing for `denied.html`, making sure that it uses the `base.html` as the template and it has a custom title and content.
+
+```html
+{% extends "base.html" %}
+{% block title %}Denied{% endblock %}
+{% block content %}
+	<div class="container">
+		<h1>Access Denied </h1>
+		<iframe src="https://giphy.com/embed/1xeVd1vr43nHO" width="480" height="271" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+		<p><a href="https://giphy.com/gifs/cheezburger-funny-dog-fails-1xeVd1vr43nHO">via GIPHY</a></p>
+	</div>
+{% endblock %}
+```
 
 ## Using FLask-Bootstrap as an Inherited Template
+We'll be using inheritance to improve the look-and-feel of the site.
+
+### Flask Bootstrap
+The Flask-Bootstrap Python extension makes stylizing this incredibly easy.
+
+1. Install Flask-Bootstrap to your project using pip:
+  - `pip install FLask-Bootstrap`
+2. Challenge: Delete the super block in your `denied.html` file and use the [Flask-Bootstrap documentation](https://pythonhosted.org/Flask-Bootstrap/basic-usage.html) to convert our `denied.html`, `success.html`, and `index.html` to use Bootstrap as the template.
 
 ## Flask-BootStrap Supports WTForms
