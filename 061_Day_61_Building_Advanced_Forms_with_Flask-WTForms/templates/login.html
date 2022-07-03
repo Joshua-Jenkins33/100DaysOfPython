@@ -1,15 +1,21 @@
-<!DOCTYPE HTML>
-
-<html>
-	<head>
-		<title>Login</title>
-		{{ form.csrf_token }}
-	</head>
-	<body>
-        <div class="container">
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}Login{% endblock %}
+{% block navbar %}
+<div class="navbar navbar-fixed-top">
+  <!-- ... -->
+</div>
+{% endblock %}
+{% block content %}
+		<div class="container">
 		<h1>Login</h1>
-        <!-- This is where our form will go. -->
-				<form method="POST" action="{{ url_for('login') }}" novalidate>
+		{{ wtf.quick_form(form, novalidate=True) }}
+        
+		
+		
+		
+		<!-- This is where our form will go. -->
+				<!-- <form method="POST" action="{{ url_for('login') }}" novalidate>
 					{{ form.csrf_token }}
 					<p>
 						{{ form.email.label }} <br> {{ form.email(size=30) }}
@@ -24,7 +30,9 @@
 						{% endfor %}
 					</p>
 					{{ form.submit }}
-				</form>
-        </div>
-	</body>
-</html>
+				</form> -->
+
+
+
+		</div>
+{% endblock %}

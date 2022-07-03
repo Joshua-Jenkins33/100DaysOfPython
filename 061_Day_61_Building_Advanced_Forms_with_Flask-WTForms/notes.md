@@ -253,4 +253,61 @@ The Flask-Bootstrap Python extension makes stylizing this incredibly easy.
   - `pip install FLask-Bootstrap`
 2. Challenge: Delete the super block in your `denied.html` file and use the [Flask-Bootstrap documentation](https://pythonhosted.org/Flask-Bootstrap/basic-usage.html) to convert our `denied.html`, `success.html`, and `index.html` to use Bootstrap as the template.
 
+```py
+from flask_bootstrap import Bootstrap
+
+app = Flask(__name__)
+app.secret_key = b'blahblahblah'
+Bootstrap(app)
+```
+
+```html
+{% extends "bootstrap/base.html" %}
+{% block title %}Secrets{% endblock %}
+{% block navbar %}
+<div class="navbar navbar-fixed-top">
+  <!-- ... -->
+</div>
+{% endblock %}
+{% block content %}
+	<div class="jumbotron">
+		<div class="container">
+			<h1>Welcome</h1>
+			<p>Are you ready to discover my secret?</p>
+			<a href="{{ url_for('login') }}"><button class="btn btn-primary btn-lg">Login</button></a>
+		</div>
+	</div>
+{% endblock %}
+```
+
 ## Flask-BootStrap Supports WTForms
+Super convenient method for generating forms with WTForms.
+
+1 line of code == form. `{{ wtf.quick_form(form) }}`
+
+This line generates all the labels, inputs, buttons, styling for your form just by taking the WTForm object that was passed to the template (`form`).
+You can delete the entire element and add a line to inherit the wtf support from bootstrap and use the `quick_form()` to generate your `form`.
+`{% import "bootstrap/wtf.html" as wtf %}`
+
+
+[Documentation](https://pythonhosted.org/Flask-Bootstrap/forms.html)
+
+**Login.html**
+```html
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}Login{% endblock %}
+{% block navbar %}
+<div class="navbar navbar-fixed-top">
+  <!-- ... -->
+</div>
+{% endblock %}
+{% block content %}
+		<div class="container" style="width: 25%;">
+		<h1>Login</h1>
+		{{ wtf.quick_form(form, novalidate=True) }}
+		</div>
+{% endblock %}
+```
+
+

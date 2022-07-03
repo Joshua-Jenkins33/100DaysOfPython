@@ -2,10 +2,11 @@ from flask import Flask, render_template
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Email, Length
+from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
-
 app.secret_key = b'O\xd8\xd6\xb7\xdf\xe1jv\xc1Z\xc0G\x1a\x96\xe8R'
+Bootstrap(app)
 
 class LoginForm(FlaskForm):
     email = StringField(label='email', validators=[DataRequired(), Email(message="Invalid email address.", check_deliverability=True)])
