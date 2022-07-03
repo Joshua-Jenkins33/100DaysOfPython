@@ -176,4 +176,4 @@ from wtforms.validators import DataRequired, URL
 
 ---
 
-- [ ] Make sure all the navigation links in the website work. 
+- [x] Make sure all the navigation links in the website work. 
