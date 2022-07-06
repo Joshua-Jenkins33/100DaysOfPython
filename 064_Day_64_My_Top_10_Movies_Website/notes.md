@@ -116,6 +116,41 @@ def home():
 ```
 
 ## Requirement 2 - Be Able to Edit a Movie's Rating and Review
+There is an edit button on the back of the movie card, you should be able to click on it and change your rating and review.
+
+1. Use what you have learnt about WTForms to create the RateMovieForm. Use this to create a Quick Form to be rendered in edit.html.
+
+NOTE: You don't need to change the code in edit.html, it already has everything you need to render your Quick Form. This is so that students don't just create a simple HTML form.
+
+If you've forgotten how to work with WTForms, you can go back a few lessons and review the content there or just use the documentation:
+- [Flask Bootstrap Forms](https://pythonhosted.org/Flask-Bootstrap/forms.html)
+- [WTForms](https://wtforms.readthedocs.io/en/2.3.x/)
+- [Flask WTF](https://flask-wtf.readthedocs.io/en/stable/)
+
+```html
+<a href="{{ url_for('edit', id=movie.id) }}" class="button">Update</a>
+```
+
+```py
+@app.route("/edit", methods=["GET", "POST"])
+def edit():
+    form = RateMovieForm()
+    movie_id = request.args.get('id')
+    movie = Movie.query.get(movie_id)
+
+    if form.validate_on_submit():
+        movie.rating = form.rating.data
+        movie.review = form.review.data
+        db.session.commit()
+        print(f"================{movie.title.upper()} UPDATED WITH NEW RATING OF {movie.rating}================")
+        print(f"================{movie.review}================")
+        return redirect(url_for('home'))
+    return render_template('edit.html', form=form, movie=movie)
+```
+
+2. Once the form is submitted and validated, add the updates to the corresponding movie entry in the database. Here's more documentation on [SQLAchemy](https://flask-sqlalchemy.palletsprojects.com/en/2.x/quickstart/#a-minimal-application)
+
+Accomplished above.
 
 ## Requirement 3 - Be Able to Delete Movies from the Database
 
