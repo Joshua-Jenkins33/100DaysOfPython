@@ -7,7 +7,7 @@ So the goal for today is to understand how HTML forms are submitted and how to u
 
 ## HTML Forms Revision - Creating a Form from Scratch
 1. Create a new PyCharm Project called html-forms. It should contain a main.py and index.html. 
-2. Create a new Flask application and serve the index.html page. Add an <h1> to the index.html so that you can tell if it's working.
+2. Create a new Flask application and serve the index.html page. Add an `<h1>` to the index.html so that you can tell if it's working.
 3. CHALLENGE: Create a HTML Form in index.html so that when rendered as a webpage, this is what you see: (image not included)
 
 ### `main.py`
@@ -58,12 +58,13 @@ At the moment when you fill out the form and press "Ok", nothing happens.
 In order for it to send the form data, we have to change our HTML form. It needs to have an `action` and `method`.
 
 1. CHALLENGE: See if you can use the documentation below to figure out how to make our HTML form submit a "POST" request to the path "/login".
+
 https://www.w3schools.com/tags/att_form_method.asp
 
 https://www.w3schools.com/tags/att_form_action.asp
 
-2. Once the form is submitted, we also need to catch this POST request in our server. To do this we first need to give each input in our form a name attribute. 
-3. Now we can create a decorator in our **main.py** that will trigger a method when it receives a **POST** request:
+1. Once the form is submitted, we also need to catch this POST request in our server. To do this we first need to give each input in our form a name attribute. 
+2. Now we can create a decorator in our **main.py** that will trigger a method when it receives a **POST** request:
 Notice that the `methods` parameter accepts a **dictionary**, so you can have **multiple** methods targeted by one route. e.g.
 
 `@app.route("/contact", methods=["GET", "POST"]`
@@ -72,7 +73,7 @@ More on this in the documentation here: https://flask.palletsprojects.com/en/1.1
 
 4. Flask has a method called `request` (don't confuse this with the requests module) which allows us to tap into the parameters of the request that was made to our server.
 
-💪 DIFFICULT CHALLENGE: See if you can use the Flask documentation below to figure out how to get hold of the name and password that was entered into the form and send it back to the client as a <h1>. e.g.:
+💪 DIFFICULT CHALLENGE: See if you can use the Flask documentation below to figure out how to get hold of the name and password that was entered into the form and send it back to the client as a `<h1>`. e.g.:
 
 Documentation:
 
@@ -144,7 +145,7 @@ Now that we've seen how to get hold of the data entered into a form from our Fla
 
 2. Add a `"/form-entry"` route in main.py to receive data from the form
 
-3. CHALLENGE: Update the code in `contact.html` and `main.py` so that you print the information the user has entered into the form and return a <h1> that says "Successfully sent your message".
+3. CHALLENGE: Update the code in `contact.html` and `main.py` so that you print the information the user has entered into the form and return a `<h1>` that says "Successfully sent your message".
 
 ```py
 @app.route('/form-entry', methods=["GET", "POST"])
