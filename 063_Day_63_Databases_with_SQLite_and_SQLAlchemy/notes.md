@@ -227,7 +227,186 @@ Luckily, there are much better ways of working with SQLite in Python projects, w
 
 
 ## SQLAlchemy
+SQL commands in Python are complicated and error-prone. SQLAlchemy was created to help us just write Python code and get the compiler to help us spot typos and errors. It's defined as an Object Relation Mapping (ORM) library. It's able to map relationships in the database into Objects. Fields become Object properties. Tables can be defined as separate Classes and each row of data is a new Object. 
+
+1. Comment out all the existing code where we create an SQLite database directly using the sqlite3 module.
+2. Install the required packages **flask** and **flask_sqlalchemy** and import the `Flask` and `SQLAlchemy` classes from each.
+  - `from flask import Flask`
+  - `from flask_sqlalchemy import SQLAlchemy`
+
+### CHALLENGE
+Use the [SQLAlchemy documentation](https://flask-sqlalchemy.palletsprojects.com/en/2.x/quickstart/) to figure out how to do everything we did in the commented out code but this time using SQLAlchemy.
+
+**Requirements**
+- Create an SQLite database called **new-books-collection.db**
+
+- Create a table in this database called **books**.
+
+- The **books** table should contain 4 fields: id, title, author and rating. The fields should have the same limitations as before e.g. INTEGER/FLOAT/VARCHAR/UNIQUE/NOT NULL etc.
+
+- Create a new entry in the books table that consists of the following data:
+  - id: 1
+  - title: 'Harry Potter'
+  - author: 'J.K. Rowling'
+  - review: 9.3
+
+
+HINT 1: The URL for your database should be `"sqlite:///new-books-collection.db"`
+HINT 2: Don't if you get a deprecation warning in the console that's related to SQL_ALCHEMY_TRACK_MODIFICATIONS
+
+You can silence it with `app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False`
+
+HINT 3: You can always check the database using DB Browser.
 
 ## CRUD Operations with SQLAlchemy
 
+### Summary
+
+#### Create a New Database
+```py
+    from flask import Flask
+    from flask_sqlalchemy import SQLAlchemy
+    app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///<name of database>.db"
+    db = SQLAlchemy(app)
+```
+
+#### Create a New Table
+```py
+    class Book(db.Model):
+        id = db.Column(db.Integer, primary_key=True)
+        title = db.Column(db.String(250), unique=True, nullable=False)
+        author = db.Column(db.String(250), nullable=False)
+        rating = db.Column(db.Float, nullable=False)
+     
+    db.create_all()
+```
+
+---
+
+In addition to these things, the most crucial thing to figure out when working with any new database technology is how to **CRUD** data records. 
+
+**C**reate
+
+**R**ead
+
+**U**pdate
+
+**D**elete
+
+### Create a New Record
+```py
+    new_book = Book(id=1, title="Harry Potter", author="J. K. Rowling", rating=9.3)
+    db.session.add(new_book)
+    db.session.commit()
+```
+
+NOTE: When creating new records, the primary key fields is optional. The `id` field will be auto-generated. 
+
+### Read All Records
+```py
+    all_books = session.query(Book).all()
+```
+
+### Read a Particular Record by Query
+```py
+    book = Book.query.filter_by(title="Harry Potter").first()
+```
+
+### Update a Particular Record by Query
+```py
+    book_to_update = Book.query.filter_by(title="Harry Potter").first()
+    book_to_update.title = "Harry Potter and the Chamber of Secrets"
+    db.session.commit()  
+```
+
+### Update a Record by Primary Key
+```py
+    book_id = 1
+    book_to_update = Book.query.get(book_id)
+    book_to_update.title = "Harry Potter and the Goblet of Fire"
+    db.session.commit()  
+```
+
+### Delete a Particular Record by Primary Key
+```py
+    book_id = 1
+    book_to_delete = Book.query.get(book_id)
+    db.session.delete(book_to_delete)
+    db.session.commit()
+```
+
+You can also delete by querying for a particular value e.g. by title or one of the other properties.
+
 ## Build a SQLite Database into the Flask Website
+You're going to build an SQLite database into the Flask Website we built at the beginning of today. So that any books added are stored in the database and you're also going to build in some extra features to take advantage of the full CRUD features of our database.
+
+### Requirements
+- [x] You should be able to add new books via the /add route, once a book is successfully added to the database, it should redirect to the home page.
+- [x] The home page should show all the books in the database:
+- [x] Add an Edit Rating Anchor Tag to each book `<li>`. When the button is pressed, it should take the user to an Edit Rating page where you can enter a new rating for that book. Then when you click "Change Rating" it should take you back to the home page and the new rating should be displayed next to the book. e.g.
+  - HINT: You'll need to think about how to pass the book id as a parameter when you make the GET request to show the edit rating page. There are many ways you can do this. Here are some things that might help:
+  - [URL Building](https://flask.palletsprojects.com/en/1.1.x/quickstart/#url-building)
+  - [Named Parameters from a URL with Flask](https://stackoverflow.com/questions/24892035/how-can-i-get-the-named-parameters-from-a-url-using-flask)
+- [x] Add a Delete Anchor Tag to each book listing `<li>`. When clicked it should delete the book from the database and redirect back to the home page. e.g.
+
+#### Edit Page
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Rating</title>
+</head>
+<body>
+    <form action="{{ url_for('edit') }}" method="POST">
+        <p> Book Name: {{ book.title }}</p>
+        <p>Book Author: {{ book.author }}</p>
+        <input hidden="hidden" name="id" value="{{ book.id }}"
+        <label>Rating</label>
+        <input type="text" name="rating" placeholder="New Rating">
+        <a href="{{ url_for('home') }}">
+          <button type="submit" value="Submit">Change Rating</button>
+        </a>
+    </form>
+</body>
+</html>
+```
+
+```py
+@app.route("/edit", methods=['GET', 'POST'])
+def edit():
+    if request.method == "POST":
+        book_id = request.form['id']
+        book_to_update = books.query.get(book_id)
+        new_rating = request.form['rating']
+        book_to_update.rating = new_rating
+        db.session.commit() 
+        print(f"================{book_to_update.title.upper()} UPDATED WITH NEW RATING OF {book_to_update.rating}================")
+        return redirect(url_for('home'))
+    book_id = request.args.get('id')
+    book_selected = books.query.get(book_id)
+    return render_template('edit.html', methods=["GET", "POST"], book=book_selected)
+
+```
+
+### Delete Page
+```py
+@app.route("/delete")
+def delete():
+    book_id = request.args.get('id')
+    book_to_delete = books.query.get(book_id)
+    db.session.delete(book_to_delete)
+    db.session.commit() 
+    return redirect(url_for('home'))
+```
+
+```html
+        {% for book in books %}
+            <li>
+                {{ book.title }} — {{ book.author }} — {{ book.rating }}/10  
+                <a href="{{ url_for('edit', id=book.id) }}">Edit Rating</a>
+                <a href="{{ url_for('delete', id=book.id) }}">Delete</a> 
+            </li>
+        {% endfor %}
+```
