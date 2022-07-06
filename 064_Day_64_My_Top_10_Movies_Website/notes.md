@@ -153,6 +153,22 @@ def edit():
 Accomplished above.
 
 ## Requirement 3 - Be Able to Delete Movies from the Database
+On the back of each movie card there is also a Delete button. Make this button work and allow the movie entry to be deleted from the database. 
+
+```py
+@app.route("/delete")
+def delete():
+    movie_id = request.args.get('id')
+    movie_to_delete = Movie.query.get(movie_id)
+    db.session.delete(movie_to_delete)
+    db.session.commit()
+    print(f"================{movie_to_delete.title.upper()} DELETED================")
+    return redirect(url_for('home'))
+```
+
+```html
+<a href="{{ url_for('delete', id=movie.id) }}" class="button delete-button">Delete</a>
+```
 
 ## Requirement 4 - Be Able to Add New Movies Via the Add Page
 
