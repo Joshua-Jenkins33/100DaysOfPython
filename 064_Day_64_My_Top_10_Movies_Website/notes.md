@@ -171,5 +171,53 @@ def delete():
 ```
 
 ## Requirement 4 - Be Able to Add New Movies Via the Add Page
+Previously, we added a new entry to our database using either a hard-coded piece of code or the DB Viewer. Now, we need to make the add page work for a user who can't do those things. We should be able to add any film and use an API to fetch the poster image, year of release and movie description.
+
+1. Make the add page render when you click on the Add Movie button on the Home page. The Add page should show a WTF quick form that only contains 1 field - the title of the movie. 
+2. When the user types a movie title and clicks "Add Movie", your Flask server should receive the movie title. Next, you should use the requests library to make a request and search The Movie Database API for all the movies that match that title. 
+  - You will need to sign up for a free account on The Movie Database.
+  - Then you will need to go to Settings -> API and get an API Key. Copy that API key into your project. 
+  - You will need to read [the documentation](https://developers.themoviedb.org/3/search/search-movies) on The Movie Database to figure out how to request for movie data by making a search query.
+
+HINT 1: The "Try it out" tab on the API docs is particularly useful to see the structure of the request and the data you can expect to get back.
+
+HINT 2: We covered how to make API requests a long time ago on Day 33, it might be worth reviewing the knowledge there if you get stuck.
+   - Using the data you get back from the API, you should render the select.html page and add all the movie title and year of release on to the page. This way, the user can choose the movie they want to add. There are usually quite a few movies under similar names. 
+
+3. Once the user selects a particular film from the select.html page, the id of the movie needs to be used to hit up another path in the Movie Database API, which will fetch all the data they have on that movie. e.g Poster image URLs.
+   - Use the id of the movie that the user selected to make a request to the get-movie-details path.
+
+https://developers.themoviedb.org/3/movies/get-movie-details
+
+The data you get back from the API should be used to populate the database with the new entry. The properties you will populate are:
+- title
+- img_url
+- year
+- description
+
+Once the entry is added, redirect to the home page and it should display the new movie as a card. Some data will be missing, that's ok.
+
+4. Instead of redirecting to the home page after finding the correct film, redirect to the edit.html page. Because the parts of the movie entry that are missing are the rating and review. The form on the edit page will contain these two fields. Update the movie entry in the database with this new data.
+
 
 ## Requirement 5 - Be Able to Sort and Rank the Movies By Rating
+
+At the moment the front of the movie card says None in large letters.
+
+Instead, we want it to display the ranking of the movie according to our rating. e.g.
+
+If we gave The Matrix a rating of **9.2** and Spirited Away was rated **9.5** and those are the only 2 movies we've added then it should display..
+
+If we add another movie and it had the highest rating among the movies, then it should be ranked according to it's rating.
+
+e.g. If Matrix (9.3), Spirited Away (9.5), Parasite (9.9)
+
+But if we edit the rating so that it becomes: Matrix (9.3), Spirited Away (9.5), Parasite (8.9)
+
+Then this is what should happen:
+
+HINT 1: https://docs.sqlalchemy.org/en/13/orm/query.html#sqlalchemy.orm.query.Query.order_by
+
+HINT 2: You don't need to change any code in index.html
+
+HINT 3: You only need to change the code in the home() function.
