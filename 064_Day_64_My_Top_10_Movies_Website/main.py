@@ -4,6 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, HiddenField
 from wtforms.validators import DataRequired
+from dotenv import load_dotenv
+import os
 import requests
 
 app = Flask(__name__)
@@ -19,8 +21,8 @@ class Movie(db.Model):
     title = db.Column(db.String(250), unique=True, nullable=False)
     year = db.Column(db.Integer)
     description = db.Column(db.String(1500))
-    rating = db.Column(db.Float(), nullable=False)
-    ranking = db.Column(db.Integer, nullable=False)
+    rating = db.Column(db.Float)
+    ranking = db.Column(db.Integer)
     review = db.Column(db.String(1500))
     img_url = db.Column(db.String(500))
 
@@ -48,9 +50,43 @@ class RateMovieForm(FlaskForm):
     submit = SubmitField('Submit')
 
 
+class GetMovieForm(FlaskForm):
+    title = StringField(label='Title of the Movie', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+
+load_dotenv(r'064_Day_64_My_Top_10_Movies_Website\.env')
+API_ACCESS_TOKEN = f"Bearer {os.getenv('API_ACCESS_TOKEN')}"
+API_ENDPOINT = 'https://api.themoviedb.org/3'
+IMAGE_DB_URL = 'https://image.tmdb.org/t/p/w500'
+HEADERS = {
+    'Authorization': API_ACCESS_TOKEN,
+    'Content-Type': 'application/json;charset=utf-8'
+}
+
+def get_movies(title, headers):
+    parameters = {
+        'query': title
+    }
+    response = requests.get(url=f"{API_ENDPOINT}/search/movie", headers=headers, params=parameters)
+    response.raise_for_status()
+    return response.json()['results']
+
+
+def get_specific_movie(id, headers):
+    response = requests.get(url=f"{API_ENDPOINT}/movie/{id}", headers=headers)
+    response.raise_for_status()
+    print(response.json())
+
+movie_list = []
+
+
 @app.route("/")
 def home():
-    all_movies = db.session.query(Movie).all()
+    all_movies = db.session.query(Movie).order_by(Movie.rating.desc()).all()
+    for i in range(len(all_movies)):
+        all_movies[i].ranking = i+1
+        db.session.commit()  
     return render_template("index.html", movies=all_movies)
 
 
@@ -78,6 +114,34 @@ def delete():
     db.session.commit()
     print(f"================{movie_to_delete.title.upper()} DELETED================")
     return redirect(url_for('home'))
+
+
+@app.route("/add", methods=["GET", "POST"])
+def add():
+    form = GetMovieForm()
+
+    if form.validate_on_submit():
+        movie_title = form.title.data
+        movie_list = get_movies(movie_title, HEADERS)
+        return render_template('select.html', movies=movie_list)
+    return render_template('add.html', form=form)
+
+
+@app.route("/find")
+def find_movie():
+    id = request.args.get("id")
+    response = requests.get(url=f"{API_ENDPOINT}/movie/{id}", headers=HEADERS)
+    response.raise_for_status()
+    movie_data = response.json()
+    new_movie = Movie(
+        title=movie_data["title"],
+        year=movie_data["release_date"].split("-")[0],
+        img_url=f'{IMAGE_DB_URL+ movie_data["poster_path"]}',
+        description=movie_data["overview"]
+    )
+    db.session.add(new_movie)
+    db.session.commit()
+    return redirect(url_for("edit", id=new_movie.id))
 
 
 if __name__ == '__main__':

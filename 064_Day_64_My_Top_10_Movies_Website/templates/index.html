@@ -18,7 +18,7 @@
    
   {% for movie in movies %}
     <div class="card" >
-      <div class="front" style="background-image: url('{{ movie.url }}');">
+      <div class="front" style="background-image: url('{{ movie.img_url }}');">
           <p class="large">{{ movie.ranking }}</p>
       </div>
       <div class="back">
@@ -42,7 +42,7 @@
   {% endfor %}
 </div>
 <div class="container text-center add">
-<a href="#" class="button">Add Movie</a>
+<a href="{{ url_for('add') }}" class="button">Add Movie</a>
 </div>
 
 {% endblock %}

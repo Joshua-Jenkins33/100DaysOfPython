@@ -174,6 +174,44 @@ def delete():
 Previously, we added a new entry to our database using either a hard-coded piece of code or the DB Viewer. Now, we need to make the add page work for a user who can't do those things. We should be able to add any film and use an API to fetch the poster image, year of release and movie description.
 
 1. Make the add page render when you click on the Add Movie button on the Home page. The Add page should show a WTF quick form that only contains 1 field - the title of the movie. 
+
+```html
+<!-- index.html -->
+<div class="container text-center add">
+<a href="{{ url_for('add') }}" class="button">Add Movie</a>
+</div>
+```
+
+```html
+<!-- add.html -->
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block styles %}
+  {{ super() }}
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,700">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+{% endblock %}
+
+{% block title %}Add Movie{% endblock %}
+
+{% block content %}
+<div class="content">
+    <h1 class="heading">Add a Movie</h1>
+    {{ wtf.quick_form(form, novalidate=True) }}
+</div>
+{% endblock %}
+```
+
+```py
+@app.route("/add")
+def add():
+    form = GetMovieForm()
+    movie_title = form.title.data
+    return render_template('add.html', form=form)
+```
+
 2. When the user types a movie title and clicks "Add Movie", your Flask server should receive the movie title. Next, you should use the requests library to make a request and search The Movie Database API for all the movies that match that title. 
   - You will need to sign up for a free account on The Movie Database.
   - Then you will need to go to Settings -> API and get an API Key. Copy that API key into your project. 
@@ -183,6 +221,80 @@ HINT 1: The "Try it out" tab on the API docs is particularly useful to see the s
 
 HINT 2: We covered how to make API requests a long time ago on Day 33, it might be worth reviewing the knowledge there if you get stuck.
    - Using the data you get back from the API, you should render the select.html page and add all the movie title and year of release on to the page. This way, the user can choose the movie they want to add. There are usually quite a few movies under similar names. 
+
+**add.html**
+```html
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block styles %}
+  {{ super() }}
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,700">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+{% endblock %}
+
+{% block title %}Add Movie{% endblock %}
+
+{% block content %}
+<div class="content">
+    <h1 class="heading">Add a Movie</h1>
+    {{ wtf.quick_form(form, novalidate=True) }}
+</div>
+{% endblock %}
+```
+
+**select.html**
+```html
+    {% for movie in movies %}
+      <p>
+        <a href="#"> {{ movie.title }} - {{ movie.release_date }}</a>
+      </p>
+    {% endfor %}
+```
+
+**index.html**
+```html
+<a href="{{ url_for('add') }}" class="button">Add Movie</a>
+```
+
+```py
+class GetMovieForm(FlaskForm):
+    title = StringField(label='Title of the Movie', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+
+load_dotenv(r'064_Day_64_My_Top_10_Movies_Website\.env')
+API_ACCESS_TOKEN = f"Bearer {os.getenv('API_ACCESS_TOKEN')}"
+API_ENDPOINT = 'https://api.themoviedb.org/3/search/movie'
+
+
+def get_movies(title):
+    headers = {
+        'Authorization': API_ACCESS_TOKEN,
+        'Content-Type': 'application/json;charset=utf-8'
+    }
+    parameters = {
+        'query': title
+    }
+    response = requests.get(url=API_ENDPOINT, headers=headers, params=parameters)
+    response.raise_for_status()
+    print(response.json())
+    return response.json()['results']
+
+
+movie_list = []
+
+@app.route("/add", methods=["GET", "POST"])
+def add():
+    form = GetMovieForm()
+
+    if form.validate_on_submit():
+        movie_title = form.title.data
+        movie_list = get_movies(movie_title)
+        return render_template('select.html', movies=movie_list)
+    return render_template('add.html', form=form)
+```
 
 3. Once the user selects a particular film from the select.html page, the id of the movie needs to be used to hit up another path in the Movie Database API, which will fetch all the data they have on that movie. e.g Poster image URLs.
    - Use the id of the movie that the user selected to make a request to the get-movie-details path.
@@ -196,6 +308,41 @@ The data you get back from the API should be used to populate the database with 
 - description
 
 Once the entry is added, redirect to the home page and it should display the new movie as a card. Some data will be missing, that's ok.
+
+```py
+def get_specific_movie(id, headers):
+    response = requests.get(url=f"{API_ENDPOINT}/movie/{id}", headers=headers)
+    response.raise_for_status()
+    print(response.json())
+
+movie_list = []
+
+
+@app.route("/find")
+def find_movie():
+    id = request.args.get("id")
+    response = requests.get(url=f"{API_ENDPOINT}/movie/{id}", headers=HEADERS)
+    response.raise_for_status()
+    movie_data = response.json()
+    new_movie = Movie(
+        title=movie_data["title"],
+        year=movie_data["release_date"].split("-")[0],
+        img_url=f'{IMAGE_DB_URL+ movie_data["poster_path"]}',
+        description=movie_data["overview"]
+    )
+    db.session.add(new_movie)
+    db.session.commit()
+    return redirect(url_for("home"))
+```
+
+**select.html**
+```html
+    {% for movie in movies %}
+      <p>
+        <a href="{{ url_for('find_movie', id=movie.id) }}"> {{ movie.title }} - {{ movie.release_date }}</a>
+      </p>
+    {% endfor %}
+```
 
 4. Instead of redirecting to the home page after finding the correct film, redirect to the edit.html page. Because the parts of the movie entry that are missing are the rating and review. The form on the edit page will contain these two fields. Update the movie entry in the database with this new data.
 
@@ -221,3 +368,13 @@ HINT 1: https://docs.sqlalchemy.org/en/13/orm/query.html#sqlalchemy.orm.query.Qu
 HINT 2: You don't need to change any code in index.html
 
 HINT 3: You only need to change the code in the home() function.
+
+```py
+@app.route("/")
+def home():
+    all_movies = db.session.query(Movie).order_by(Movie.rating.desc()).all()
+    for i in range(len(all_movies)):
+        all_movies[i].ranking = i+1
+        db.session.commit()  
+    return render_template("index.html", movies=all_movies)
+```
