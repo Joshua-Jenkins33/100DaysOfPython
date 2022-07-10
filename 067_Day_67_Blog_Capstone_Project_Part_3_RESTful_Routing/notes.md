@@ -118,6 +118,28 @@ August 31, 2019
 
 [Docs](https://www.w3schools.com/python/python_datetime.asp)
 
+```py
+@app.route("/new-post", methods=["GET", "POST"])
+def new_post():
+    create_post_form = CreatePostForm()
+    print(str(datetime.date.today()))
+
+    if create_post_form.validate_on_submit():
+        new_post = BlogPost(
+            title=create_post_form.title.data,
+            subtitle=create_post_form.subtitle.data,
+            date=str(datetime.date.today().strftime("%B %d, %Y")),
+            body=create_post_form.body.data,
+            author=create_post_form.author.data,
+            img_url=create_post_form.img_url.data
+        )
+        db.session.add(new_post)
+        db.session.commit()
+        print(f"================BlogPost Added================")
+        return redirect(url_for('get_all_posts'))
+    return render_template("make-post.html", form=create_post_form)
+```
+
 NOTE: The data from the CKEditorField is saved as HTML. It contains all the structure and styling of the blog post. In order for this structure to be reflected when you go to the post.html page for the blog post, you need to add a [Jinja safe() filter](https://jinja.palletsprojects.com/en/2.11.x/templates/#safe).
 
 This makes sure that when Jinja renders the post.html template, it doesn't treat the HTML as text.
@@ -126,31 +148,43 @@ To apply a Jinja filter, you need the pipe symbol "|" and this goes between the 
 
 e.g. `{‌{ Jinja expression | Jinja filter }}`
 
+```html
+<p>
+  {{post.body | safe()}}
+</p>
+```
+
 ## Requirement 3 - Be Able to Edit Existing Blog Posts
+When you click on each of the blog posts on the home page you are taken to the post.html page for the blog post. At the end of the post, you can see an Edit Post button. When you click on this button, it should take you the make-post.html page.
 
+1. Create a new route `/edit-post/<post_id>`
 
+When the user clicks on the "Edit Post" button at the bottom of any blog post (post.html page) it should make a `GET` request to this route, where the `post_id` is the id of the post they were reading.
 
+If the user came from "Create New Post" the `<h1>` should read "New Post", but if the user came to edit a particular blog post, it should read "Edit Post".
 
+```py
+@app.route("/edit/<int:post_id>", methods=["GET", "POST"])
+def edit_post(post_id):
+    form = CreatePostForm()
+    if form.validate_on_submit():
+        post_to_edit = BlogPost.query.get(post_id)
+        print(post_to_edit)
+        post_to_edit.title = form.title.data
+        post_to_edit.subtitle = form.subtitle.data
+        post_to_edit.author = form.author.data
+        post_to_edit.img_url = form.img_url.data
+        post_to_edit.body = form.body.data
+        db.session.commit()
+        return redirect(url_for('get_all_posts'))
+    return render_template("make-post.html", form=form, post_type="edit")
+```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```html
+{% if post_type == "new" %}
+  <h1>New Post</h1>
+{% else %}
+  <h1>Edit Post</h1>
+{% endif %}
+```
 ## Requirement 4 - Be Able to DELETE Blog Posts
