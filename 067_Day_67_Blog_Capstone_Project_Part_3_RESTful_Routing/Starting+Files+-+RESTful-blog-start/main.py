@@ -78,10 +78,16 @@ def new_post():
 
 @app.route("/edit/<int:post_id>", methods=["GET", "POST"])
 def edit_post(post_id):
-    form = CreatePostForm()
+    post_to_edit = BlogPost.query.get(post_id)
+    form = CreatePostForm(    
+        title=post_to_edit.title,
+        subtitle=post_to_edit.subtitle,
+        img_url=post_to_edit.img_url,
+        author=post_to_edit.author,
+        body=post_to_edit.body
+    )
     if form.validate_on_submit():
-        post_to_edit = BlogPost.query.get(post_id)
-        print(post_to_edit)
+        
         post_to_edit.title = form.title.data
         post_to_edit.subtitle = form.subtitle.data
         post_to_edit.author = form.author.data
@@ -90,6 +96,13 @@ def edit_post(post_id):
         db.session.commit()
         return redirect(url_for('get_all_posts'))
     return render_template("make-post.html", form=form, post_type="edit")
+
+
+@app.route("/delete/<int:post_id>", methods=["GET", "DELETE"])
+def delete_post(post_id):
+    BlogPost.query.filter_by(id=post_id).delete()
+    db.session.commit()
+    return redirect(url_for('get_all_posts'))
 
 
 @app.route("/about")

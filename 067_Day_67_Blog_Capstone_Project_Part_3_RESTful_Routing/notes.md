@@ -187,4 +187,44 @@ def edit_post(post_id):
   <h1>Edit Post</h1>
 {% endif %}
 ```
+
+2. When you head over to make-post.html it should **auto-populate the fields** in the WTForm with the blog post's data. This way the user doesn't have to type out their blog post again.
+
+You can do this by passing the post Object's properties when you create the form:
+
+```py
+    edit_form = CreatePostForm(
+        title=post.title,
+        subtitle=post.subtitle,
+        img_url=post.img_url,
+        author=post.author,
+        body=post.body
+    )
+```
+
+3. When the user is done editing in the WTForm, they click "Submit Post", the post should now be updated in the database. And the user redirected to the post.html page for that blog post.
+
+NOTE: HTML forms (WTForms included) [do not accept PUT, PATCH or DELETE methods](https://softwareengineering.stackexchange.com/questions/114156/why-are-there-are-no-put-and-delete-methods-on-html-forms). So while this would normally be a PUT request (replacing existing data), because the request is coming from a HTML form, you should accept the edited post as a POST request.
+
+Also, the `date` field should not be changed, it should represent the original date the post was made. Not the date of the edit.
+
 ## Requirement 4 - Be Able to DELETE Blog Posts
+1. In index.html create an anchor tag that just shows a ✘ character next to each post.  (you can copy and paste this).
+
+When you click on it, it should delete the post from the database and redirect the user to the home page.
+
+You will need to create a DELETE route at the path `/delete/<post_id>`
+
+```py
+@app.route("/delete/<int:post_id>", methods=["GET", "DELETE"])
+def delete_post(post_id):
+    BlogPost.query.filter_by(id=post_id).delete()
+    db.session.commit()
+    return redirect(url_for('get_all_posts'))
+```
+
+```html
+          <p class="post-meta">Posted by
+            <a href="#">{{post.author}}</a>
+            on {{post.date}} <a href="{{ url_for('delete_post', post_id=post.id) }}">✘</a></p>
+```
