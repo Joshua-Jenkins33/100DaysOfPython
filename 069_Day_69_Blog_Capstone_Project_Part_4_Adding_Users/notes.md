@@ -14,9 +14,36 @@ Wouldn't it be great if we could have some users on our blog? What if we could l
 
 The data the user entered should be used to create a new entry in your **blog.db** in a `User` table. 
 
+```py
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(250), nullable=False)
+    password = db.Column(db.String(250), nullable=False)
+    name = db.Column(db.String(250), nullable=False)
+db.create_all()
+```
+
 HINT 1: You don't need to change anything in register.html
 
 HINT 2: Don't worry about Flask-Login yet, you are just creating a new user in the database. We'll log them in in the next step.
+
+```py
+@app.route('/register', methods=["POST", "GET"])
+def register():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        new_user = User(
+            email = form.email.data,
+            password = generate_password_hash(form.password.data, method='pbkdf2:sha256', salt_length=8),
+            name = form.name.data
+        )
+        db.session.add(new_user)
+        db.session.commit()
+        print(f"================USER {form.name.data.upper()} REGISTERED================")
+        return redirect(url_for('get_all_posts'))
+
+    return render_template("register.html", form=form)
+```
 
 ## Requirement 2 - Login Registered Users
 

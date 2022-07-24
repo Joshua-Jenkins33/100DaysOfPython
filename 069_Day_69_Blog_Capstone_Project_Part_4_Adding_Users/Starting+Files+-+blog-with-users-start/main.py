@@ -39,6 +39,7 @@ class User(db.Model):
     email = db.Column(db.String(250), nullable=False)
     password = db.Column(db.String(250), nullable=False)
     name = db.Column(db.String(250), nullable=False)
+db.create_all()
 
 
 @app.route('/')
@@ -59,27 +60,7 @@ def register():
         db.session.add(new_user)
         db.session.commit()
         print(f"================USER {form.name.data.upper()} REGISTERED================")
-
-    # form = CafeForm()
-    #     if form.validate_on_submit():
-    #         with open(r'062_Day_62_Flask_WTForms_Bootstrap_and_CSV_Coffee_and_Wifi_Project/cafe-data.csv', 'a+', newline='', encoding='utf-8') as csv_file:
-    #             writer_object = writer(csv_file)
-    #             form_submission = [form.cafe.data,form.location.data,form.opening_time.data,form.closing_time.data,form.coffee_rating.data,form.wifi_rating.data,form.power_socket_rating.data]
-    #             print(form_submission)
-    #             writer_object.writerow(form_submission)  
-    #     return render_template('add.html', form=form)
-
-
-    # new_book = books(
-    #         title=request.form['title'],
-    #         author=request.form['author'],
-    #         rating=request.form['rating']
-    #     )
-    #     db.session.add(new_book)
-    #     db.session.commit()
-    #     print(f"================{request.form['title'].upper()} ADDED================")
-    #     return redirect(url_for('home'))
-    # return render_template('add.html', methods=["GET", "POST"])
+        return redirect(url_for('get_all_posts'))
 
     return render_template("register.html", form=form)
 
@@ -159,4 +140,4 @@ def delete_post(post_id):
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+    app.run(debug=True)
