@@ -89,19 +89,45 @@ def login():
 2. Add 1 line of code in the `/register` route so that when users successfully register they are taken back to the home page and are logged in with Flask-Login.
 
 ```py
-
+login_user(new_user)
 ```
 
 3. In the in the `/register` route, if a user is trying to register with an email that already exists in the database then they should be redirected to the `/login` route and a flash message used to tell them to log in with that email instead.
 
 ```py
+form = RegisterForm()
+if form.validate_on_submit():
+    user = User.query.filter_by(email=form.email.data).first()
+    
+    if user is not None:
+        flash('You\'ve already registered with this email. Please log in here instead.')
+        return redirect(url_for('login'))
+```
 
+**login.html**
+```html
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+          <p style="color:red; text-align: center">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+  {% endwith %}
 ```
 
 4. In the `/login` route, if a user's email does not exist in the database or if their password does not match the one stored using `check_password()` then they should be redirected back to `/login` and a flash message should let them know what they issue was and ask them to try again. 
 
 ```py
-
+if user is not None:
+            valid_credentials = check_password_hash(user.password, password)
+            if valid_credentials:
+                login_user(user)
+                flash('Logged in successfully.')
+                return redirect(url_for('get_all_posts'))
+            else:
+                flash('Authentication failed; password was incorrect.')
+        else:
+            flash('Authentication failed, user doesn\'t exist.')
 ```
 
 5. Figure out how to update the navbar so that when a user is not logged in it shows:
@@ -114,14 +140,33 @@ But if the user is logged in / authenticated after registering, then the navbar 
 HINT: The navbar code is inside header.html
 HINT: [https://flask-login.readthedocs.io/en/latest/#login-example](https://flask-login.readthedocs.io/en/latest/#login-example)
 
-```py
+Added `logged_in=current_user.is_authenticated` to most `render_template` returns.
 
+**header.html**
+```html
+{% if not logged_in: %}
+<li class="nav-item">
+    <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{{ url_for('register') }}">Register</a>
+</li>
+{% endif %}
+{% if logged_in: %}
+<li class="nav-item">
+    <a class="nav-link" href="{{ url_for('logout') }}">Log Out</a>
+</li>
+{% endif %}
 ```
 
 6. Code up the `/logout` route so that when the user clicks on the LOG OUT button, it logs them out and takes them back to the home page. 
 
 ```py
-
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('get_all_posts'))
 ```
 
 ## Requirement 3 - Protect Routes

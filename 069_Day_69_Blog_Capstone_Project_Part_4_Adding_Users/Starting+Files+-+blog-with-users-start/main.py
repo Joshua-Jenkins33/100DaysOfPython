@@ -53,13 +53,19 @@ def load_user(id):
 @app.route('/')
 def get_all_posts():
     posts = BlogPost.query.all()
-    return render_template("index.html", all_posts=posts)
+    return render_template("index.html", all_posts=posts, logged_in=current_user.is_authenticated)
 
 
 @app.route('/register', methods=["POST", "GET"])
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        
+        if user is not None:
+            flash('You\'ve already registered with this email. Please log in here instead.')
+            return redirect(url_for('login'))
+
         new_user = User(
             email = form.email.data,
             password = generate_password_hash(form.password.data, method='pbkdf2:sha256', salt_length=8),
@@ -68,9 +74,10 @@ def register():
         db.session.add(new_user)
         db.session.commit()
         print(f"================USER {form.name.data.upper()} REGISTERED================")
+        login_user(new_user)
         return redirect(url_for('get_all_posts'))
 
-    return render_template("register.html", form=form)
+    return render_template("register.html", form=form, logged_in=current_user.is_authenticated)
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -91,28 +98,30 @@ def login():
                 flash('Authentication failed; password was incorrect.')
         else:
             flash('Authentication failed, user doesn\'t exist.')
-    return render_template("login.html", form=form)
+    return render_template("login.html", form=form, logged_in=current_user.is_authenticated)
 
 
 @app.route('/logout')
+@login_required
 def logout():
+    logout_user()
     return redirect(url_for('get_all_posts'))
 
 
 @app.route("/post/<int:post_id>")
 def show_post(post_id):
     requested_post = BlogPost.query.get(post_id)
-    return render_template("post.html", post=requested_post)
+    return render_template("post.html", post=requested_post, logged_in=current_user.is_authenticated)
 
 
 @app.route("/about")
 def about():
-    return render_template("about.html")
+    return render_template("about.html", logged_in=current_user.is_authenticated)
 
 
 @app.route("/contact")
 def contact():
-    return render_template("contact.html")
+    return render_template("contact.html", logged_in=current_user.is_authenticated)
 
 
 @app.route("/new-post")
@@ -130,7 +139,7 @@ def add_new_post():
         db.session.add(new_post)
         db.session.commit()
         return redirect(url_for("get_all_posts"))
-    return render_template("make-post.html", form=form)
+    return render_template("make-post.html", form=form, logged_in=current_user.is_authenticated)
 
 
 @app.route("/edit-post/<int:post_id>")
@@ -152,7 +161,7 @@ def edit_post(post_id):
         db.session.commit()
         return redirect(url_for("show_post", post_id=post.id))
 
-    return render_template("make-post.html", form=edit_form)
+    return render_template("make-post.html", form=edit_form, logged_in=current_user.is_authenticated)
 
 
 @app.route("/delete/<int:post_id>")
