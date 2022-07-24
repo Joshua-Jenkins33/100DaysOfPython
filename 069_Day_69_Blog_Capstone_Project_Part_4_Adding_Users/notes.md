@@ -218,5 +218,113 @@ def add_new_post():
 ```
 
 ## Creating Relational Databases
+Given that the 1st user is the admin and the blog owner. It would make sense if we could link the blog posts they write to their user in the database. In the future, maybe we will want to invite other users to write posts in the blog and grant them the admin privileges.
+
+So we need to create a **relationship** between the `User` table and the `BlogPost` table to link them together. So we can see which BlogPosts a User has written. Or see which User is the author of a particular BlogPost.
+
+If we were just writing Python code, you could imagine creating a `User` object which has a property called `posts` that contains a List of `BlogPost` objects. 
+
+```py
+    class User:
+        def __init__(self, name, email, password):
+             self.name = name
+             self.email = email
+             self.password = password
+             self.posts = []
+     
+    class BlogPost:
+        def __init__(self, title, subtitle, body):
+             self.title = title
+             self.subtitle = subtitle
+             self.body = body
+     
+    new_user = User(
+        name="Angela",
+        email="angela@email.com",
+        password=123456,
+        posts=[
+            BlogPost(
+                title="Life of Cactus",
+                subtitle="So Interesting",
+                body="blah blah"
+            )
+        ]        
+    }
+```
+
+This would make it easy to find all the BlogPosts a particular user has written. But what about the other way around? How can you find the author of a particular BlogPost object? This is why we're using a database instead of just simple Python data structures.
+
+In relational databases such as SQLite, MySQL or Postgresql we're able to define a relationship between tables using a `ForeignKey` and a `relationship()` method.
+
+e.g. If we wanted to create a One to Many relationship between the User Table and the BlogPost table, where One User can create Many BlogPost objects, we can use the [SQLAlchemy docs](https://docs.sqlalchemy.org/en/13/orm/basic_relationships.html) to achieve this. 
+
+**CHALLENGE 1:** See if you can modify the User (Parent) and BlogPost (Child) class code to create a bidirectional One-to-Many relationship between the two tables. You should be able to easily locate the BlogPosts a User has written and also the User of any BlogPost object.
+
+```py
+class User(UserMixin, db.Model):
+    __tablename__ = "user"
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(250), nullable=False)
+    password = db.Column(db.String(250), nullable=False)
+    name = db.Column(db.String(250), nullable=False)
+    posts = relationship("BlogPost", back_populates="author")
+db.create_all()
+
+class BlogPost(db.Model):
+    __tablename__ = "blog_posts"
+    id = db.Column(db.Integer, primary_key=True)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    title = db.Column(db.String(250), unique=True, nullable=False)
+    subtitle = db.Column(db.String(250), nullable=False)
+    date = db.Column(db.String(250), nullable=False)
+    body = db.Column(db.Text, nullable=False)
+    img_url = db.Column(db.String(250), nullable=False)
+    author = relationship("User", back_populates="posts")
+db.create_all()
+```
+
+### Re-creating the Database after changes to the Schema
+If you re-run your blog at this point you'll get an error:
+
+`OperationalError: (sqlite3.OperationalError) no such column: blog_posts.author_id`
+
+The reason is that our new code in the main.py modifies our database model by adding a new column into our database that was not present in the original `blog.db`  from the starter code:
+
+`author_id = db.Column(db.Integer, db.ForeignKey("users.id"))`
+
+We don't have any valuable data at this point that we'd like to preserve, so the easiest way to simply **delete** the existing blog.db entirely and to use the line `db.create_all()` to re-create all the tables from scratch. Remember, this means you also have to register your user again and create a post since we've just wiped our database. 
+
+Now if you refresh your Blog website, you'll see the author name disappear from the index.html and page.html pages. 
+
+**CHALLENGE 2:** Modify the index.html and post.html pages so that the author name is still displayed in the right places.
+
+HINT: the author property of `BlogPost` is now a `User` object.
+
+```py
+@app.route("/new-post", methods=["POST", "GET"]) # had to add the methods
+@app.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
+@admin_only
+def edit_post(post_id):
+    post = BlogPost.query.get(post_id)
+    edit_form = CreatePostForm(
+        title=post.title,
+        subtitle=post.subtitle,
+        img_url=post.img_url, # had to remove author from here as it's not in the form builder at forms.py
+        body=post.body
+    )
+    if edit_form.validate_on_submit():
+        post.title = edit_form.title.data
+        post.subtitle = edit_form.subtitle.data
+        post.img_url = edit_form.img_url.data
+        post.author = current_user # had to change to the current user
+        post.body = edit_form.body.data
+        db.session.commit()
+        return redirect(url_for("show_post", post_id=post.id))
+```
+
+**index.thml and post.html**
+```html
+<a href="#">{{post.author.name}}</a> 
+```
 
 ## Requirement 4 - Allow Any User to Add Comments to BlogPosts
