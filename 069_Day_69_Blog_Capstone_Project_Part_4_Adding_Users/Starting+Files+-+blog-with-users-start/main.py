@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
-from forms import CreatePostForm, RegisterForm
+from forms import CreatePostForm, RegisterForm, LoginForm
 from flask_gravatar import Gravatar
 
 app = Flask(__name__)
@@ -34,12 +34,20 @@ class BlogPost(db.Model):
 db.create_all()
 
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(250), nullable=False)
     password = db.Column(db.String(250), nullable=False)
     name = db.Column(db.String(250), nullable=False)
 db.create_all()
+
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(id):
+    return User.query.get(str(id))
 
 
 @app.route('/')
@@ -65,9 +73,25 @@ def register():
     return render_template("register.html", form=form)
 
 
-@app.route('/login')
+@app.route('/login', methods=["GET", "POST"])
 def login():
-    return render_template("login.html")
+    form = LoginForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
+        user = User.query.filter_by(email=email).first()
+
+        if user is not None:
+            valid_credentials = check_password_hash(user.password, password)
+            if valid_credentials:
+                login_user(user)
+                flash('Logged in successfully.')
+                return redirect(url_for('get_all_posts'))
+            else:
+                flash('Authentication failed; password was incorrect.')
+        else:
+            flash('Authentication failed, user doesn\'t exist.')
+    return render_template("login.html", form=form)
 
 
 @app.route('/logout')
