@@ -169,6 +169,26 @@ HARD CHALLENGE:
 
 Use the [Flask_Login documentation](https://flask-login.readthedocs.io/en/latest/) to implement the `/login` route. The `/secrets` route should be secured so that it requires the user to be logged in. 
 
+HINT 1: [You will need to configure your Flask app to use Flask_Login](https://flask-login.readthedocs.io/en/latest/#configuring-your-application).
+
+HINT 2: [You will need to create a user_loader function](https://flask-login.readthedocs.io/en/latest/#how-it-works).
+
+HINT 3: Make sure you [implement the UserMixin](https://flask-login.readthedocs.io/en/latest/#your-user-class) in your User class.
+
+Note: A Mixin is simply a way to provide multiple inheritance to Python. This is how you add a Mixin:
+
+`class MyClass(MixinClassB, MixinClassA, BaseClass):`
+
+[Further Reading on Mixins](https://www.thedigitalcatonline.com/blog/2020/03/27/mixin-classes-in-python/)
+
+HINT 4: [You can check the user's password using the check_password_hash function](https://werkzeug.palletsprojects.com/en/1.0.x/utils/#werkzeug.security.check_password_hash).
+
+HINT 5: You need to find the user by the email they entered in the login form.
+
+HINT 6: If the user has successfully logged in or registered, you need to use the login_user() function to authenticate them.
+
+HINT 7: Both the /secrets and /download route need to be [secured](https://flask-login.readthedocs.io/en/latest/#flask_login.login_required) so that only authenticated users can access them.
+
 ## Flask Flash Messages
 
 ## Passing Authentication Status to Templates
