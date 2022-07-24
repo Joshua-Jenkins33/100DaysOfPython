@@ -170,6 +170,52 @@ def logout():
 ```
 
 ## Requirement 3 - Protect Routes
+In our blog, the first registered user will be the admin. They will be able to create new blog posts, edit posts and delete posts.
+
+1. The first user's `id` is `1`. We can use this in index.html and post.html to make sure that only the admin user can see the "Create New Post" and "Edit Post" and Delete buttons.
+
+**post.html**
+```html
+{% if current_user.id == 1: %}
+    <div class="clearfix">
+    <a class="btn btn-primary float-right" href="{{url_for('edit_post', post_id=post.id)}}">Edit Post</a>
+    </div>
+{% endif %}
+```
+
+**index.html**
+```html
+{% if current_user.id == 1: %}
+    <!-- New Post -->
+    <div class="clearfix">
+    <a class="btn btn-primary float-right" href="{{url_for('add_new_post')}}">Create New Post</a>
+    </div>
+{% endif %}
+```
+
+2. Just because a user can't see the buttons, they can still manually access the /edit-post or /new-post or /delete routes. Protect these routes by creating a Python decorator called `@admin_only`
+
+If the current_user's id is 1 then they can access those routes, otherwise, they should get a 403 error (not authorised).
+
+HINT 1: You might need to review the lessons on Python Decorators on day 54.
+
+HINT 2: See what the @login_required decorator looks like: [https://flask.palletsprojects.com/en/1.1.x/patterns/viewdecorators/#login-required-decorator](https://flask.palletsprojects.com/en/1.1.x/patterns/viewdecorators/#login-required-decorator)
+
+HINT 3: The abort function is quick way to return HTTP errors like 403 or 404: [https://flask.palletsprojects.com/en/1.1.x/patterns/errorpages/](https://flask.palletsprojects.com/en/1.1.x/patterns/errorpages/)
+
+```py
+def admin_only(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if current_user.id != 1:
+            abort(404, description="You're not supposed to be here.")
+        return f(*args, **kwargs)
+    return decorated_function
+
+@app.route("/new-post")
+@admin_only
+def add_new_post():
+```
 
 ## Creating Relational Databases
 
