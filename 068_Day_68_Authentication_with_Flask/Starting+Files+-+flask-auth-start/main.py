@@ -26,7 +26,7 @@ class User(UserMixin, db.Model):
     
 @app.route('/')
 def home():
-    return render_template("index.html")
+    return render_template("index.html", logged_in=current_user.is_authenticated)
 
 
 @app.route('/register', methods=["GET", "POST"])
@@ -34,6 +34,12 @@ def register():
     if request.method == "POST":
         name = request.form['name']
         email = request.form['email']
+        user = User.query.filter_by(email=email).first()
+        
+        if user is not None:
+            flash('You\'ve already registered with this email. Please log in here instead.')
+            return redirect(url_for('login'))
+
         password = generate_password_hash(request.form['password'], method='pbkdf2:sha256', salt_length=8)
 
         new_user = User(
@@ -49,7 +55,7 @@ def register():
 
         return render_template("secrets.html", name=name)
     else:
-        return render_template("register.html")
+        return render_template("register.html", logged_in=current_user.is_authenticated)
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -59,16 +65,20 @@ def login():
         password = request.form['password']
         user = User.query.filter_by(email=email).first()
         exists = user is not None
-        is_right_password = check_password_hash(user.password, password)
 
-        if exists and is_right_password:
-            login_user(user)
-            flash('Logged in successfully.')
-            return redirect(url_for('secrets'))
+        if exists:
+            is_right_password = check_password_hash(user.password, password)
+            if is_right_password:
+                login_user(user)
+                flash('Logged in successfully.')
+                return redirect(url_for('secrets'))
+            else:
+                flash('Authentication failed; password was incorrect.')
         else:
-            flash('Authentication failed; user doesn\'t exist or the password was incorrect.')
+            if not exists:
+                flash('Authentication failed; user doesn\'t exist.')
 
-    return render_template("login.html")
+    return render_template("login.html", logged_in=current_user.is_authenticated)
 
 
 @app.route("/logout")
@@ -81,7 +91,7 @@ def logout():
 @app.route('/secrets')
 @login_required
 def secrets():
-    return render_template("secrets.html", name=current_user.name)
+    return render_template("secrets.html", name=current_user.name, logged_in=True)
 
 
 @app.route('/download')

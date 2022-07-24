@@ -190,5 +190,110 @@ HINT 6: If the user has successfully logged in or registered, you need to use th
 HINT 7: Both the /secrets and /download route need to be [secured](https://flask-login.readthedocs.io/en/latest/#flask_login.login_required) so that only authenticated users can access them.
 
 ## Flask Flash Messages
+Sometimes, you will want to give the user some feedback on an action they took. e.g. Was there an issue with login in? Are they typing in the wrong password or does their email not exist? It would be a good user experience if, in these situations, we told them what was wrong, instead of just constantly redirecting them back to the login page.
+
+The easiest way to do this is through Flask Flash messages. They are messages that get sent to the template to be rendered just once. And they disappear when the page is reloaded.
+
+[https://flask.palletsprojects.com/en/1.1.x/patterns/flashing/](https://flask.palletsprojects.com/en/1.1.x/patterns/flashing/)
+
+1. Update the login route so that if the user's email doesn't exist in the database, you send them a Flash message to let them know and redirect them back to the login route.
+
+```py
+@app.route('/login', methods=["GET", "POST"])
+def login():
+    error = None
+
+    if request.method == "POST":
+        email = request.form['email']
+        password = request.form['password']
+        user = User.query.filter_by(email=email).first()
+        exists = user is not None
+
+        if exists:
+            is_right_password = check_password_hash(user.password, password)
+            if is_right_password:
+                login_user(user)
+                flash('Logged in successfully.')
+                return redirect(url_for('secrets'))
+            else:
+                flash('Authentication failed; password was incorrect.')
+                error = 'Invalid password'
+        else:
+            if not exists:
+                flash('Authentication failed; user doesn\'t exist.')
+                error = 'User doesn\'t exist'
+
+    return render_template("login.html", error=error)
+```
+
+```html
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class="flashes">
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endwith %}
+```
+
+HINT: A `<p>` tag in the login page will show up as red text. 
+
+```html
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color:red">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+```
+
+2. Update the login route so that if the `check_password` function returns False, you send a Flash message to the user when you redirect them back to the login page.
+
+```py
+else:
+  flash('Authentication failed; password was incorrect.')
+  error = 'Invalid password'
+```
+
+3. Update the `/register` route so that if the user enters an email that already exists in the database, you should redirect them to the login page and show a flash message to let them know they have already registered.
+
+```py
+def register():
+    if request.method == "POST":
+        name = request.form['name']
+        email = request.form['email']
+        user = User.query.filter_by(email=email).first()
+        
+        if user is not None:
+            flash('You\'ve already registered with this email. Please log in here instead.')
+            return redirect(url_for('login'))
+```
 
 ## Passing Authentication Status to Templates
+When a user is logged in, the home page should not show the login/register buttons. And the navigation bar should not show Register or Login either.
+
+See if you can make some changes to the code in base.html and index.html so this happens.
+
+Remember, as we learnt in previous lessons base.html is the layout template which all the pages inherit from. 
+
+[Documentation](https://flask.palletsprojects.com/en/1.1.x/patterns/templateinheritance/)
+
+### `index.html`
+```html
+  {% if not logged_in: %}
+    <a href="{{ url_for('login') }}" class="btn btn-primary btn-block btn-large">Login</a>
+    <a href="{{ url_for('register') }}" class="btn btn-secondary btn-block btn-large">Register</a>
+  {% endif %}
+```
+
+### `main.py`
+```py
+@app.route('/')
+def home():
+    return render_template("index.html", logged_in=current_user.is_authenticated)
+```
+
+Applied to all pages. Template inheritance allows for the navbar changes to take place across all pages.
