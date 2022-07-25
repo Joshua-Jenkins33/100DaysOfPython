@@ -118,6 +118,45 @@ If successful, you should see a popup with a link to your new repository. But yo
 That's it, you've now added version control to your project and pushed it to GitHub. 
 
 ## Step 2 - Use gunicorn and Heroku to host your website
+Now that our project code is uploaded to GitHub we can use Heroku to host the code and deploy our website.
+
+
+1. Sign up for a free account on [www.heroku.com](www.heroku.com)
+
+
+2. Create a new application on Heroku:
+
+Give your new app a unique name, I used angela-blog which means that no one else can use that name. It's just like a web address, it has to be unique. Leave the region as US and click Create App.
+
+3. Connect Heroku to your GitHub project. Under the Deploy tab, select Connect to GitHub
+
+4. Sign in to your GitHub account (the account where your blog project repository exists).
+
+5. Search for the name of your blog project repository name (if in doubt check GitHub) and connect it to Heroku.
+
+6. Scrolling further down the page on the deploy pane, click on Enable Automatic Deploys. This means that whenever you push a new commit to your remote GitHub repository, it will automatically re-deploy your server with the changes.
+
+7. Finally, in Manual deploys, click on Deploy Branch to deploy for the first time.
+
+NOTE: This step will take some time, but you can watch the logs for any errors and Google them if they prevent deployment. It might mean that you miss a step that we covered.
+
+8. Once it's done, click View to see your web app, NOTE: it won't work just yet:
+
+If everything went well, you should see the following:
+
+> "Application error" an error occurred in the application and your page could not be served...
+
+It tells us to see the Heroku logs to see what went wrong.
+
+9. Instead of using the command line as they suggested, we're going to view the logs on heroku.com
+
+Make sure that you're in your app's dashboard page, go to More -> View Logs
+
+In my case, it tells me that there are no web processes running:
+
+This error tells me that our code is successfully hosted on Heroku but it doesn't know how to run our app.
+
+That's what we'll do in the next lesson.
 
 ## Step 3 - Setup a WSGI server with gunicorn
 
