@@ -378,3 +378,13 @@ class CommentForm(FlaskForm):
 The next step is to allow users to leave a comment and save the comment. Now that we've seen how relationships can be established between tables in our database. Let's step up our relationships to create a new Table where any user can write comments to our blog posts.
 
 2. Create a Table called `Comment` where the `tablename` is `"comments"`. It should contain an `id` and a `text` property which will be the primary key and the text entered into the CKEditor.
+
+**main.py** -- Adding the comments table.
+```py
+class Comment(db.Model):
+    __tablename__ = "comments"
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.Text, nullable=False)
+```
+
+3. Establish a One to Many relationship Between the User Table (Parent) and the Comment table (Child). Where One User is linked to Many Comment objects. 

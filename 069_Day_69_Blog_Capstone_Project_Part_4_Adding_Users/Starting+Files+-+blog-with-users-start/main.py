@@ -44,6 +44,11 @@ class BlogPost(db.Model):
     author = relationship("User", back_populates="posts")
 db.create_all()
 
+class Comment(db.Model):
+    __tablename__ = "comments"
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.Text, nullable=False)
+
 
 def admin_only(f):
     @wraps(f)
