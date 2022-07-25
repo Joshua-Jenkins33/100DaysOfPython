@@ -328,3 +328,53 @@ def edit_post(post_id):
 ```
 
 ## Requirement 4 - Allow Any User to Add Comments to BlogPosts
+1. Create a `CommentForm` in the form.py file it will only contain a single `CKEditorField` for users to write their comments.
+
+Hint: You might need to check the [documentation](https://flask-ckeditor.readthedocs.io/en/latest/basic.html) or day 67 to see how we implement the CKEditor. 
+
+**main.py**
+```py
+@app.route("/post/<int:post_id>", methods=["GET", "POST"])
+def show_post(post_id):
+    form = CommentForm()
+    if form.validate_on_submit():
+        comment = form.comment.data
+        author = current_user
+    requested_post = BlogPost.query.get(post_id)
+    return render_template("post.html", post=requested_post, logged_in=current_user.is_authenticated, form=form)
+```
+
+**forms.py**
+```py
+class CommentForm(FlaskForm):
+    comment = CKEditorField("Comment", validators=[DataRequired()])
+    submit = SubmitField("Submit Comment")
+```
+
+**post.html**
+```html
+{% import "bootstrap/wtf.html" as wtf %}
+
+<!--           Comments Area -->
+          <div class="col-lg-8 col-md-10 mx-auto comment">
+              <ul class="commentList">
+                <li>
+                    <div class="commenterImage">
+                      <img src="https://pbs.twimg.com/profile_images/744849215675838464/IH0FNIXk.jpg"/>
+                    </div>
+                    <div class="commentText">
+                      <p>Some comment</p>
+                      <span class="date sub-text">comment author name</span>
+                    </div>
+                </li>
+              </ul>
+            </div>
+
+            {{ ckeditor.load() }}
+            {{ ckeditor.config(name='body') }}
+            {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+```
+
+The next step is to allow users to leave a comment and save the comment. Now that we've seen how relationships can be established between tables in our database. Let's step up our relationships to create a new Table where any user can write comments to our blog posts.
+
+2. Create a Table called `Comment` where the `tablename` is `"comments"`. It should contain an `id` and a `text` property which will be the primary key and the text entered into the CKEditor.
