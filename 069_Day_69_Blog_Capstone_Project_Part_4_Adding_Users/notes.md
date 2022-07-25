@@ -408,3 +408,30 @@ class Comment(db.Model):
     comment_author = relationship("User", back_populates="comments")
 db.create_all()
 ```
+
+4. Establish a One to Many relationship between each `BlogPost` object (Parent) and `Comment` object (Child). Where each `BlogPost` can have many associated `Comment` objects.
+
+```py
+# class BlogPost(db.Model):
+#     __tablename__ = "blog_post"
+#     id = db.Column(db.Integer, primary_key=True)
+#     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+#     title = db.Column(db.String(250), unique=True, nullable=False)
+#     subtitle = db.Column(db.String(250), nullable=False)
+#     date = db.Column(db.String(250), nullable=False)
+#     body = db.Column(db.Text, nullable=False)
+#     img_url = db.Column(db.String(250), nullable=False)
+#     author = relationship("User", back_populates="posts")
+    comments = relationship("Comment", back_populates="post_comment")
+# db.create_all()
+
+class Comment(db.Model):
+    __tablename__ = "comments"
+    id = db.Column(db.Integer, primary_key=True)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    comment_id = db.Column(db.Integer, db.ForeignKey('blog_post.id'))
+    text = db.Column(db.Text, nullable=False)
+    comment_author = relationship("User", back_populates="comments")
+    post_comment = relationship("BlogPost", back_populates="comments")
+db.create_all()
+```
