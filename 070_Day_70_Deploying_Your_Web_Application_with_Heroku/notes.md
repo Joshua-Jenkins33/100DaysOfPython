@@ -211,3 +211,49 @@ All going well, you should now be able to go to your app and see the blog up and
 - [x] 💥 Done! 💥
 
 ## Step 4 - Upgrade SQLite Databse to PostgreSQL
+Getting a website is not that easy huh?
+
+You might be wondering what else we might possibly need to do after all that. There's just one last thing. When we were coding and testing our Flask website, it was nice to use a simple database like SQLite. But SQLite is a file-based database. This is its strength and weakness. It's a strength because while we're coding up our database and debugging, it's really useful to be able to open the SQLite file using DB Viewer and see how our data looks.
+
+But it's also a weakness because once it's deployed with Heroku the file locations are shifted around every 24 hours or so. This means that your database might just get wiped every day. That will mean some very unhappy users. [Read more here](https://devcenter.heroku.com/articles/sqlite3).
+
+So we've got to put on our big-boy/big-girl pants and upgrade our simple SQLite database to PosgreSQL, a database that can handle millions of data entries and reliably delivers data to users.
+
+Luckily, because we used SQLAlchemy to create our Flask app, there's nothing we need to change in terms of code. We just need to set up the PostgreSQL database and tell Heroku about it.
+
+1. Go to your app's dashboard on Heroku and go to the Resources tab. Then search for Heroku Postgres.
+
+Next, you will see a popup, keep the free-tier and click Submit. 
+
+Next, we need to connect to this Heroku Postgres database instead of the local SQLite database.
+
+2. Go to Settings -> Reveal Config Vars
+
+This is the same as our .env file, it's where you can put top secret stuff like API keys and passwords. Then you give it a variable name and you can tap into the value using `os.environ.get("VAR_NAME")` .
+
+You'll see that we already have the Postgres database convifg var set up. We just need to connect to it from our code file.
+
+3. Copy the name of the database config var (mine is `DATABASE_URL`) and add it to your main.py instead of the sqlite URL.
+
+4. Let's move our SECRET_KEY into the config var as well. 
+
+5. SQLite is pre-installed for all Python projects, but if we are going to use Postgres, we'll need to install the [psycopg2-binary](https://pypi.org/project/psycopg2-binary/) packages as well. Note, you'll also need to add the package name and version to requirements.txt as well as commit and push the updates.
+
+Important, make sure that you don't include any pipfile or pipfile.lock files in your GitHub repo (you can delete them and commit the changes). Heroku needs to know which packages they should install on their side
+
+Because our main.py SQLAlchemy database is now pointing to an environment variable that is only avilable on Heroku, if you run the app right now locally, you will get some errors.
+
+Instead, we want to provide SQLite as the alternative when we're developing the app locally. 
+
+6. Update the app config to use "DATABASE_URL" environment variable if provided, but if it's None (e.g. when running locally) then we can provide sqlite:///blog.db as the alternative.
+
+```py
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL",  "sqlite:///blog.db")
+```
+
+Finally, if you go to your heroku app, it should now be up and using a Postgres database.
+
+Whoohoo! Congratulations if you got this far!
+
+
+Also, check out [my version](https://angela-blog.herokuapp.com/)
