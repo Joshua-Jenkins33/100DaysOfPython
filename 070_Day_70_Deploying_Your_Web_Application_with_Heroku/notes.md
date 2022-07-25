@@ -1,3 +1,13 @@
+- [Day 70: Advanced - Deploying Your Web Application with Heroku](#day-70-advanced---deploying-your-web-application-with-heroku)
+  - [Version Control and Git](#version-control-and-git)
+  - [What is GitHub?](#what-is-github)
+  - [Step 1 - Upload Your Project to GitHub](#step-1---upload-your-project-to-github)
+    - [Local Version Control with PyCharm](#local-version-control-with-pycharm)
+    - [Push to Git Remote on GitHub](#push-to-git-remote-on-github)
+  - [Step 2 - Use gunicorn and Heroku to host your website](#step-2---use-gunicorn-and-heroku-to-host-your-website)
+  - [Step 3 - Setup a WSGI server with gunicorn](#step-3---setup-a-wsgi-server-with-gunicorn)
+  - [Step 4 - Upgrade SQLite Databse to PostgreSQL](#step-4---upgrade-sqlite-databse-to-postgresql)
+
 # Day 70: Advanced - Deploying Your Web Application with Heroku
 Going to be publishing our Flask website onto the internet with:
 - Git
@@ -256,4 +266,4 @@ Finally, if you go to your heroku app, it should now be up and using a Postgres 
 Whoohoo! Congratulations if you got this far!
 
 
-Also, check out [my version](https://angela-blog.herokuapp.com/)
+Also, check out [my version](https://angela-blog.herokuapp.com/):
