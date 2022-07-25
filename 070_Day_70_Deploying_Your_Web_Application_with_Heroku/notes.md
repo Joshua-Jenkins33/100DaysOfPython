@@ -159,5 +159,55 @@ This error tells me that our code is successfully hosted on Heroku but it doesn'
 That's what we'll do in the next lesson.
 
 ## Step 3 - Setup a WSGI server with gunicorn
+You might recall that every time we ran our app, we got a warning telling us that when we want to make our website go live and go from development to production mode that we should use a WSGI server.
+
+**WSGI** stands for **Web Server Gateway Interface** and it's described [here](https://www.python.org/dev/peps/pep-3333/).
+
+It standardises the language and protocols between our Python Flask application and the host server.
+
+Again, but in English: Normal web servers can't run Python applications, so a special type of server was created (WSGI) to run python applications.
+
+There are many WSGIs to choose from, but we'll use the most popular - **gunicorn**.
+
+So Heroku will call gunicorn to run our code and gunicorn will know how to speak to Heroku. 
+
+1. In PyCharm go to the Python Interpreter for your Project and install the gunicorn package:
+
+Windows: Files -> Settings -> Project: blog-with-user -> Python Interpretor
+
+Note: Make a note of the version of gunicorn you installed e.g. `20.1.0`
+
+2. Add the package to the requirements.txt file on a new line:
+
+`gunicorn==<version number>`
+
+NOTE: Your version number will be higher than mine because you are in the future.
+
+
+Next, we need to tell Heroku about our gunicorn server and how to run our Flask app, we do that using a Procfile.
+
+3. Create a new file in the project top-level folder called `Procfile`
+
+NOTE: make sure you spell the name of the file exactly as you see above, with a capital P and no file extension.
+
+Type the following into the Procfile: `web: gunicorn main:app`
+
+This will tell Heroku to create a `web` worker, one that is able to receive HTTP requests.
+
+To use **gunicorn** to serve your web app
+
+And the Flask **app** object is the **main**.py file.
+
+NOTE: If your app is not inside a file called main.py then you should change main to your file name.
+
+4. Add the new Procfile/requirements.txt to git and commit the changes then push it to the remote. 
+
+Note: If you forgot to "Commit and Push" and just clicked on "Commit" then just go to VSC -> Git -> Push
+
+Because we enabled automatic re-deploys, if you go to your app's logs you should see it being re-built an re-deployed with the changes we have pushed to GitHub.
+
+All going well, you should now be able to go to your app and see the blog up and running. 
+
+- [x] 💥 Done! 💥
 
 ## Step 4 - Upgrade SQLite Databse to PostgreSQL
