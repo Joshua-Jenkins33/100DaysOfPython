@@ -387,4 +387,24 @@ class Comment(db.Model):
     text = db.Column(db.Text, nullable=False)
 ```
 
-3. Establish a One to Many relationship Between the User Table (Parent) and the Comment table (Child). Where One User is linked to Many Comment objects. 
+3. Establish a One to Many relationship Between the `User` Table (Parent) and the `Comment` table (Child). Where One `User` is linked to Many `Comment` objects. 
+
+```py
+# class User(UserMixin, db.Model):
+#     __tablename__ = "user"
+#     id = db.Column(db.Integer, primary_key=True)
+#     email = db.Column(db.String(250), nullable=False)
+#     password = db.Column(db.String(250), nullable=False)
+#     name = db.Column(db.String(250), nullable=False)
+#     posts = relationship("BlogPost", back_populates="author")
+    comments = relationship("Comment", back_populates="comment_author")
+# db.create_all()
+
+class Comment(db.Model):
+    __tablename__ = "comments"
+    id = db.Column(db.Integer, primary_key=True)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    text = db.Column(db.Text, nullable=False)
+    comment_author = relationship("User", back_populates="comments")
+db.create_all()
+```
