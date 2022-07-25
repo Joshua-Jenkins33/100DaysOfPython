@@ -429,7 +429,7 @@ class Comment(db.Model):
     __tablename__ = "comments"
     id = db.Column(db.Integer, primary_key=True)
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    comment_id = db.Column(db.Integer, db.ForeignKey('blog_post.id'))
+    blog_post_id = db.Column(db.Integer, db.ForeignKey('blog_post.id'))
     text = db.Column(db.Text, nullable=False)
     comment_author = relationship("User", back_populates="comments")
     post_comment = relationship("BlogPost", back_populates="comments")
@@ -443,3 +443,27 @@ This means you should create a new admin user (id == 1), a new blog post and ano
 - [x] Register admin user first.
 - [x] Register a new blog reader user.
 - [x] Create a new blog post.
+
+6. Log in as your John Doe user (or any user that is not the primary user) and make a comment on a blog post. In order for this to work, you will need to update the `/post/<int:post_id>` route. Make sure that only authenticated (logged-in) users can save their comment. Otherwise, they should see a flash message telling them to log in and redirect them to the `/login` route.
+
+```py
+@app.route("/post/<int:post_id>", methods=["GET", "POST"])
+def show_post(post_id):
+    form = CommentForm()
+    if form.validate_on_submit():
+        if not current_user.is_anonymous:
+            comment = form.comment.data
+
+            new_comment = Comment(
+                author_id = current_user.id,
+                blog_post_id = post_id,
+                text = comment
+            )
+            db.session.add(new_comment)
+            db.session.commit()
+
+            print(f"================COMMENT ADDED================")
+        else:
+            flash('You need to be logged in to leave a comment.')
+            return redirect(url_for('login'))
+```

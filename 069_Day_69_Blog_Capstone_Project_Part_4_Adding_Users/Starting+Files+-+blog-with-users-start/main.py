@@ -50,7 +50,7 @@ class Comment(db.Model):
     __tablename__ = "comments"
     id = db.Column(db.Integer, primary_key=True)
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    comment_id = db.Column(db.Integer, db.ForeignKey('blog_post.id'))
+    blog_post_id = db.Column(db.Integer, db.ForeignKey('blog_post.id'))
     text = db.Column(db.Text, nullable=False)
     comment_author = relationship("User", back_populates="comments")
     post_comment = relationship("BlogPost", back_populates="comments")
@@ -116,7 +116,7 @@ def login():
             valid_credentials = check_password_hash(user.password, password)
             if valid_credentials:
                 login_user(user)
-                flash('Logged in successfully.')
+                # flash('Logged in successfully.')
                 return redirect(url_for('get_all_posts'))
             else:
                 flash('Authentication failed; password was incorrect.')
@@ -136,8 +136,22 @@ def logout():
 def show_post(post_id):
     form = CommentForm()
     if form.validate_on_submit():
-        comment = form.comment.data
-        author = current_user
+        if not current_user.is_anonymous:
+            comment = form.comment.data
+
+            new_comment = Comment(
+                author_id = current_user.id,
+                blog_post_id = post_id,
+                text = comment
+            )
+            db.session.add(new_comment)
+            db.session.commit()
+
+            print(f"================COMMENT ADDED================")
+        else:
+            flash('You need to be logged in to leave a comment.')
+            return redirect(url_for('login'))
+
     requested_post = BlogPost.query.get(post_id)
     return render_template("post.html", post=requested_post, logged_in=current_user.is_authenticated, form=form)
 
