@@ -1,3 +1,14 @@
+- [Day 69: Blog Capstone Project Part 4 — Adding Users](#day-69-blog-capstone-project-part-4--adding-users)
+  - [Download the Starting Project](#download-the-starting-project)
+  - [Requirement 1 - Register New Users](#requirement-1---register-new-users)
+  - [Requirement 2 - Login Registered Users](#requirement-2---login-registered-users)
+    - [forms.py](#formspy)
+    - [main.py](#mainpy)
+  - [Requirement 3 - Protect Routes](#requirement-3---protect-routes)
+  - [Creating Relational Databases](#creating-relational-databases)
+    - [Re-creating the Database after changes to the Schema](#re-creating-the-database-after-changes-to-the-schema)
+  - [Requirement 4 - Allow Any User to Add Comments to BlogPosts](#requirement-4---allow-any-user-to-add-comments-to-blogposts)
+ 
 # Day 69: Blog Capstone Project Part 4 — Adding Users
 Wouldn't it be great if we could have some users on our blog? What if we could let anyone sign up and comment on our blog posts? In order for that to work, we would need to add authentication to our blog. This will be the final step in our Blog Capstone Project. Once we're done, it will be a fully-fledged blog website that you can publish and launch. 
 
