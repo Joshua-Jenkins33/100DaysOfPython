@@ -435,3 +435,11 @@ class Comment(db.Model):
     post_comment = relationship("BlogPost", back_populates="comments")
 db.create_all()
 ```
+
+5. At this point, with a new Table added, it's a good idea to **delete** the existing blog.db entirely and to use the line db.create_all() to create all the tables from scratch.
+
+This means you should create a new admin user (id == 1), a new blog post and another user who will make some comments.
+
+- [x] Register admin user first.
+- [x] Register a new blog reader user.
+- [x] Create a new blog post.
