@@ -467,3 +467,59 @@ def show_post(post_id):
             flash('You need to be logged in to leave a comment.')
             return redirect(url_for('login'))
 ```
+
+7. Update the code in post.html to display all the comments associated with the blog post.
+
+HINT 1: Don't worry about the commenter image just yet.
+
+HINT 2: `comments` is a property of each blog post, you can treat it like a List.
+
+HINT 3: The text of each comment is created from the CKEditor just like the body of each blog post so it will be saved in HTML format. 
+
+**post.html**
+```html
+  <!-- Post Content -->
+  <article>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+            {{ post.body|safe }}
+          <hr>
+          {% if current_user.id == 1: %}
+            <div class="clearfix">
+            <a class="btn btn-primary float-right" href="{{url_for('edit_post', post_id=post.id)}}">Edit Post</a>
+            </div>
+          {% endif %}
+
+          {{ ckeditor.load() }}
+          {{ ckeditor.config(name='body') }}
+          {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+
+<!--           Comments Area -->
+          {% for comment in comments %}
+            <div class="col-lg-8 col-md-10 mx-auto comment">
+                <ul class="commentList">
+                  <li>
+                      <div class="commenterImage">
+                        <img src="https://pbs.twimg.com/profile_images/744849215675838464/IH0FNIXk.jpg"/>
+                      </div>
+                      <div class="commentText">
+                        {{ comment.text|safe }}
+                        <span class="date sub-text">{{ comment.name }}</span>
+                      </div>
+                  </li>
+                </ul>
+              </div>
+            {% endfor %}
+            
+          </div>
+      </div>
+    </div>
+  </article>
+```
+
+**main.py --> show_post()**
+```py
+    comments = Comment.query.join(User, Comment.author_id==User.id).add_columns(User.name, Comment.text).filter(Comment.blog_post_id==post_id)
+    return render_template("post.html", post=requested_post, logged_in=current_user.is_authenticated, form=form, comments=comments)
+```

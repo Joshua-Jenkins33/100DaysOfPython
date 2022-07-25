@@ -153,7 +153,8 @@ def show_post(post_id):
             return redirect(url_for('login'))
 
     requested_post = BlogPost.query.get(post_id)
-    return render_template("post.html", post=requested_post, logged_in=current_user.is_authenticated, form=form)
+    comments = Comment.query.join(User, Comment.author_id==User.id).add_columns(User.name, Comment.text).filter(Comment.blog_post_id==post_id)
+    return render_template("post.html", post=requested_post, logged_in=current_user.is_authenticated, form=form, comments=comments)
 
 
 @app.route("/about")
