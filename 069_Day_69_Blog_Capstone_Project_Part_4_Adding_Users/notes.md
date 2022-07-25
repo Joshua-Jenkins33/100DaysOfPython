@@ -523,3 +523,40 @@ HINT 3: The text of each comment is created from the CKEditor just like the body
     comments = Comment.query.join(User, Comment.author_id==User.id).add_columns(User.name, Comment.text).filter(Comment.blog_post_id==post_id)
     return render_template("post.html", post=requested_post, logged_in=current_user.is_authenticated, form=form, comments=comments)
 ```
+
+Gravatar images are used across the internet to provide an avatar image for blog commenters. 
+
+Gravatar allows you to change the image that you use across the blog websites that use Gravatar here: http://en.gravatar.com/
+
+It's super simple to implement into a Flask application. 
+
+8. Use the [Gravatar docs here](https://pythonhosted.org/Flask-Gravatar/) to add Gravatar images into your comments section. 
+
+[HINT](http://en.gravatar.com/site/implement/images)
+
+**post.html**
+```html
+          {% for comment in comments %}
+            <div class="col-lg-8 col-md-10 mx-auto comment">
+                <ul class="commentList">
+                  <li>
+                      <div class="commenterImage">
+                        <img src="{{ comment.comment_author.email | gravatar }}"/>
+                      </div>
+                      <div class="commentText">
+                        {{ comment.text|safe }}
+                        <span class="date sub-text">{{ comment.comment_author.name }}</span>
+                      </div>
+                  </li>
+                </ul>
+              </div>
+            {% endfor %}
+```
+
+**main.py --> show_post() update + Gravatar**
+```py
+##Gravatar
+gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=False, force_lower=False, use_ssl=False, base_url=None)
+
+comments = Comment.query.filter(Comment.blog_post_id==post_id)
+```

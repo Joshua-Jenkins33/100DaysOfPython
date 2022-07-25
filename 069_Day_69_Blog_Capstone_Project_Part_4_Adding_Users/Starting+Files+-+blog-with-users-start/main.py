@@ -20,6 +20,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+##Gravatar
+gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=False, force_lower=False, use_ssl=False, base_url=None)
 
 ##CONFIGURE TABLES
 
@@ -153,7 +155,7 @@ def show_post(post_id):
             return redirect(url_for('login'))
 
     requested_post = BlogPost.query.get(post_id)
-    comments = Comment.query.join(User, Comment.author_id==User.id).add_columns(User.name, Comment.text).filter(Comment.blog_post_id==post_id)
+    comments = Comment.query.filter(Comment.blog_post_id==post_id)
     return render_template("post.html", post=requested_post, logged_in=current_user.is_authenticated, form=form, comments=comments)
 
 
