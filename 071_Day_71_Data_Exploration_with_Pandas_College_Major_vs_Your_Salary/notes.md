@@ -331,3 +331,15 @@ pd.options.display.float_format = '{:,.2f}'.format
 The PayScale dataset used in this lesson was from 2008 and looked at the prior 10 years. Notice how Finance ranked very high on post-degree earnings at the time. However, we all know there was a massive financial crash in that year. Perhaps things have changed. Can you use what you've learnt about web scraping in the prior lessons (e.g., Day 45) and share some updated information from PayScale's website in the comments below? 
 
 TODO: Return to this!
+
+## Learning Points & Summary
+- Use `.head()`, `.tail()`, `.shape` and `.columns` to explore your DataFrame and find out the number of rows and columns as well as the column names.
+- Look for NaN (not a number) values with `.findna()` and consider using `.dropna()` to clean up yourDataFrame.
+- You can access entire columns of a DataFrame using the square bracket notation: `df['column name']` or `d[['column name 1', 'column name 2', 'column name 3']]`
+- You can access individual cells in a DataFrame by chaining square brackets `df['column name'][index]` or using `df['column name'].loc[index]`
+- The largest and smallest values, as well as their positions, can be found with methods like `.max()`, `.mi()`, `.idxmax()` and `.idxmin()`
+- You can sort the DataFrame with `.sort_values()` and add new columns with `.insert()`
+- To create an Excel Style Pivot Table by grouping entries that belong to a particular category use the `.groupby()` method
+
+
+I've attached the completed notebook to this lesson as a .zip file. If you have any issues, unzip the file, upload it to google drive and open it as a Google Colab Notebook. 
