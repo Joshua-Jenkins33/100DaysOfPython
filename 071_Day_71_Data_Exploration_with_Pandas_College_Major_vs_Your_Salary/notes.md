@@ -205,4 +205,28 @@ I'll provide the solution and the code snippets in the next lesson =)
 
 ## Solution: Highest and Lowest Earning Degrees
 
+### The Highest Mid-Career Salary
+```py
+print(clean_df['Mid-Career Median Salary'].max())
+print(f"Index for the max mid career salary: {clean_df['Mid-Career Median Salary'].idxmax()}")
+clean_df['Undergraduate Major'][8]
+```
+
+If you have multiple lines in the same cell, only the last one will get printed as an output automatically. If you'd like to see more than one thing printed out, then you still have to use a print statement on the lines above. 
+
+### The Lowest Starting and Mid-Career Salary
+```py
+print(clean_df['Starting Median Salary'].min())
+clean_df['Undergraduate Major'].loc[clean_df['Starting Median Salary'].idxmin()]
+```
+
+Here I've nested the code that we've seen in the previous lesson in the same line. We can also use the `.loc` property to access an entire row. Below I've accessed the row at the index of the smallest mid-career salary:
+
+```py
+clean_df.loc[clean_df['Mid-Career Median Salary'].idxmin()]
+```
+
+Sadly, education is actually the degree with the lowest mid-career salary and Spanish is the major with the lowest starting salary. 
+
+
 ## Sorting Values & Adding Columns: Majors with the Most Potential vs Lowest Risk
