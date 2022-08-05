@@ -86,6 +86,20 @@ df['TAG'].groupby([df.DATE.dt.month, df.TAG]).agg('count')
 ```
 
 ## Data Cleaning: Working with Time Stampes
+In order to look at the number of entries and the number of posts by programming language, we need to make use of the `.groupby()` method. The key is combining `.groupby()` with the TAG column, which holds as our categories (the names of the programming languages).
+
+If we `.sum()` the number of posts then we can see how many posts each programming language had since the creation of Stack Overflow. 
+
+```py
+df.groupby("TAG").sum()
+```
+
+If we `.count()` the entries in each column, we can see how many months of entries exist per programming language. 
+
+```py
+df.groupby("TAG").count()
+```
+
 
 ## Data Manipulation: Pivoting DataFrames
 
