@@ -302,3 +302,32 @@ highest_spread = clean_df.sort_values('Mid-Career Median Salary', ascending=Fals
 highest_spread[['Undergraduate Major', 'Mid-Career Median Salary']].head()
 ```
 
+## Grouping and Pivoting Data with Pandas
+Often times you will want to sum rows that belong to a particular category. For example, which category of degrees has the highest average salary? Is it STEM, Business or HASS (Humanities, Arts, and Social Science)? 
+
+To answer this question we need to learn to use the `.groupby()` method. This allows us to manipulate data similar to a Microsoft Excel Pivot Table.
+
+We have three categories in the 'Group' column: STEM, HASS and Business. Let's count how many majors we have in each category:
+
+```py
+clean_df.groupby('Group').count()
+```
+
+### Mini Challenge
+Now can you use the `.mean()` method to find the average salary by group? 
+
+```py
+clean_df.groupby('Group').mean()
+```
+
+### Number formats in the Output
+The above is a little hard to read, isn't it? We can tell Pandas to print the numbers in our notebook to look like 1,012.45 with the following line:
+
+```py
+pd.options.display.float_format = '{:,.2f}'.format 
+```
+
+### Extra Credit
+The PayScale dataset used in this lesson was from 2008 and looked at the prior 10 years. Notice how Finance ranked very high on post-degree earnings at the time. However, we all know there was a massive financial crash in that year. Perhaps things have changed. Can you use what you've learnt about web scraping in the prior lessons (e.g., Day 45) and share some updated information from PayScale's website in the comments below? 
+
+TODO: Return to this!
