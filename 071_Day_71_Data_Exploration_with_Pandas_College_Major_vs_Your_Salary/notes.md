@@ -1,3 +1,28 @@
+- [Day 71: Data Exploration with Pandas: College Major v.s. Your Salary](#day-71-data-exploration-with-pandas-college-major-vs-your-salary)
+  - [Getting Set Up for Data Science](#getting-set-up-for-data-science)
+  - [Upload the Data and Read the .csv File](#upload-the-data-and-read-the-csv-file)
+  - [Preliminary Data Exploration and Data Cleaning with Pandas](#preliminary-data-exploration-and-data-cleaning-with-pandas)
+    - [Missing Values and Junk Data](#missing-values-and-junk-data)
+      - [Delete the Last Row](#delete-the-last-row)
+  - [Accessing Columns and Individual Cells in a Dataframe](#accessing-columns-and-individual-cells-in-a-dataframe)
+    - [Find College Major with Highest Starting Salaries](#find-college-major-with-highest-starting-salaries)
+    - [Challenge](#challenge)
+  - [Solution: Highest and Lowest Earning Degrees](#solution-highest-and-lowest-earning-degrees)
+    - [The Highest Mid-Career Salary](#the-highest-mid-career-salary)
+    - [The Lowest Starting and Mid-Career Salary](#the-lowest-starting-and-mid-career-salary)
+  - [Sorting Values & Adding Columns: Majors with the Most Potential vs Lowest Risk](#sorting-values--adding-columns-majors-with-the-most-potential-vs-lowest-risk)
+    - [Lowest Risk Majors](#lowest-risk-majors)
+      - [Sorting by the Lowest Spread](#sorting-by-the-lowest-spread)
+    - [Challenge](#challenge-1)
+  - [Solution: Degress with the Highest Potential](#solution-degress-with-the-highest-potential)
+    - [Majors with the Highest Potential](#majors-with-the-highest-potential)
+    - [Majors with the Greatest Spread in Salaries](#majors-with-the-greatest-spread-in-salaries)
+  - [Grouping and Pivoting Data with Pandas](#grouping-and-pivoting-data-with-pandas)
+    - [Mini Challenge](#mini-challenge)
+    - [Number formats in the Output](#number-formats-in-the-output)
+    - [Extra Credit](#extra-credit)
+  - [Learning Points & Summary](#learning-points--summary)
+
 # Day 71: Data Exploration with Pandas: College Major v.s. Your Salary
 Learn Data Exploration with Pandas by Analysing the Post-University Salaries of Graduates by Major 
 
