@@ -35,6 +35,25 @@ The notebook is divided into cells. Each cell can be executed individually and t
 That's pretty much it. Let's get started!
 
 ## Upload the Data and Read the .csv File
+Download the salaries_by_college_major.csv file from the course resources and add this file to the notebook by dropping it into the sidebar with the little folder icon.
+
+Then import pandas into your notebook and read the .csv file. 
+
+```py
+import pandas as pd
+
+df = pd.read_csv('salaries_by_college_major.csv')
+```
+
+You can save yourself some typing by bringing up the autocompletion by using the keyboard shortcuts `ctrl` + `Space` (windows) or `⌘` + `Space` (Mac). 
+
+Now take a look at the Pandas dataframe we've just created with .head(). This will show us the first 5 rows of our dataframe.
+
+```py
+df.head() 
+```
+
+Once you hit shift + enter on your keyboard the cell will be evaluated and you should see the output automatically printed below the cell. This feature of automatically printing the output below in a pretty format is what makes the notebook format so lovely to work with. 
 
 ## Preliminary Data Exploration and Data Cleaning with Pandas
 
