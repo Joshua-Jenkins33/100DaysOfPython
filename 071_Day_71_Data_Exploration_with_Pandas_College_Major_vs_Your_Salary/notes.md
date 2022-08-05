@@ -230,3 +230,52 @@ Sadly, education is actually the degree with the lowest mid-career salary and Sp
 
 
 ## Sorting Values & Adding Columns: Majors with the Most Potential vs Lowest Risk
+
+### Lowest Risk Majors
+A low-risk major is a degree where there is a small difference between the lowest and highest salaries. In other words, if the difference between the 10th percentile and the 90th percentile earnings of your major is small, then you can be more certain about your salary after you graduate.
+
+How would we calculate the difference between the earnings of the 10th and 90th percentile? Well, Pandas allows us to do simple arithmetic with entire columns, so all we need to do is take the difference between the two columns:
+
+```py
+clean_df['Mid-Career 90th Percentile Salary'] - clean_df['Mid-Career 10th Percentile Salary']
+```
+
+Alternatively, you can also use the `.subtract()` method. 
+
+```py
+clean_df['Mid-Career 90th Percentile Salary'].subtract(clean_df['Mid-Career 10th Percentile Salary'])
+```
+
+The output of this computation will be another Pandas dataframe column. We can add this to our existing dataframe with the `.insert()` method:
+
+```py
+spread_col = clean_df['Mid-Career 90th Percentile Salary'] - clean_df['Mid-Career 10th Percentile Salary']
+clean_df.insert(1, 'Spread', spread_col)
+clean_df.head()
+```
+
+The first argument is the position of where the column should be inserted. In our case, it's at position 1, so the second column. 
+
+#### Sorting by the Lowest Spread
+To see which degrees have the smallest spread, we can use the `.sort_values()` method. And since we are interested in only seeing the name of the degree and the major, we can pass a list of these two column names to look at the .head() of these two columns exclusively.
+
+```py
+low_risk = clean_df.sort_values('Spread')
+low_risk[['Undergraduate Major', 'Spread']].head()
+```
+
+
+Does `.sort_values()` sort in ascending or descending order? To find out, check out the [Pandas documentation](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.sort_values.html)
+
+You can also bring up the quick documentation with shift + tab on your keyboard directly in the Python notebook. 
+
+**The Answer:** Ascending
+
+### Challenge
+Using the .sort_values() method, can you find the degrees with the highest potential? Find the top 5 degrees with the highest values in the 90th percentile. 
+
+Also, find the degrees with the greatest spread in salaries. Which majors have the largest difference between high and low earners after graduation.
+
+I've got the solution for you in the next lesson. 
+
+**Answers.** See `Careers wit hthe Highest Potential.ipynb`
