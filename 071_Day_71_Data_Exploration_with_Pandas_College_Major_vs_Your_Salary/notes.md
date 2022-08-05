@@ -279,3 +279,26 @@ Also, find the degrees with the greatest spread in salaries. Which majors have t
 I've got the solution for you in the next lesson. 
 
 **Answers.** See `Careers wit hthe Highest Potential.ipynb`
+
+## Solution: Degress with the Highest Potential
+Here's the solution to the challenge from the previous lesson: 
+
+### Majors with the Highest Potential
+```py
+highest_potential = clean_df.sort_values('Mid-Career 90th Percentile Salary', ascending=False)
+highest_potential[['Undergraduate Major', 'Mid-Career 90th Percentile Salary']].head()
+```
+
+### Majors with the Greatest Spread in Salaries
+```py
+highest_spread = clean_df.sort_values('Spread', ascending=False)
+highest_spread[['Undergraduate Major', 'Spread']].head()
+```
+
+Notice how 3 of the top 5 are present in both. This means that there are some very high earning Economics degree holders out there, but also some who are not earning as much. It's actually quite interesting to compare these two rankings versus the degrees where the median salary is very high. 
+
+```py
+highest_spread = clean_df.sort_values('Mid-Career Median Salary', ascending=False)
+highest_spread[['Undergraduate Major', 'Mid-Career Median Salary']].head()
+```
+
