@@ -102,6 +102,107 @@ clean_df.tail()
 
 ## Accessing Columns and Individual Cells in a Dataframe
 
+### Find College Major with Highest Starting Salaries
+To access a particular column from a data frame, we can use the square bracket notation, like so:
+
+```py
+clean_df['Starting Median Salary']
+```
+
+You should see all the values printed out below the cell for just this column:
+
+```
+0     46000.0
+1     57700.0
+2     42600.0
+3     36800.0
+4     41600.0
+5     35800.0
+6     38800.0
+7     43000.0
+8     63200.0
+9     42600.0
+10    53900.0
+11    38100.0
+12    61400.0
+13    55900.0
+14    53700.0
+15    35000.0
+16    35900.0
+17    50100.0
+18    34900.0
+19    60900.0
+20    38000.0
+21    37900.0
+22    47900.0
+23    39100.0
+24    41200.0
+25    43500.0
+26    35700.0
+27    38800.0
+28    39200.0
+29    37800.0
+30    57700.0
+31    49100.0
+32    36100.0
+33    40900.0
+34    35600.0
+35    49200.0
+36    40800.0
+37    45400.0
+38    57900.0
+39    35900.0
+40    54200.0
+41    39900.0
+42    39900.0
+43    74300.0
+44    50300.0
+45    40800.0
+46    35900.0
+47    34100.0
+48    36500.0
+49    34000.0
+Name: Starting Median Salary, dtype: float64
+```
+To find the highest starting salary we can simply chain the `.max()` method. 
+
+```py
+clean_df['Starting Median Salary'].max()
+```
+
+The highest starting salary is $74,300. But which college major earns this much on average? For this, we need to know the row number or **index** so that we can look up the name of the major. Lucky for us, the `.idxmax`() method will give us index for the row with the largest value. 
+
+```py
+clean_df['Starting Median Salary'].idxmax()
+```
+
+which is 43. To see the name of the major that corresponds to that particular row, we can use the `.loc` (location) property. 
+
+```py
+clean_df['Undergraduate Major'].loc[43]
+```
+
+Here we are selecting both a column ('Undergraduate Major') and a row at index 43, so we are retrieving the value of a particular cell. You might see people using the double square brackets notation to achieve exactly the same thing: 
+
+```py
+clean_df['Undergraduate Major'][43]
+```
+
+If you don't specify a particular column you can use the .loc property to retrieve an entire row: 
+
+```py
+clean_df.loc[43]
+```
+
+### Challenge
+Now that we've found the major with the highest starting salary, can you write the code to find the following:
+
+- What college major has the highest mid-career salary? How much do graduates with this major earn? (Mid-career is defined as having 10+ years of experience).
+- Which college major has the lowest starting salary and how much do graduates earn after university?
+- Which college major has the lowest mid-career salary and how much can people expect to earn with this degree? 
+
+I'll provide the solution and the code snippets in the next lesson =) 
+
 ## Solution: Highest and Lowest Earning Degrees
 
 ## Sorting Values & Adding Columns: Majors with the Most Potential vs Lowest Risk
