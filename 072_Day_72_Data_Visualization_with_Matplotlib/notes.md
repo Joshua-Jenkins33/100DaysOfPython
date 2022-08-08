@@ -414,5 +414,31 @@ Play with the `window` argument (use `3` or `12`) and see how the chart changes!
 
 
 ## Quiz 18: Programming Language Data Analysis
+Question 1:
+
+Looking at the data, what was the most popular programming language from 2008 to 2012 by the number of posts?
+
+- [ ] Python
+- [ ] Javascript
+- [ ] Assembly
+- [x] C#
+
+Question 2:
+
+What was the most popular programming language from 2015 to 2018?
+
+- [ ] Python
+- [ ] Java
+- [x] Javascript
+- [ ] PHP
+
+Question 3:
+
+What was the most popular programming language in 2020?
+
+- [ ] Javascript
+- [x] PYTHON!!!!!!!
+- [ ] Not Python
+
 
 ## Learning Points & Summary
