@@ -330,12 +330,59 @@ plt.ylim(0, 35000)
 Now that you've successfully created and styled your chart, can you figure out how to plot both Java and Python next to each other?
 
 ```py
-java_python_df = reshaped_df.filter(items=['java', 'python'], axis=1)
-java_python_df.plot.line()
+plt.figure(figsize=(16,10)) 
+plt.plot(reshaped_df.index, reshaped_df.java)
+plt.plot(reshaped_df.index, reshaped_df.python)
+plt.xlabel('Date', fontsize=14)
+plt.ylabel('Number of Posts', fontsize=14)
+plt.ylim(0, 35000)
 ```
 
 
 ## Multi-Line Charts with Matplotlib
+
+### Solution: Two Line Charts Next to Each Other
+The trick is simply calling the .plot() method twice. That's all there is to it! =)
+
+```py
+plt.figure(figsize=(16,10)) # make chart larger
+plt.xticks(fontsize=14)
+plt.yticks(fontsize=14)
+plt.xlabel('Date', fontsize=14)
+plt.ylabel('Number of Posts', fontsize=14)
+plt.ylim(0, 35000)
+
+plt.plot(reshaped_df.index, reshaped_df.java)
+plt.plot(reshaped_df.index, reshaped_df.python) # Tadah!
+```
+
+But what if we wanted to plot all the programming languages on the same chart? We don't want to type out .plot() a million times, right? We can actually just use a for-loop:
+
+```py
+    for column in reshaped_df.columns:
+        plt.plot(reshaped_df.index, reshaped_df[column])
+```
+
+This will allow us to iterate over each column in the DataFrame and plot it on our chart.
+
+But wait, which language is which? It's really hard to make out without a legend that tells us which colour corresponds to each language. Let's modify the plotting code to add a label for each line based on the column name (and make the lines thicker at the same time using linewidth). Then let's add a legend to our chart: 
+
+```py
+    plt.figure(figsize=(16,10))
+    plt.xticks(fontsize=14)
+    plt.yticks(fontsize=14)
+    plt.xlabel('Date', fontsize=14)
+    plt.ylabel('Number of Posts', fontsize=14)
+    plt.ylim(0, 35000)
+     
+    for column in reshaped_df.columns:
+        plt.plot(reshaped_df.index, reshaped_df[column], 
+                 linewidth=3, label=reshaped_df[column].name)
+     
+    plt.legend(fontsize=16) 
+```
+
+Looks like Python is the most popular programming language judging by the number of posts on Stack Overflow! Python for the win! =) 
 
 ## Smoothing out Time-Series Data
 
