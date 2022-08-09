@@ -161,6 +161,55 @@ sets.sort_values('num_parts', ascending=False).head()
 The largest LEGO set ever produced has around 10,000 pieces! Apparently, only two of these boxes were ever produced, so if you wanted to get your hands on a ridiculously large LEGO set, you'll have to settle for the 7,541 piece Millennium Falcon. 
 
 ## Visualize the Number of Sets Published over Time
+Now let's take a look at how many sets the LEGO company has published year-on-year. This might tell us something about how LEGO's product offering has changed over time.
+
+First, let's import Matplotlib so we can visualise our findings up top:
+
+### Challenge
+Now, let's create a new Series called `sets_by_year` which has the years as the index and the number of sets as the value. 
+
+```py
+sets_by_year = sets.groupby('year').count()
+sets_by_year.set_num.head()
+```
+
+Having summed the number of LEGO sets per year, visualise this data using a line chart with Matplotlib. 
+
+```py
+plt.figure(figsize=(16,10))
+sets_by_year.plot.line()
+plt.xlabel('Year', fontsize=14)
+plt.ylabel('LEGO Set Count', fontsize=14)
+```
+
+Because the .csv file is from late 2020, to plot the full calendar years, you will have to exclude some data from your chart. Use the slicing techniques covered in Day 21 to avoid plotting the last two years? The same syntax will work on Pandas DataFrames. 
+
+```py
+sets_by_year[0,-2].plot.line()
+```
+
+#### Solution: Sets Per Year
+The trick is grouping the data by the year and counting the number of entries for that year. 
+
+```py
+sets_by_year = sets.groupby('year').count()
+sets_by_year['set_num'].head()
+sets_by_year['set_num'].tail()
+```
+
+From this, we can see that LEGO published less than 10 different sets per year during its first few years of operation. But by 2019 the company had grown spectacularly, releasing 840 sets in that year alone!
+
+You also notice that there is an entry for 2021. The .csv file is from late 2020, so it appears that it already includes some sets on a forward-looking basis. We'll have to take this into account for our charts:
+```py
+    plt.plot(sets_by_year.index, sets_by_year.set_num)
+```
+If we don't exclude the last two years we get a dramatic drop at the end of the chart. This is quite misleading as it suggests LEGO is in big trouble! Given the dataset does not include a full calendar year for 2020, it's best to exclude the last two rows to get a better picture:
+```py
+    plt.plot(sets_by_year.index[:-2], sets_by_year.set_num[:-2])
+```
+The Python List slicing syntax covered in Day 21 comes in quite handy here! 
+
+We also see that while the first 45 years or so, LEGO had some steady growth in its product offering, but it was really in the mid-1990s that the number of sets produced by the company increased dramatically! We also see a brief decline in the early 2000s and a strong recovery around 2005 in the chart. 
 
 ## How to use the Pandas `.agg()` function
 
