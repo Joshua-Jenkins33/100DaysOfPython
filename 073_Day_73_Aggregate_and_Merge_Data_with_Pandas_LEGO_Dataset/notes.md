@@ -246,6 +246,51 @@ plt.plot(themes_by_year.index[:-2], themes_by_year.nr_themes[:-2])
 Again, we're using the same slicing technique as before. In the chart, we can see that LEGO has pretty consistently added more and more themes until the mid-1990s. From then the number of themes has stagnated for around 10 years or so until the early 2010s. 
 
 ## Superimposing Line Charts with Separate Axes
+Wouldn't it be nice to have the number of themes and the number sets on the same chart? But what do we get if we just plot both of them the way we have before? 
+
+```py
+# This looks terrible
+plt.plot(themes_by_year.index[:-2], themes_by_year.nr_themes[:-2])
+plt.plot(sets_by_year.index[:-2], sets_by_year.set_num[:-2])
+```
+
+Well, that's not very informative! 🤦‍♀️ The problem is that the "number of themes" and the "number of sets" have very different scales. The theme number ranges between 0 and 90, while the number of sets ranges between 0 and 900. So what can we do?
+
+### Two Separate Axes
+We need to be able to configure and plot our data on two separate axes on the same chart. This involves getting hold of an axis object from Matplotlib. 
+
+```py
+ax1 = plt.gca() # get current axes
+ax2 = ax1.twinx() 
+```
+
+We then create another axis object: `ax2`. The key thing is that by using the `.twinx()` method allows `ax1` and `ax2` to share the same x-axis. When we plot our data on the axes objects we get this:
+
+```py
+ax1.plot(sets_by_year.index[:-2], sets_by_year.set_num[:-2])
+ax2.plot(themes_by_year.index[:-2], themes_by_year.nr_themes[:-2])
+```
+
+That's very nice! But there's one problem: we can't tell the lines apart because they have the same colour! Let's add some styling. Let's:
+
+- colour in the lines
+- colour in the axes and
+- add some labels
+
+so that we can see what's going on. Here's what we get:
+
+```py
+ax1 = plt.gca() # get current axes
+ax2 = ax1.twinx() 
+
+# add styling
+ax1.plot(sets_by_year.index[:-2], sets_by_year.set_num[:-2], color='g')
+ax2.plot(themes_by_year.index[:-2], themes_by_year.nr_themes[:-2], 'b')
+
+ax1.set_xlabel('Year')
+ax1.set_ylabel('Number of Sets', color='green')
+ax2.set_ylabel('Number of Themes', color='blue')
+```
 
 ## Scatter Plots: Average Number of Parts per LEGO Set
 
