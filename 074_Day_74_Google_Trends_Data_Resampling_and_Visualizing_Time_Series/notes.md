@@ -1,3 +1,18 @@
+- [Day 74: Google Trends Data: Resapmling and Visualizing Time Series](#day-74-google-trends-data-resapmling-and-visualizing-time-series)
+  - [What We'll Make Today](#what-well-make-today)
+    - [Combine Google Trends with other Time Series Data](#combine-google-trends-with-other-time-series-data)
+    - [What You'll Learn Today](#what-youll-learn-today)
+    - [Downlad and add the Notebook to Google Drive](#downlad-and-add-the-notebook-to-google-drive)
+    - [Add the Data to the Notebook](#add-the-data-to-the-notebook)
+  - [Data Exploration: Making Sense of Google Search Data](#data-exploration-making-sense-of-google-search-data)
+  - [Data Cleaning: Resampling Time Series Data](#data-cleaning-resampling-time-series-data)
+  - [Data Visualization: Tesla Line Charts in Matplotlib](#data-visualization-tesla-line-charts-in-matplotlib)
+  - [Using Locators and DateFormatters to generate Tick Marks on a Time Line](#using-locators-and-dateformatters-to-generate-tick-marks-on-a-time-line)
+  - [Data Visualization - Bitcoin: Line Style and Markers](#data-visualization---bitcoin-line-style-and-markers)
+  - [Data Visualization - Unemployment: How to use Grids](#data-visualization---unemployment-how-to-use-grids)
+  - [Data Visualization - Unemployment: The Effect of New Data](#data-visualization---unemployment-the-effect-of-new-data)
+  - [Learning Points & Summary](#learning-points--summary)
+
 # Day 74: Google Trends Data: Resapmling and Visualizing Time Series
 
 ## What We'll Make Today
