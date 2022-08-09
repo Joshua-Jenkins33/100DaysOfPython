@@ -7,6 +7,7 @@
   - [Data Exploration: Making Sense of Google Search Data](#data-exploration-making-sense-of-google-search-data)
     - [What do the Search Numbers Mean?](#what-do-the-search-numbers-mean)
   - [Data Cleaning: Resampling Time Series Data](#data-cleaning-resampling-time-series-data)
+    - [Resampling Time Series Data](#resampling-time-series-data)
   - [Data Visualization: Tesla Line Charts in Matplotlib](#data-visualization-tesla-line-charts-in-matplotlib)
   - [Using Locators and DateFormatters to generate Tick Marks on a Time Line](#using-locators-and-dateformatters-to-generate-tick-marks-on-a-time-line)
   - [Data Visualization - Bitcoin: Line Style and Markers](#data-visualization---bitcoin-line-style-and-markers)
@@ -132,6 +133,101 @@ Here are the Google Trends Search Parameters that I used to generate the .csv da
 - "Unemployment Benefits", United States, Web Search
 
 ## Data Cleaning: Resampling Time Series Data
+First, we have to identify if there are any missing or junk values in our DataFrames. 
+
+**Challenge**
+Can you investigate all 4 DataFrames and find if there are any missing values? 
+
+If yes, find how many missing or NaN values there are. Then, find the row where the missing values occur.
+
+Finally, remove any rows that contain missing values. 
+
+```py
+def check_if_missing_values(df):
+    missing_values = False
+    if df.isnull().sum().sum() > 0:
+        missing_values = True
+    return missing_values
+
+def number_of_df_missing_values(df):
+    return df.isnull().sum().sum()
+
+print(f'Missing values for Tesla?: {check_if_missing_values(df_tesla)}')
+print(f'\nMissing values for U/E?: {check_if_missing_values(df_unemployment)}')
+print(f'\nMissing values for BTC Search?: {check_if_missing_values(df_btc_search)}')
+
+print(f'Missing values for BTC price?: {check_if_missing_values(df_btc_price)}')
+
+print(f'Number of missing values: {number_of_df_missing_values(df_btc_price)}')
+
+df_btc_price.dropna()
+```
+
+**Solution: Finding the missing values**
+For 3 of the DataFrames there are no missing values. We can verify this using the `.isna()` method. This will return a whole series of booleans, but we can chain `.values.any()` to see if any value in the series is `True`.
+
+```py
+    print(f'Missing values for Tesla?: {df_tesla.isna().values.any()}')
+    print(f'Missing values for U/E?: {df_unemployment.isna().values.any()}')
+    print(f'Missing values for BTC Search?: {df_btc_search.isna().values.any()}')
+```
+
+However, for the Bitcoin price data, there seems to be a problem. There's a missing value somewhere.
+
+The number of missing values can be found by using `.sum()` to add up the number of occurrences of `True` in the series. This shows that there are 2 missing values.
+
+To find the row where the missing values occur, we can create a subset of the DataFrame using `.isna()` once again (If you've arrived at this answer using a different approach, that's fine too. There are a number of ways to solve this challenge.) 
+
+To remove a missing value we can use `.dropna()`. The `inplace` argument allows to overwrite our DataFrame and means we don't have to write:
+
+```py
+# don't need to do this
+df_btc_price = df_btc_price.dropna()
+
+# can do this
+df_btc_price.dropna(inplace=True)
+```
+
+**Challenge**
+Our DataFrames contain time-series data. Do you remember how to check the data type of the entries in the DataFrame? Have a look at the data types of the MONTH or DATE columns. Convert any strings you find into `Datetime` objects. Do this for all 4 DataFrames. Double-check if your type conversion was successful.
+
+```py
+df_tesla.MONTH = pd.to_datetime(df_tesla.MONTH, format='%Y/%m/%d')
+df_btc_search.MONTH = pd.to_datetime(df_btc_search.MONTH, format='%Y/%m/%d')
+df_btc_price.DATE = pd.to_datetime(df_btc_price.DATE, format='%Y/%m/%d')
+df_unemployment.MONTH = pd.to_datetime(df_unemployment.MONTH, format='%Y/%m/%d')
+
+print(f'Data Types:\nTesla: {df_tesla.dtypes}\n\nBitcoin Search: {df_btc_search.dtypes}\n\nBitcoin Price: {df_btc_price.dtypes}\n\nUnemployment: {df_unemployment.dtypes}')
+```
+
+**Solution: Converting Strings to DateTime Objects**
+All the date data in our columns are in the form of strings. To convert this into a Datetime object we're going to use the Pandas `.to_datetime()` function.
+
+```py
+df_tesla.MONTH = pd.to_datetime(df_tesla.MONTH)
+df_btc_search.MONTH = pd.to_datetime(df_btc_search.MONTH)
+df_unemployment.MONTH = pd.to_datetime(df_unemployment.MONTH)
+df_btc_price.DATE = pd.to_datetime(df_btc_price.DATE)
+```
+
+### Resampling Time Series Data
+Next, we have to think about how to make our Bitcoin price and our Bitcoin search volume comparable. Our Bitcoin price is daily data, but our Bitcoin Search Popularity is monthly data. 
+
+To convert our daily data into monthly data, we're going to use the [.resample()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.resample.html) function. The only things we need to specify is which column to use (i.e., our DATE column) and what kind of sample frequency we want (i.e., the "rule"). We want a monthly frequency, so we use `'M'`.  If you ever need to resample a time series to a different frequency, you can find a list of different options [here](https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#dateoffset-objects) (for example `'Y'` for yearly or `'T'` for minute).
+
+After resampling, we need to figure out how the data should be treated. In our case, we want the last available price of the month - the price at month-end.
+
+```py
+df_btc_monthly = df_btc_price.resample('M', on='DATE').last()
+```
+
+If we wanted the average price over the course of the month, we could use something like:
+
+```py
+df_btc_monthly = df_btc_price.resample('M', on='DATE').mean()
+```
+
+We have 73 rows in our price data - the same as our search data. Nice! 😎
 
 ## Data Visualization: Tesla Line Charts in Matplotlib
 
