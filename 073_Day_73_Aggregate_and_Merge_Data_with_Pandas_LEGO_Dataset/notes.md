@@ -294,6 +294,44 @@ ax2.set_ylabel('Number of Themes', color='blue')
 
 ## Scatter Plots: Average Number of Parts per LEGO Set
 
+### Complexity Over Time
+Have LEGO sets become larger and more complex over time? Let's work out the average number of parts per LEGO set. This is the perfect time to revise how to use the `.agg()` function.
+
+#### Challenge
+Create a Pandas Series called parts_per_set that has the year as the index and contains the average number of parts per LEGO set in that year. Here's what you're looking to create:
+
+```py
+parts_per_set = sets.groupby("year").agg({'num_parts':'mean'})
+```
+
+#### Solution
+Once again, we're going to use the `.groupby()` and the `.agg()` function together to work this one out. However, this time we pass a dictionary to the `.agg()` function so that we will target the num_parts column with the `mean()` function. That way, we group our data by year and then we average the number of parts for that year.
+
+```py
+parts_per_set = sets.groupby('year').agg({'num_parts': pd.Series.mean})
+```
+
+To visualise our `parts_per_set` data, let's create a scatter plot. A scatter plot simply uses dots to represent the values of each data point.
+
+#### Challenge
+See if you can use [the Matplotlib documentation](https://matplotlib.org/3.1.0/api/_as_gen/matplotlib.pyplot.scatter.html) to generate the scatter plot chart. Do you spot a trend in the chart? Again, you'll have to exclude the last two observations.
+
+
+I'll provide the solution below.
+
+```py
+plt.scatter(parts_per_set.index[:-2], parts_per_set.num_parts[:-2])
+```
+
+#### Solution
+We just need to call the `.scatter()` instead of the `.plot()` method to create the chart. For the x-values, we'll use the index of the `parts_per_set` Series (the years) and for the y-values, we'll use the values of the series (the column name happens to be `num_parts`). 
+
+```py
+plt.scatter(parts_per_set.index[:-2], parts_per_set.num_parts[:-2])
+```
+
+From the chart, we can definitely make out an upward trend in the size and complexity of the LEGO sets based on the average number of parts. In the 2010s the average set contained around 200 individual pieces, which is roughly double what average LEGO set used to contain in the 1960s. 
+
 ## Relational Database Schemas: Primary and Foreign Keys
 
 ## How to Merge DataFrames and Create Bar Charts
