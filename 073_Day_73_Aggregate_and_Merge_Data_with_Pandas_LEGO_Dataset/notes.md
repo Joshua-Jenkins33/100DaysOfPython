@@ -333,6 +333,87 @@ plt.scatter(parts_per_set.index[:-2], parts_per_set.num_parts[:-2])
 From the chart, we can definitely make out an upward trend in the size and complexity of the LEGO sets based on the average number of parts. In the 2010s the average set contained around 200 individual pieces, which is roughly double what average LEGO set used to contain in the 1960s. 
 
 ## Relational Database Schemas: Primary and Foreign Keys
+LEGO has licensed many hit franchises from Harry Potter to Marvel Super Heros to many others. But which theme has the largest number of individual sets? Is it one of LEGO's own themes like Ninjago or Technic or is it a third party theme? Let's analyse LEGO's product lines in more detail!
+
+### Number of Sets per LEGO Theme
+To count the number of sets per Theme we can use the `.value_counts()` method on our `theme_id` column. But there's one problem:
+
+```py
+set_theme_count = sets["theme_id"].value_counts()
+set_theme_count[:5]
+```
+
+We have no idea what our themes are actually called! 🤨 Ok, we can see that the theme with id 158 is the largest theme containing 753 individual sets, but what's that theme called? This is not very helpful. We need to find the names of the themes based on the `theme_id` from the `themes.csv` file. 
+
+#### Mini-Challenge
+Display the database schema (link: https://i.imgur.com/Sg4lcjx.png) inside the Notebook.
+
+```md
+![Database Schema](https://i.imgur.com/Sg4lcjx.png)
+```
+
+#### Solution
+To display an image in a Text (aka Markdown) cell, all you need to do is use the HTML `<img>` tag.
+```md
+<img src="https://i.imgur.com/Sg4lcjx.png">
+```
+
+### Working with a Relational Database
+What is a database schema? A **schema** is just how the database is organized. Many relational databases, such as our LEGO data, is split into individual tables. We have separate tables for the colours, the sets and the themes. With a relational database, the tables are linked to each other through their **keys**.
+
+### Understand the theme.csv file
+The *themes.csv* file has the actual theme names. How is this table linked to the others tables? Well, the *sets.csv* has **theme_ids** which match the id column in the *themes.csv*.
+
+This means that the **theme_id** is the **foreign key** inside the *sets.csv*. Many different sets can be part of the same theme. But inside the themes.csv, each theme_id, which is just called `id` is unique. This uniqueness makes the `id` column the **primary key** inside the *themes.csv*. To see this in action, explore the themes.csv. 
+
+#### Challenge
+How is the themes.csv structured?
+- id
+- name
+- parent
+
+Search for the name 'Star Wars'. How many `id`s correspond to the 'Star Wars' name in the themes.csv?
+- 18
+- 158
+- 209
+- 261
+
+**4 themes correspond to Star Wars.**
+
+Use the `id`s you just found and look for the corresponding sets in the sets.csv (Hint: you'll need to look for matches in the `theme_id` column).
+
+```py
+star_wars_ids = [18, 158, 209, 261]
+
+# sets[sets['theme_id'] == 18]
+sets[sets['theme_id'].isin(star_wars_ids)]
+```
+
+#### Solution
+Looking at the first 5 rows, we see the column names. Each value in the id column is unique (this is the primary key for the themes table). The theme names are not unique. If we search for the name "Star Wars", we see that 4 different ids correspond to that name. 
+
+```py
+themes = pd.read_csv('data/themes.csv')
+themes.head()
+
+themes[themes.name == 'Star Wars']
+```
+
+Why would Star Wars have so many different themes? We can check which products corresponded to those themes in the sets.csv:
+
+```py
+sets[sets.theme_id == 18]
+```
+
+Star Wars is a really long-running franchise. Theme number 18 was running from 2000 to 2002 and seems to be comprised of several of the show's characters. What about, say theme 209?
+
+```py
+sets[sets.theme_id == 209]
+```
+
+Here we see that all of the Star Wars Advent Calendars share the same theme_id. That makes sense. 
+
+
 
 ## How to Merge DataFrames and Create Bar Charts
 
