@@ -27,7 +27,37 @@ Right-click to create a new folder called `data` and add the .csv files to the d
 If you are running the Notebook locally using Jupyter, I've supplied the image assets for you as well. If you're using Google Colab, then you won't need the assets folder. 
 
 ## Use HTML Markdown to Make Your Notebook Look Pretty
+The cells inside the notebook can either be code cells for your Python code or Text (Markdown) cells. The starter notebook includes a few of these Text cells with section headings and challenge text. However, we can style these cells even more by using HTML (see Days 43 and 44). 
 
+### Insert a Markdown Cell
+
+Add a new Text cell below the Introduction. 
+
+### Adding Images
+
+Display an image in a Text cell, use an HTML `<img>` tag with the URL of the image. For example:
+```html
+    <img src="https://i.imgur.com/49FNOHj.jpg">
+```
+If you are using Jupyter Notebook instead of Google Colab, you can also link to one of the files provided in the .zip like so:
+```html
+    <img src="assets/bricks.jpg">
+```
+
+### Section Headings
+
+You can add section headings using tags like `<h1>` or `<h2>`. However, the Notebook also has its own shorthand for common HTML tags. For example, you can use the `#` symbol as a shortcut. Here's how the headings change their size up to a minimum of `<h5>`
+
+### Challenge
+Now, let's get warmed up and write some Python code. Let's find out how many different colour LEGO bricks are actually in production!
+
+Read the colors.csv file from the data folder and find the total number of unique colours.
+
+There's a number of different ways you can accomplish this. Maybe try using the [.nunique()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.nunique.html?highlight=nunique#pandas.DataFrame.nunique) from Pandas this time.
+
+Also, figure out how many of the LEGO colours are transparent compared to how many colours are opaque. See if you can Google your way to finding at least two different ways of arriving at the answer. 
+
+## Solution: Exploring the LEGO Brick Colors
 ### Import Pandas
 As always, the first step is importing the module that we'll use: Pandas
 
@@ -65,18 +95,6 @@ Do you remember how to work with section headings and images? See if you can tac
 
 ```md
 ![Image 1](https://i.imgur.com/aKcwkSx.png)
-```
-
-## Solution: Exploring the LEGO Brick Colors
-```py
-import pandas as pd
-
-colors = pd.read_csv('data/colors.csv')
-colors.head()
-
-colors['name'].nunique()
-colors.groupby('is_trans').count() 
-colors.is_trans.value_counts()
 ```
 
 ## Find the Oldest and Largest LEGO Sets
