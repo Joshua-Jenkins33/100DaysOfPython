@@ -413,8 +413,69 @@ sets[sets.theme_id == 209]
 
 Here we see that all of the Star Wars Advent Calendars share the same theme_id. That makes sense. 
 
-
-
 ## How to Merge DataFrames and Create Bar Charts
+Wouldn't it be nice if we could combine our data on theme names with the number sets per theme? 
+
+Let's use the [.merge() method](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.merge.html?highlight=merge#pandas.DataFrame.merge) to combine two separate DataFrames into one. The merge method works on columns with the same **name** in both DataFrames.
+
+Currently, our theme_ids and our number of sets per theme live inside a Series called `set_theme_count`. 
+
+```py
+set_theme_count = sets["theme_id"].value_counts()
+set_theme_count[:5]
+```
+
+To make sure we have a column with the name `id`, I'll convert this Pandas Series into a Pandas DataFrame. 
+
+```py
+set_theme_count = pd.DataFrame({'id':set_theme_count.index,
+                                'set_count':set_theme_count.values})
+
+set_theme_count.head()
+```
+
+Here I'm providing a dictionary to create the DataFrame. The keys in the dictionary become my column names.
+
+
+### The Pandas `.merge()` function
+To [.merge()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.merge.html) two DataFrame along a particular column, we need to provide our two DataFrames and then the **column name** on which to merge. This is why we set `on='id'`. Both our `set_theme_count` and our `themes` DataFrames have a column with this name.
+
+```py
+merged_df = pd.merge(set_theme_count, themes, on='id')
+```
+
+The first 3 rows in our merged DataFrame look like this:
+
+```py
+merged_df = pd.merge(set_theme_count, themes, on='id')
+merged_df[:3]
+```
+
+Aha! Star Wars is indeed the theme with the most LEGO sets. Let's plot the top 10 themes on a chart.
+
+### Creating a Bar Chart
+Matplotlib can create almost any chart imaginable with very few lines of code. Using [.bar()](https://matplotlib.org/3.3.2/api/_as_gen/matplotlib.pyplot.bar.html) we can provide our theme names and the number of sets. This is what we get:
+
+```py
+plt.bar(merged_df.name[:10], merged_df.set_count[:10])
+```
+
+That worked, but it's almost unreadable. 😩 The good thing for us is that we already know how to customize our charts! Here's what we get when we increase the size of our figure, add some labels, and most importantly, rotate the category names on the x-axis so that they don't overlap.
+
+```py
+plt.figure(figsize=(14,8))
+plt.xticks(fontsize=14, rotation=45)
+plt.yticks(fontsize=14)
+plt.ylabel('Nr of Sets', fontsize=14)
+plt.xlabel('Theme Name', fontsize=14)
+  
+plt.bar(merged_df.name[:10], merged_df.set_count[:10])
+```
+
+Niiiiice.😌 So what can we see here? Well, a couple of these themes like Star Wars, Town, or Ninjago are what I would think of when I think of LEGO. However, it looks like LEGO also produces a huge number of ... books and key chains?!?! I guess I'm showing my age here, but it's interesting that the LEGO company seems to produce so much more these days than just plastic bricks. The 'Gear' category itself is huge and includes everything from bags to pencil cases apparently. Has LEGO strayed from its core business or is it successfully diversifying? That we can't answer from our dataset. I'll leave that one up to a business school case study to decide. 🤷‍♀️
+
+
+
+
 
 ## Learning Points and Summary
