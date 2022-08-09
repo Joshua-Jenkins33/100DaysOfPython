@@ -1,3 +1,46 @@
+- [Day 73: Advanced - Aggregate & Merge Data with Pandas: Analyze the LEGO Dataset](#day-73-advanced---aggregate--merge-data-with-pandas-analyze-the-lego-dataset)
+  - [Today's Goals](#todays-goals)
+  - [Use HTML Markdown to Make Your Notebook Look Pretty](#use-html-markdown-to-make-your-notebook-look-pretty)
+    - [Insert a Markdown Cell](#insert-a-markdown-cell)
+    - [Adding Images](#adding-images)
+    - [Section Headings](#section-headings)
+    - [Challenge](#challenge)
+  - [Solution: Exploring the LEGO Brick Colors](#solution-exploring-the-lego-brick-colors)
+    - [Import Pandas](#import-pandas)
+    - [Examine the Structure](#examine-the-structure)
+    - [Find the Number of Transparent Colors](#find-the-number-of-transparent-colors)
+    - [Challenge](#challenge-1)
+  - [Find the Oldest and Largest LEGO Sets](#find-the-oldest-and-largest-lego-sets)
+    - [Markdown Challenge Solution](#markdown-challenge-solution)
+    - [Exploring the sets.csv](#exploring-the-setscsv)
+    - [Solution](#solution)
+  - [Visualize the Number of Sets Published over Time](#visualize-the-number-of-sets-published-over-time)
+    - [Challenge](#challenge-2)
+      - [Solution: Sets Per Year](#solution-sets-per-year)
+  - [How to use the Pandas `.agg()` function](#how-to-use-the-pandas-agg-function)
+    - [Number of Themes per Calendar Year](#number-of-themes-per-calendar-year)
+    - [Challenge](#challenge-3)
+  - [Superimposing Line Charts with Separate Axes](#superimposing-line-charts-with-separate-axes)
+    - [Two Separate Axes](#two-separate-axes)
+  - [Scatter Plots: Average Number of Parts per LEGO Set](#scatter-plots-average-number-of-parts-per-lego-set)
+    - [Complexity Over Time](#complexity-over-time)
+      - [Challenge](#challenge-4)
+      - [Solution](#solution-1)
+      - [Challenge](#challenge-5)
+      - [Solution](#solution-2)
+  - [Relational Database Schemas: Primary and Foreign Keys](#relational-database-schemas-primary-and-foreign-keys)
+    - [Number of Sets per LEGO Theme](#number-of-sets-per-lego-theme)
+      - [Mini-Challenge](#mini-challenge)
+      - [Solution](#solution-3)
+    - [Working with a Relational Database](#working-with-a-relational-database)
+    - [Understand the theme.csv file](#understand-the-themecsv-file)
+      - [Challenge](#challenge-6)
+      - [Solution](#solution-4)
+  - [How to Merge DataFrames and Create Bar Charts](#how-to-merge-dataframes-and-create-bar-charts)
+    - [The Pandas `.merge()` function](#the-pandas-merge-function)
+    - [Creating a Bar Chart](#creating-a-bar-chart)
+  - [Learning Points and Summary](#learning-points-and-summary)
+
 # Day 73: Advanced - Aggregate & Merge Data with Pandas: Analyze the LEGO Dataset
 
 ## Today's Goals
@@ -474,8 +517,25 @@ plt.bar(merged_df.name[:10], merged_df.set_count[:10])
 
 Niiiiice.😌 So what can we see here? Well, a couple of these themes like Star Wars, Town, or Ninjago are what I would think of when I think of LEGO. However, it looks like LEGO also produces a huge number of ... books and key chains?!?! I guess I'm showing my age here, but it's interesting that the LEGO company seems to produce so much more these days than just plastic bricks. The 'Gear' category itself is huge and includes everything from bags to pencil cases apparently. Has LEGO strayed from its core business or is it successfully diversifying? That we can't answer from our dataset. I'll leave that one up to a business school case study to decide. 🤷‍♀️
 
-
-
-
-
 ## Learning Points and Summary
+In this lesson we looked at how to:
+
+- use HTML Markdown in Notebooks, such as section headings `#` and how to embed images with the `<img>` tag.
+- combine the `groupby()` and `count()` functions to aggregate data
+- use the `.value_counts()` function
+- slice DataFrames using the square bracket notation e.g., `df[:-2]` or `df[:10]`
+- use the `.agg()` function to run an operation on a particular column
+- `rename()` columns of DataFrames
+- create a line chart with two separate axes to visualise data that have different scales.
+- create a scatter plot in Matplotlib
+- work with tables in a relational database by using primary and foreign keys
+- `.merge()` DataFrames along a particular column
+- create a bar chart with Matplotlib
+
+
+You can download the completed code for today in this lesson.
+
+
+Today was another super packed day. I hope you found digging into LEGOs product catalogue as fascinating as I have. Have a good rest and I'll see you tomorrow! 💪
+
+
