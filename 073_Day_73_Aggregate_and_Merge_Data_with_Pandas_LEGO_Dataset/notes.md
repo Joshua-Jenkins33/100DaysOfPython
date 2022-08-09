@@ -68,6 +68,16 @@ Do you remember how to work with section headings and images? See if you can tac
 ```
 
 ## Solution: Exploring the LEGO Brick Colors
+```py
+import pandas as pd
+
+colors = pd.read_csv('data/colors.csv')
+colors.head()
+
+colors['name'].nunique()
+colors.groupby('is_trans').count() 
+colors.is_trans.value_counts()
+```
 
 ## Find the Oldest and Largest LEGO Sets
 
