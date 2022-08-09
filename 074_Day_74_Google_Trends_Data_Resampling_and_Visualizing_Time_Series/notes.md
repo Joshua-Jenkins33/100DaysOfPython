@@ -230,6 +230,159 @@ df_btc_monthly = df_btc_price.resample('M', on='DATE').mean()
 We have 73 rows in our price data - the same as our search data. Nice! 😎
 
 ## Data Visualization: Tesla Line Charts in Matplotlib
+Let's create a basic line chart of the Tesla stock price and the search popularity and then gradually add more and more styling to our chart. 
+
+**Challenge.**
+Plot the Tesla stock price against the Tesla search volume using a line chart and two different axes. 
+
+```py
+ax1 = plt.gca()
+ax2 = ax1.twinx()
+
+ax1.plot(df_tesla.MONTH, df_tesla.TSLA_WEB_SEARCH)
+ax2.plot(df_tesla.MONTH, df_tesla.TSLA_USD_CLOSE)
+
+ax1.set_xlabel('Month')
+ax1.set_ylabel('Search Trend')
+ax2.set_ylabel('TSLA Stock Price')
+```
+
+**Solution: Creating a basic chart**
+This bit should pretty much be review from the previous days' lessons. To create a line plot with two different y-axes we first have to get the current axis and make a copy of it using `.twinx()`. Then we can configure each axis separately and call `.plot()`.
+
+```py
+    ax1 = plt.gca() # get current axis
+    ax2 = ax1.twinx()
+     
+    ax1.set_ylabel('TSLA Stock Price')
+    ax2.set_ylabel('Search Trend')
+     
+    ax1.plot(df_tesla.MONTH, df_tesla.TSLA_USD_CLOSE)
+    ax2.plot(df_tesla.MONTH, df_tesla.TSLA_WEB_SEARCH)
+```
+
+**Challenge.**
+Now let's style the chart a bit more. In particular, let's check out the different colours you can use with Matplotlib.
+
+For our updated chart, let's differentiate the two lines and the axis labels using different colours. Try using one of the blue [colour names](https://matplotlib.org/3.1.1/gallery/color/named_colors.html) for the search volume and a [HEX code](https://htmlcolorcodes.com/color-picker/) for a red colour for the stock price. 
+
+```py
+ax1 = plt.gca()
+ax2 = ax1.twinx()
+
+ax1.plot(df_tesla.MONTH, df_tesla.TSLA_WEB_SEARCH, 'tab:purple')
+ax2.plot(df_tesla.MONTH, df_tesla.TSLA_USD_CLOSE, '#ae2d2d')
+
+ax1.set_xlabel('Month')
+ax1.set_ylabel('Search Trend', color='tab:purple')
+ax2.set_ylabel('TSLA Stock Price', color='#ae2d2d')
+```
+
+**Solution: Adding Colors**
+Your code should now look something like this (with your own choice of colours of course):
+```py
+    ax1 = plt.gca()
+    ax2 = ax1.twinx()
+     
+    ax1.set_ylabel('TSLA Stock Price', color='#E6232E') # can use a HEX code
+    ax2.set_ylabel('Search Trend', color='skyblue') # or a named colour
+     
+    ax1.plot(df_tesla.MONTH, df_tesla.TSLA_USD_CLOSE, color='#E6232E')
+    ax2.plot(df_tesla.MONTH, df_tesla.TSLA_WEB_SEARCH, color='skyblue')
+```
+
+**Challenge.**
+There are still some ways to improve the look of this chart. First off, let's make it larger. Can you make the following changes:
+
+1. Increase the figure size (e.g., to 14 by 8).
+2. Increase the font sizes for the labels and the ticks on the x-axis to 14.
+3. Rotate the text on the x-axis by 45 degrees.
+4. Add a title that reads 'Tesla Web Search vs Price'
+5. Make the lines on the chart thicker.
+6. Keep the chart looking sharp by changing the dots-per-inch or [DPI value](https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.figure.html).
+7. Set minimum and maximum values for the y and x-axis. Hint: check out methods like [set_xlim()](https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.axes.Axes.set_xlim.html).
+8. Finally use [plt.show()](https://matplotlib.org/3.2.1/api/_as_gen/matplotlib.pyplot.show.html) to display the chart below the cell instead of relying on the automatic notebook output.
+
+```py
+plt.figure(figsize=(14,8), dpi=120)
+plt.xticks(fontsize=14, rotation=45)
+plt.yticks(fontsize=14)
+plt.title('Tesla Web Search vs Price', fontsize=18)
+
+ax1 = plt.gca()
+ax2 = ax1.twinx()
+
+ax1.set_xlabel('Month')
+ax1.set_ylabel('Search Trend', color='tab:purple', fontsize=14)
+ax2.set_ylabel('TSLA Stock Price', color='#ae2d2d', fontsize=14)
+# ax1.set_xlim(2011, 2021)
+# ax1.set_ylim(0, 35)
+# ax2.set_ylim(25, 550)
+
+ax1.plot(df_tesla.MONTH, df_tesla.TSLA_WEB_SEARCH, 'tab:purple', linewidth=2)
+ax2.plot(df_tesla.MONTH, df_tesla.TSLA_USD_CLOSE, '#ae2d2d', linewidth=2)
+
+plt.show()
+```
+
+**Solution: Additional Styling, Icnreasing Size & Resolution**
+There's a couple of tweaks to the code going on here. First, we use `.figure()` to increase the size and resolution of our chart. Since we now have a bigger chart, we should also increase the font size of our labels and the thickness of our lines.
+
+Finally, we are calling `.show()` to explicitly display the chart below the cell. This `.show()` method is important to be aware of if you're ever trying to generate charts in PyCharm or elsewhere outside of an interactive notebook like Google Colab or Jupyter. Also, it gives our notebook a very clean look.
+
+```py
+# increases size and resolution
+plt.figure(figsize=(14,8), dpi=120) 
+plt.title('Tesla Web Search vs Price', fontsize=18)
+  
+ax1 = plt.gca()
+ax2 = ax1.twinx()
+  
+# Also, increase fontsize and linewidth for larger charts
+ax1.set_ylabel('TSLA Stock Price', color='#E6232E', fontsize=14)
+ax2.set_ylabel('Search Trend', color='skyblue', fontsize=14)
+  
+ax1.plot(df_tesla.MONTH, df_tesla.TSLA_USD_CLOSE, color='#E6232E', linewidth=3)
+ax2.plot(df_tesla.MONTH, df_tesla.TSLA_WEB_SEARCH, color='skyblue', linewidth=3)
+  
+# Displays chart explicitly
+plt.show()
+```
+
+Here's the code with rotation added to the x-ticks. With `.set_ylim()` and `.set_xlim()` you have precise control over which data you want to show on the chart. You can either choose hard values like displaying the Tesla stock price between $0 and $600. Or you could use the `.min()` and `.max()` functions to help you work out the bounds for the chart as well. 
+
+```py
+plt.figure(figsize=(14,8), dpi=120)
+plt.title('Tesla Web Search vs Price', fontsize=18)
+  
+# Increase the size and rotate the labels on the x-axis
+plt.xticks(fontsize=14, rotation=45)
+  
+ax1 = plt.gca()
+ax2 = ax1.twinx()
+  
+ax1.set_ylabel('TSLA Stock Price', color='#E6232E', fontsize=14)
+ax2.set_ylabel('Search Trend', color='skyblue', fontsize=14)
+  
+# Set the minimum and maximum values on the axes
+ax1.set_ylim([0, 600])
+ax1.set_xlim([df_tesla.MONTH.min(), df_tesla.MONTH.max()])
+  
+ax1.plot(df_tesla.MONTH, df_tesla.TSLA_USD_CLOSE, color='#E6232E', linewidth=3)
+ax2.plot(df_tesla.MONTH, df_tesla.TSLA_WEB_SEARCH, color='skyblue', linewidth=3)
+  
+plt.show()
+```
+
+**Fix the Matplotlib Warning (if you see it)**
+At this point, you might have seen a warning from Matplotlib.
+
+This is not an error, but an FYI to be explicit about which datetime converter to use. We have a timeline on our x-axis after all. To address this simply follow the instructions in the warning message and add the following code:
+
+```py
+from pandas.plotting import register_matplotlib_converters
+register_matplotlib_converters()
+```
 
 ## Using Locators and DateFormatters to generate Tick Marks on a Time Line
 
