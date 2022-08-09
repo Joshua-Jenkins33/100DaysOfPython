@@ -63,6 +63,10 @@ Once again, we select the column (here with the .dot notation) and call the meth
 ### Challenge
 Do you remember how to work with section headings and images? See if you can tackle the next couple of challenges to make your notebook look like this:
 
+```md
+![Image 1](https://i.imgur.com/aKcwkSx.png)
+```
+
 ## Solution: Exploring the LEGO Brick Colors
 
 ## Find the Oldest and Largest LEGO Sets
