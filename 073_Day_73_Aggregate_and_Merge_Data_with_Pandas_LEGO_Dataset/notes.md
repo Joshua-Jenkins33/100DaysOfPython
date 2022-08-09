@@ -28,6 +28,41 @@ If you are running the Notebook locally using Jupyter, I've supplied the image a
 
 ## Use HTML Markdown to Make Your Notebook Look Pretty
 
+### Import Pandas
+As always, the first step is importing the module that we'll use: Pandas
+
+```py
+    import pandas as pd
+```
+
+### Examine the Structure
+From there we can read the .csv file and take a look at the first 5 rows.
+```py
+    colors = pd.read_csv('data/colors.csv')
+    colors.head()
+```
+We see that there are 5 columns, which include the name of the colour and its corresponding RGB value. To find the number of unique colours, all we need to do is check if every entry in the `name` column is unique: 
+```py
+    colors['name'].nunique()
+```
+This shows us that there are 135 unique colours for LEGO blocks.
+
+### Find the Number of Transparent Colors
+One way you can do this is through combining our old friend, the .groupby() method, with the .count() method.
+```py
+    colors.groupby('is_trans').count() 
+```
+Here we just group by the is_trans column and count the entries.
+
+But you might have also come across the very handy [.value_counts()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.value_counts.html) method in your research.
+```py
+    colors.is_trans.value_counts()
+```
+Once again, we select the column (here with the .dot notation) and call the method. The .value_counts() method is a very quick way of finding the number of members of each category. 
+
+### Challenge
+Do you remember how to work with section headings and images? See if you can tackle the next couple of challenges to make your notebook look like this:
+
 ## Solution: Exploring the LEGO Brick Colors
 
 ## Find the Oldest and Largest LEGO Sets
