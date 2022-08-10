@@ -414,6 +414,80 @@ When we take a look at our chart, we can see the tick marks nicely. The tick mar
 
 
 ## Data Visualization - Bitcoin: Line Style and Markers
+Now that we've got Tesla looking the way we want it to, let's do the same for Bitcoin. We've already matched the sample frequency and we can re-use our chart! Simply copy-paste the entire cell and make some modifications to the code as per the challenge. 
+
+**Challenge.**
+1. Modify the chart title to read 'Bitcoin News Search vs Resampled Price'
+2. Change the y-axis label to 'BTC Price'
+3. Change the y- and x-axis limits to improve the appearance
+4. Investigate the [linestyles](https://matplotlib.org/3.2.1/api/_as_gen/matplotlib.pyplot.plot.html) to make the BTC closing price a dashed line
+5. Investigate the [marker types](https://matplotlib.org/3.2.1/api/markers_api.html) to make the search datapoints little circles
+6. Were big increases in searches for Bitcoin accompanied by big increases in the price?
+
+```py
+plt.figure(figsize=(14,8), dpi=120)
+plt.title('Bitcoin News Search vs Resampled Price', fontsize=18)
+  
+# Increase the size and rotate the labels on the x-axis
+plt.xticks(fontsize=14, rotation=45)
+  
+ax1 = plt.gca()
+ax1.xaxis.set_major_locator(years)
+ax1.xaxis.set_major_formatter(years_fmt)
+ax1.xaxis.set_minor_locator(months)
+ax1.set_ylabel('BTC Price', color='#E6232E', fontsize=14)
+ax1.set_xlim([df_btc_monthly.index.min(), df_btc_monthly.index.max()])
+# Set the minimum and maximum values on the axes
+ax1.set_ylim(bottom=0, top=15000)
+ax1.plot(df_btc_monthly.DATE, df_btc_monthly.CLOSE, color='#E6232E', linewidth=3, linestyle='--')
+
+ax2 = ax1.twinx()
+ax2.set_ylabel('Search Trend', color='skyblue', fontsize=14)
+ax2.plot(df_btc_search.MONTH, df_btc_search.BTC_NEWS_SEARCH, color='skyblue', linewidth=3, marker='o')
+
+plt.show()
+```
+
+**Solution: Charting Bitcoin**
+I hope you had a good go at generating the chart.
+
+Updating the title and the axis labels just involved changing the strings. To set the axis limits, I've chosen $0 to $15,000 on the left y-axis. I've also used a HEX code for orange to colour the line.
+
+To change the line style or the markers, you just have to look at the documentation (e.g., try `'--'` or `'-.'` for the `linestyle`). Similarly for the markers, you also have loads of different options.
+
+I think the main trick with this challenge involved substituting a different set of dates. The months of the time series are found in the index of the monthly bitcoin prices: `df_btc_monthly.index`. 
+
+```py
+plt.figure(figsize=(14,8), dpi=120)
+  
+plt.title('Bitcoin News Search vs Resampled Price', fontsize=18)
+plt.xticks(fontsize=14, rotation=45)
+  
+ax1 = plt.gca()
+ax2 = ax1.twinx()
+  
+ax1.set_ylabel('BTC Price', color='#F08F2E', fontsize=14)
+ax2.set_ylabel('Search Trend', color='skyblue', fontsize=14)
+  
+ax1.xaxis.set_major_locator(years)
+ax1.xaxis.set_major_formatter(years_fmt)
+ax1.xaxis.set_minor_locator(months)
+  
+ax1.set_ylim(bottom=0, top=15000)
+ax1.set_xlim([df_btc_monthly.index.min(), df_btc_monthly.index.max()])
+  
+# Experiment with the linestyle and markers
+ax1.plot(df_btc_monthly.index, df_btc_monthly.CLOSE, 
+          color='#F08F2E', linewidth=3, linestyle='--')
+ax2.plot(df_btc_monthly.index, df_btc_search.BTC_NEWS_SEARCH, 
+          color='skyblue', linewidth=3, marker='o')
+  
+plt.show()
+```
+
+What we see in the chart is that similar to Tesla, the crazy price movements in the beginning of 2018 are associated with very high search volumes. Everyone was talking about (and buying) Bitcoin in late 2017/early 2018 so search volumes were at a record high!  Interestingly, there was quite a huge spike in bitcoin prices in Q1 of 2019, but this time the increase in search volume was much less pronounced (perhaps because at this point everyone knew what Bitcoin was). 
+
+
 
 ## Data Visualization - Unemployment: How to use Grids
 
