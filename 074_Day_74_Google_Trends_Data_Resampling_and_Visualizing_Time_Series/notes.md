@@ -10,6 +10,7 @@
     - [Resampling Time Series Data](#resampling-time-series-data)
   - [Data Visualization: Tesla Line Charts in Matplotlib](#data-visualization-tesla-line-charts-in-matplotlib)
   - [Using Locators and DateFormatters to generate Tick Marks on a Time Line](#using-locators-and-dateformatters-to-generate-tick-marks-on-a-time-line)
+    - [Adding Locator Tick Marks](#adding-locator-tick-marks)
   - [Data Visualization - Bitcoin: Line Style and Markers](#data-visualization---bitcoin-line-style-and-markers)
   - [Data Visualization - Unemployment: How to use Grids](#data-visualization---unemployment-how-to-use-grids)
   - [Data Visualization - Unemployment: The Effect of New Data](#data-visualization---unemployment-the-effect-of-new-data)
@@ -385,6 +386,32 @@ register_matplotlib_converters()
 ```
 
 ## Using Locators and DateFormatters to generate Tick Marks on a Time Line
+
+### Adding Locator Tick Marks
+When working with time series, it's often quite difficult to get the tick marks on charts looking the way you want to. This is why we have Locator helpers. 
+
+The first step is importing `matplotlib.dates`.  This is where all the date plotting capabilities live. 
+
+```py
+import matplotlib.dates as mdates
+```
+
+Next, we need a `YearLocator()` and a `MonthLocator()` objects, which will help Matplotlib find the years and the months. Then we also need a `DateFormatter()`, which will help us specify how we want to display the dates. 
+
+```py
+# Create locators for ticks on the time axis
+years = mdates.YearLocator()
+months = mdates.MonthLocator()
+years_fmt = mdates.DateFormatter('%Y')
+
+# format the ticks
+ax1.xaxis.set_major_locator(years)
+ax1.xaxis.set_major_formatter(years_fmt)
+ax1.xaxis.set_minor_locator(months)
+```
+
+When we take a look at our chart, we can see the tick marks nicely. The tick marks also allow us to visually date that spike of interest in the middle of the chart - March 2016. This was when the Tesla Model 3 was unveiled. Also, we can clearly see that the most recent spikes in search coincide, not with the release of a new car, but the roaring stock price for the company!
+
 
 ## Data Visualization - Bitcoin: Line Style and Markers
 
