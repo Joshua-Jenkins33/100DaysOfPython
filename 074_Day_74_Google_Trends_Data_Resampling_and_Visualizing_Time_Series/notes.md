@@ -645,7 +645,75 @@ ax2.plot(df_unemployment.MONTH, roll_df.UE_BENEFITS_WEB_SEARCH, 'skyblue', linew
 plt.show()
 ```
 
-
 ## Data Visualization - Unemployment: The Effect of New Data
+The financial crisis in 2008 was pretty bad. We saw how it took around 10 years for the unemployment rate to go back to where it was prior to the crisis.
+
+Let's see how 2020 affects our analysis.
+
+**Challenge**
+Read the data in the 'UE Benefits Search vs UE Rate 2004-20.csv' into a DataFrame. Convert the MONTH column to Pandas Datetime objects and then plot the chart. What do you see?
+
+```py
+df_unemployment_new = pd.read_csv('UE Benefits Search vs UE Rate 2004-20.csv')
+df_unemployment_new.head()
+
+df_unemployment_new.MONTH = pd.to_datetime(df_unemployment.MONTH, format='%Y/%m')
+df_unemployment_new.head()
+
+plt.figure(figsize=(14,8), dpi=120)
+plt.title('Monthly US "Unemployment Benefits" Web Search vs UNRATE incl 2020', fontsize=18)
+  
+# Increase the size and rotate the labels on the x-axis
+plt.yticks(fontsize=14)
+plt.xticks(fontsize=14, rotation=45)
+  
+# ax1.grid(visible=True, which='major', axis='both', color='#c2c2c2', linestyle='--')
+plt.grid(visible=True, which='major', axis='both', color='#c2c2c2', linestyle='--')
+    
+ax1 = plt.gca()
+ax1.xaxis.set_major_locator(years)
+ax1.xaxis.set_major_formatter(years_fmt)
+ax1.xaxis.set_minor_locator(months)
+ax1.set_ylabel('FRED U/E Rate', color='#6c186e', fontsize=14)
+ax1.set_xlim([df_unemployment_new.MONTH.min(), df_unemployment_new.MONTH.max()])
+# Set the minimum and maximum values on the axes
+ax1.set_ylim(bottom=3, top=11)
+ax1.plot(df_unemployment_new.MONTH, df_unemployment_new.UNRATE, color='#6c186e', linewidth=3, linestyle='--')
+
+ax2 = ax1.twinx()
+ax2.set_ylabel('Search Trend', color='skyblue', fontsize=14)
+ax2.plot(df_unemployment_new.MONTH, df_unemployment_new.UE_BENEFITS_WEB_SEARCH, color='skyblue', linewidth=3)
+
+plt.show()
+```
+
+**Solution: Included 2020**
+Here's how you read the data and make a DataFrame:
+
+```py
+    df_ue_2020 = pd.read_csv('UE Benefits Search vs UE Rate 2004-20.csv')
+    df_ue_2020.MONTH = pd.to_datetime(df_ue_2020.MONTH)
+```
+And here's the chart:
+```py
+    plt.figure(figsize=(14,8), dpi=120)
+    plt.yticks(fontsize=14)
+    plt.xticks(fontsize=14, rotation=45)
+    plt.title('Monthly US "Unemployment Benefits" Web Search vs UNRATE incl 2020', fontsize=18)
+     
+    ax1 = plt.gca()
+    ax2 = ax1.twinx()
+     
+    ax1.set_ylabel('FRED U/E Rate', color='purple', fontsize=16)
+    ax2.set_ylabel('Search Trend', color='skyblue', fontsize=16)
+     
+    ax1.set_xlim([df_ue_2020.MONTH.min(), df_ue_2020.MONTH.max()])
+     
+    ax1.plot(df_ue_2020.MONTH, df_ue_2020.UNRATE, 'purple', linewidth=3)
+    ax2.plot(df_ue_2020.MONTH, df_ue_2020.UE_BENEFITS_WEB_SEARCH, 'skyblue', linewidth=3)
+     
+    plt.show()
+```
+What we see is not pretty. The US unemployment rate spiked to unprecedented levels during the COVID pandemic, dwarfing the levels seen during the financial crisis. Let's hope the recovery will be swifter this time. 
 
 ## Learning Points & Summary
