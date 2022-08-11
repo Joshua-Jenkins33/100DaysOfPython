@@ -135,6 +135,54 @@ So we can see that 13 different features were originally scraped from the Google
 - The installs are not the exact number of installs. If an app has 245,239 installs then Google will simply report an order of magnitude like 100,000+. I’ve removed the '+' and we’ll assume the exact number of installs in that column for simplicity.
 
 # Preliminary Exploration: The Highest Ratings, Most Reviews, and Largest Size
+**Challenge:** Identify which apps are the highest rated. What problem might you encounter if you rely exclusively on ratings alone to determine the quality of an app?
+
+```py
+df_apps_clean.sort_values(by=['Rating', 'Reviews', 'Installs'], ascending=False)
+```
+
+If you rely *exclusively on ratings alone to determine the quality of an app*, then you could wind up with a dataset that leads you to believe an app is incredibly popular despite only have one or two installs. It only takes one or two ratings to show the app's popularity. Whereas an app with lots more ratings that *maintains* a high rating is in reality the more popular app.
+
+**Challenge:** What's the size in megabytes (MB) of the largest Android apps in the Google Play Store. Based on the data, do you think there could be a limit in place or can developers make apps as large as they please?
+
+```py
+df_apps_clean.sort_values(by=['Size_MBs'], ascending=False).head(5)
+```
+
+There appears to be a limit for developers to make apps **100 MBs** at most.
+
+**Challenge:** Which apps have the highest number of reviews? Are there any paid apps among the top 50?
+
+```py
+df_apps_clean.sort_values(by='Reviews', ascending=False).head(50)
+```
+
+**There are no paid apps** among the top 50 most popular applications.
+
+---
+
+**Solution: Preliminary Data Exploration**
+This challenge should have been fairly straightforward if you remembered to use the .sort_values() function.
+
+
+```py
+df_apps_clean.sort_values('Rating', ascending=False).head()
+```
+
+Only apps with very few reviews (and a low number on installs) have perfect 5 star ratings (most likely by friends and family).
+
+```py
+df_apps_clean.sort_values('Size_MBs', ascending=False).head()
+```
+
+Here we can clearly see that there seems to be an upper bound of 100 MB for the size of an app. A quick google search would also have revealed that this limit is imposed by the Google Play Store itself. It’s interesting to see that a number of apps actually hit that limit exactly.
+
+```py
+df_apps_clean.sort_values('Reviews', ascending=False).head(50)
+```
+
+If you look at the number of reviews, you can find the most popular apps on the Android App Store. These include the usual suspects: Facebook, WhatsApp, Instagram etc. What’s also notable is that the list of the top 50 most reviewed apps does not include a single paid app! 🤔
+
 
 # Data Visualization with Plotly: Create Pie and Donut Charts
 
