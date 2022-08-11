@@ -247,6 +247,99 @@ fig.show()
 Yum! 😋
 
 # Numeric Type Conversions for the Installations & Price Data
+**Challenge:** How many apps had over 1 billion (that's right - BILLION) installations? How many apps just had a single install?
+1. Check the datatype of the Installs column
+2. Count the number of apps at each level of installations
+3. Convert the number of installations (the Installs column) to a numeric data type. Hint: this is a 2-step process. You'll have to make sure you remove non-numeric characters first.
+
+```py
+df_apps_clean.dtypes # shows object type
+
+#Needed help with 2 and 3
+```
+
+**Solution: Data Cleaning & Converting Data to Numeric Types**
+To check the data types you can either use `.describe()` on the column or `.info()` on the DataFrame.
+
+`df_apps_clean.Installs.describe()`
+
+`df_apps_clean.info()`
+
+Both of these show that we are dealing with a non-numeric data type. In this case, the type is "object".
+
+If we take two of the columns, say Installs and the App name, we can count the number of entries per level of installations with `.groupby()` and `.count()`. However, because we are dealing with a non-numeric data type, the ordering is not helpful. The reason Python is not recognising our installs as numbers is because of the comma (`,`) characters.
+
+`df_apps_clean[['App', 'Installs']].groupby('Installs').count()`
+
+![Query Return](https://img-b.udemycdn.com/redactor/raw/2020-10-11_12-25-56-6e1796e77c7c62d86add95c5bb702d61.png)
+
+We can remove the comma (`,`) character - or any character for that matter - from a DataFrame using the string’s [.replace()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.str.replace.html) method. Here we’re saying: “replace the `,` with an empty string”. This completely removes all the commas in the Installs column. We can then convert our data to a number using `.to_numeric()`.
+
+```py
+df_apps_clean.Installs = df_apps_clean.Installs.astype(str).str.replace(',', "")
+df_apps_clean.Installs = pd.to_numeric(df_apps_clean.Installs)
+df_apps_clean[['App', 'Installs']].groupby('Installs').count()
+```
+
+![Query Return 2](https://img-b.udemycdn.com/redactor/raw/2020-10-11_12-27-06-b8d1d316afdae7047bd4c37d3c1bd0ab.png)
+
+Let's examine the Price column more closely.
+
+**Challenge:** Convert the price column to numeric data. Then investigate the top 20 most expensive apps in the dataset.
+
+Remove all apps that cost more than $250 from the df_apps_clean DataFrame.
+
+Add a column called 'Revenue_Estimate' to the DataFrame. This column should hold the price of the app times the number of installs. What are the top 10 highest-grossing paid apps according to this estimate? Out of the top 10, how many are games?
+
+```py
+df_apps_clean.info() # price is an object
+df_apps_clean.Price # we want to replace $ 
+
+df_apps_clean_sub250 = df_apps_clean.drop(df_apps_clean[df_apps_clean.Price >= 250].index)
+df_apps_clean_sub250
+
+df_apps_clean_sub250['Revenue_Estimate'] = df_apps_clean_sub250.Price * df_apps_clean_sub250.Installs
+df_apps_clean_sub250.sort_values('Revenue_Estimate', ascending=False)
+
+df_apps_clean_sub250['Revenue_Estimate'] = df_apps_clean_sub250.Price * df_apps_clean_sub250.Installs
+df_highest_grossing_paid_apps = df_apps_clean_sub250.sort_values('Revenue_Estimate', ascending=False).head(10)
+
+df_highest_grossing_paid_apps.loc[df_apps_clean_sub250.Category == 'GAME'].count()
+```
+
+**Solution: Finding the most Expensive Apps and Filtering out the Junk**
+If you look at the data type of the price column:
+```py
+    df_apps_clean.Price.describe()
+```
+You also see that is of type object. The reason is the dollar $ signs that we’ve spotted before. To convert the price column to numeric data we use the .replace() method once again, but this time we filter out the dollar sign.
+```py
+    df_apps_clean.Price = df_apps_clean.Price.astype(str).str.replace('$', "")
+    df_apps_clean.Price = pd.to_numeric(df_apps_clean.Price)
+     
+    df_apps_clean.sort_values('Price', ascending=False).head(20)
+```
+Here’s what we see:
+
+![I am rich](https://img-b.udemycdn.com/redactor/raw/2020-10-11_12-29-17-bc5f0a4ad2e83b4d4fcf62a84f7f3511.png)
+
+What’s going on here? There are 15 I am Rich Apps in the Google Play Store apparently. They all cost $300 or more, which is the main point of the app. The story goes that in 2008, Armin Heinrich released the very first I am Rich app in the iOS App Store for $999.90. The app does absolutely nothing. It just displays the picture of a gemstone and can be used to prove to your friends how rich you are. Armin actually made a total of 7 sales before the app was hastily removed by Apple. Nonetheless, it inspired a bunch of copycats on the Android App Store, but if you search today, you’ll find all of these apps have disappeared as well. The high installation numbers are likely gamed by making the app available for free at some point to get reviews and appear more legitimate.
+
+Leaving this bad data in our dataset will misrepresent our analysis of the most expensive 'real' apps. Here’s how we can remove these rows:
+```py
+df_apps_clean = df_apps_clean[df_apps_clean['Price'] < 250]
+df_apps_clean.sort_values('Price', ascending=False).head(5)
+```
+When we look at the top 5 apps now, we see that 4 out of 5 are medical apps.
+
+![Still Rich](https://img-b.udemycdn.com/redactor/raw/2020-10-11_12-30-28-ab771a555e152a1f12150951f5cb06b4.png)
+
+We can work out the highest grossing paid apps now. All we need to do is multiply the values in the price and the installs column to get the number:
+```py
+df_apps_clean['Revenue_Estimate'] = df_apps_clean.Installs.mul(df_apps_clean.Price)
+df_apps_clean.sort_values('Revenue_Estimate', ascending=False)[:10]
+```
+This generously assumes of course that all the installs would have been made at the listed price, which is unlikely, as there are always promotions and free give-aways on the App Stores.
 
 # Plotly Bar Charts & Scatter Plots: The Most Competitive & Popular App Categories
 
