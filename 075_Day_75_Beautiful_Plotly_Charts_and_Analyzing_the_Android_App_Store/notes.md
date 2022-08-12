@@ -464,6 +464,85 @@ What we see is that the categories like Family, Tools, and Game have many differ
 ![Scatter Plot Results](https://img-b.udemycdn.com/redactor/raw/2020-10-11_13-16-11-a310e773b06e1efc0ad4114a12a51e01.png)
 
 # Extracting Nested Column Data using `.stack()`
+Let's turn our attention to the Genres column. This is quite similar to the categories column but more granular.
+
+**Challenge.**
+How many different types of genres are there? Can an app belong to more than one genre? Check what happens when you use `.value_counts()` on a column with nested values? See if you can work around this problem by using the `.split()` function and the DataFrame's [.stack()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.stack.html) method.
+
+```py
+len(df_apps_clean.Genres.unique())
+
+df_apps_clean.Genres.value_counts()
+
+# had to cheat on this one
+stack = df_apps_clean.Genres.str.split(';', expand=True).stack()
+
+genres = stack.value_counts()
+len(genres)
+```
+
+**Solution: Working with Nested Column Data**
+
+If we look at the number of unique values in the Genres column we get 114. But this is not accurate if we have nested data like we do here. We can see this using `.value_counts()` and looking at the values that just have a single entry. There we see that the semi-colon (`;`) separates the genre names.
+
+```py
+# Number of Genres?
+len(df_apps_clean.Genres.unique())
+
+# Problem: Have multiple categories separated by ;
+df_apps_clean.Genres.value_counts().sort_values(ascending=-Ture)[:5]
+```
+
+We somehow need to separate the genre names to get a clear picture. This is where the string’s `.split()` method comes in handy. After we’ve separated our genre names based on the semi-colon, we can add them all into a single column with `.stack()` and then use `.value_counts()`.
+
+```py
+# Split the strings on the semi-colon and then .stack them.
+stack = df_apps_clean.Genres.str.split(';', expand=True).stack()
+print(f'We now have a single column with shape: {stack.shape}')
+num_genres = stack.value_counts()
+print(f'Number of genres: {len(num_genres)}')
+```
+
+This shows us we actually have 53 different genres.
+
+**Challenge.**
+Can you create this chart with the Series containing the genre data?
+![Chart to Replicate](https://img-b.udemycdn.com/redactor/raw/2020-10-11_13-20-25-275a5904eaf5ce179f8fc10d1cdb4f2b.png)
+
+Try experimenting with the built-in colour scales in Plotly. You can find a full list [here](https://plotly.com/python/builtin-colorscales/).
+- Find a way to set the colour scale using the `color_continuous_scale` parameter.
+- Find a way to make the colour axis disappear by using `coloraxis_showscale`.
+
+```py
+genres = genres.to_frame(name='App_Count')[:15]
+
+bar = px.bar(genres, x = genres.index,
+             y = 'App_Count',
+             color_continuous_scale="Algae",
+             labels={'index':'Genre','App_Count':'Number of Apps'},
+             color='App_Count')
+  
+bar.update_layout(coloraxis_showscale=False)
+
+bar.show()
+```
+
+**Solution: Working with Colour Scales in Plotly**
+
+```py
+bar = px.bar(x = num_genres.index[:15], # index = category name
+              y = num_genres.values[:15], # count
+              title='Top Genres',
+              hover_name=num_genres.index[:15],
+              color=num_genres.values[:15],
+              color_continuous_scale='Agsunset')
+  
+bar.update_layout(xaxis_title='Genre',
+yaxis_title='Number of Apps',
+coloraxis_showscale=False)
+  
+bar.show()
+```
 
 # Grouped Bar Charts and Box Plots with Plotly
 
