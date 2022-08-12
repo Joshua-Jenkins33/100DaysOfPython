@@ -342,6 +342,126 @@ df_apps_clean.sort_values('Revenue_Estimate', ascending=False)[:10]
 This generously assumes of course that all the installs would have been made at the listed price, which is unlikely, as there are always promotions and free give-aways on the App Stores.
 
 # Plotly Bar Charts & Scatter Plots: The Most Competitive & Popular App Categories
+If you were to release an app, would you choose to go after a competitive category with many other apps? Or would you target a popular category with a high number of downloads? Or perhaps you can target a category which is both popular but also one where the downloads are spread out among many different apps. That way, even if it’s more difficult to discover among all the other apps, your app has a better chance of getting installed, right? Let’s analyse this with bar charts and scatter plots and figure out which categories are dominating the market.
+
+We can find the number of different categories like so:
+
+```py
+    df_apps_clean.Category.nunique()
+```
+
+Which shows us that we there are 33 unique categories.
+
+To calculate the number of apps per category we can use our old friend `.value_counts()`
+
+```py
+top10_category = df_apps_clean.Category.value_counts()[:10]
+```
+
+To visualise this data in a bar chart we can use the plotly express (our px) [bar()](https://plotly.com/python-api-reference/generated/plotly.express.bar.html#plotly.express.bar) function:
+
+```py
+    bar = px.bar(x = top10_category.index, # index = category name
+                 y = top10_category.values)
+     
+    bar.show()
+```
+
+![Bar Chart](https://img-b.udemycdn.com/redactor/raw/2020-10-11_12-50-27-18f0bf39f584e83d11de5a269b080336.png)
+
+Based on the number of apps, the Family and Game categories are the most competitive. Releasing yet another app into these categories will make it hard to get noticed.
+
+
+But what if we look at it from a different perspective? What matters is not just the total number of apps in the category but how often apps are downloaded in that category. This will give us an idea of how popular a category is. First, we have to group all our apps by category and sum the number of installations:
+
+```py
+category_installs = df_apps_clean.groupby('Category').agg({'Installs': pd.Series.sum})
+category_installs.sort_values('Installs', ascending=True, inplace=True)
+```
+
+Then we can create a horizontal bar chart, simply by adding the orientation parameter:
+```py
+h_bar = px.bar(x = category_installs.Installs,
+                y = category_installs.index,
+                orientation='h')
+  
+h_bar.show()
+```
+
+We can also add a custom title and axis labels like so:
+```py
+h_bar = px.bar(x = category_installs.Installs,
+                y = category_installs.index,
+                orientation='h',
+                title='Category Popularity')
+  
+h_bar.update_layout(xaxis_title='Number of Downloads', yaxis_title='Category')
+h_bar.show()
+```
+
+![Horizontal Bar Chart](https://img-b.udemycdn.com/redactor/raw/2020-10-11_12-51-08-abc65eebc2434504dd6457da4618a9ac.png)
+
+Now we see that Games and Tools are actually the most popular categories. If we plot the popularity of a category next to the number of apps in that category we can get an idea of how concentrated a category is. Do few apps have most of the downloads or are the downloads spread out over many apps?
+
+**Challenge.** As a challenge, let’s use plotly to create a scatter plot that looks like this:
+![Scatter Chart](https://img-b.udemycdn.com/redactor/raw/2020-10-11_12-51-37-3937d6162a4800714f6fdcbdf2b12870.png)
+- Create a DataFrame that has the number of apps in one column and the number of installs in another
+- Then use the [plotly express examples from the documentation](https://plotly.com/python/line-and-scatter/) alongside the [.scatter() API reference](https://plotly.com/python-api-reference/generated/plotly.express.scatter.html) to create scatter plot that looks like the chart above.
+
+*Hint:* Use the `size`, `hover_name` and `color` parameters in `.scatter()`. To scale the y-axis, call `.update_layout()` and specify that the y-axis should be on a log-scale like so: `yaxis=dict(type='log')`
+
+```py
+category_number = df_apps_clean.groupby('Category').agg({'App': pd.Series.count})
+
+df_categories_and_installs = category_installs.merge(category_number, on='Category')
+df_categories_and_installs
+
+fig = px.scatter(
+    x=df_categories_and_installs.App, 
+    y=df_categories_and_installs.Installs,
+    size=df_categories_and_installs.App,
+    #hover_name=,
+    color=df_categories_and_installs.Installs
+).update_layout(yaxis=dict(type='log'))
+fig.show()
+```
+
+**Solution: Create a scatter plot with Plotly**
+First, we need to work out the number of apps in each category (similar to what we did previously).
+
+```py
+cat_number = df_apps_clean.groupby('Category').agg({'App': pd.Series.count})
+```
+
+Then we can use `.merge()` and combine the two DataFrames.
+
+```py
+cat_merged_df = pd.merge(cat_number, category_installs, on='Category', how="inner")
+print(f'The dimensions of the DataFrame are: {cat_merged_df.shape}')
+cat_merged_df.sort_values('Installs', ascending=False)
+```
+
+Now we can create the chart. Note that we can pass in an entire DataFrame and specify which columns should be used for the x and y by column name.
+
+```py
+scatter = px.scatter(cat_merged_df, # data
+                    x='App', # column name
+                    y='Installs',
+                    title='Category Concentration',
+                    size='App',
+                    hover_name=cat_merged_df.index,
+                    color='Installs')
+  
+scatter.update_layout(xaxis_title="Number of Apps (Lower=More Concentrated)",
+                      yaxis_title="Installs",
+                      yaxis=dict(type='log'))
+  
+scatter.show()
+```
+
+What we see is that the categories like Family, Tools, and Game have many different apps sharing a high number of downloads. But for the categories like video players and entertainment, all the downloads are concentrated in very few apps.
+
+![Scatter Plot Results](https://img-b.udemycdn.com/redactor/raw/2020-10-11_13-16-11-a310e773b06e1efc0ad4114a12a51e01.png)
 
 # Extracting Nested Column Data using `.stack()`
 
