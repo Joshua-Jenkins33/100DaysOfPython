@@ -545,5 +545,242 @@ bar.show()
 ```
 
 # Grouped Bar Charts and Box Plots with Plotly
+Now that we’ve looked at the total number of apps per category and the total number of apps per genre, let’s see what the split is between free and paid apps.
+
+```py
+df_apps_clean.Type.value_counts()
+```
+
+We see that the majority of apps are free on the Google Play Store. But perhaps some categories have more paid apps than others. Let’s investigate. We can group our data first by Category and then by Type. Then we can add up the number of apps per each type. Using `as_index=False` we push all the data into columns rather than end up with our Categories as the index.
+
+```py
+df_free_vs_paid = df_apps_clean.groupby(["Category", "Type"], as_index=False).agg({'App': pd.Series.count})
+df_free_vs_paid.head()
+```
+
+Unsurprisingly the biggest categories have the most paid apps. However, there might be some patterns if we put the numbers of a graph!
+
+**Challenge.**
+Use the plotly express bar [chart examples](https://plotly.com/python/bar-charts/#bar-chart-with-sorted-or-ordered-categories) and the [.bar() API reference](https://plotly.com/python-api-reference/generated/plotly.express.bar.html#plotly.express.bar) to create this bar chart:
+![Challenge Bar Chart](https://img-b.udemycdn.com/redactor/raw/2020-10-11_13-46-44-c19715fca6ba4ca0dcaedfccb9725f83.png)
+
+You'll want to use the df_free_vs_paid DataFrame that you created above that has the total number of free and paid apps per category.
+
+See if you can figure out how to get the look above by changing the `categoryorder` to `'total descending'` as outlined in the documentation [here](https://plotly.com/python/categorical-axes/#automatically-sorting-categories-by-name-or-total-value).
+
+This is what I tried, but it didn't work. I gave up.
+
+```py
+import plotly.graph_objects as go
+
+fig = go.Figure()
+
+fig.add_trace(
+    go.Bar( 
+        x=df_free_vs_paid.Category, 
+        y=df_free_vs_paid.loc[df_free_vs_paid['Type'] == 'Free'], 
+        name='Type=Free', 
+        marker_color='#646ffa'
+    )
+)
+
+fig.add_trace(
+    go.Bar(
+        x=df_free_vs_paid.Category, 
+        y=df_free_vs_paid.loc[df_free_vs_paid['Type'] == 'Paid'], 
+        name='Type=Paid', 
+        marker_color='#f0553b'
+    )
+)
+
+
+fig.update_xaxes(categoryorder='total descending')
+
+fig.show()
+```
+
+Seems that the above is not super helpful with dataframes? Not sure why you would use it then? Super tedios to make all those lists... I wonder if this page was updated?
+
+**Solution.**
+The key is using the `color` and `barmode` parameters for the `.bar()` method. To get a particular order, you can pass a dictionary to the axis parameter in `.update_layout()`.
+
+```py
+g_bar = px.bar(df_free_vs_paid,
+                x='Category',
+                y='App',
+                title='Free vs Paid Apps by Category',
+                color='Type',
+                barmode='group')
+  
+g_bar.update_layout(xaxis_title='Category',
+                    yaxis_title='Number of Apps',
+                    xaxis={'categoryorder':'total descending'},
+                    yaxis=dict(type='log'))
+  
+g_bar.show()
+```
+
+What we see is that while there are very few paid apps on the Google Play Store, some categories have relatively more paid apps than others, including Personalization, Medical and Weather. So, depending on the category you are targeting, it might make sense to release a paid-for app.
+
+But this leads to many more questions:
+- How much should you charge? What are other apps charging in that category?
+- How much revenue could you make?
+- And how many downloads are you potentially giving up because your app is paid?
+
+Let’s try and answer these questions with some Box plots. Box plots show us some handy descriptive statistics in a graph - things like the median value, the maximum value, the minimum value, and some quartiles. Here’s what we’re after:
+
+![Box Plot](https://img-b.udemycdn.com/redactor/raw/2020-10-11_13-51-33-b158b5d866b0b6653796e51626017897.png)
+
+But how do we get there? This is your challenge.
+
+**Challenge.** 
+Create a box plot that shows the number of Installs for free versus paid apps. How does the median number of installations compare? Is the difference large or small?
+
+Use the [Box Plots Guide](https://plotly.com/python/box-plots/) and the [.box API reference](https://plotly.com/python-api-reference/generated/plotly.express.box.html) to create the chart above.
+
+This is as far as I got. Gah! I was really close! I just needed to use `df_apps_clean` for the dataframe instead of the one I thought I needed to build...
+```py
+fig = px.box(
+    df_downloads_by_type, 
+    x='Type', 
+    y="Installs", 
+#     points='all',
+    title='How Many Downloads Are Paid Apps Giving Up?',
+    color='Type',
+#     notched=True
+)
+
+fig.update_layout(yaxis=dict(type='log'))
+
+fig.show()
+```
+
+**Solution: Create Box Plots for the Number of Installs**
+
+From the hover text in the chart, we see that the median number of downloads for free apps is 500,000, while the median number of downloads for paid apps is around 5,000! This is massively lower.
+
+```py
+box = px.box(df_apps_clean,
+              y='Installs',
+              x='Type',
+              color='Type',
+              notched=True,
+              points='all',
+              title='How Many Downloads are Paid Apps Giving Up?')
+  
+box.update_layout(yaxis=dict(type='log'))
+  
+box.show()
+```
+But does this mean we should give up on selling a paid app? Let’s see how much revenue we would estimate per category.
+
+**Challenge.**
+See if you can generate the chart below:
+
+![The Monster Graph](https://img-b.udemycdn.com/redactor/raw/2020-10-11_13-54-47-0e957e51ecdff5ccaba35b99cdc17a06.png)
+
+Looking at the hover text, how much does the median app earn in the Tools category? [If developing an Android app costs $30,000 or thereabouts](http://howmuchtomakeanapp.com/), does the average photography app recoup its development costs?
+
+Hint: I've used `'min ascending'` to sort the categories.
+
+```py
+df_paid_apps = df_apps_clean[df_apps_clean['Type'] == 'Paid']
+
+fig = px.box(
+    df_paid_apps, 
+    x='Category', 
+    y="Revenue_Estimate", 
+    title='How Much Can Paid Apps Earn?',
+    labels={'Revenue_Estimate':'Paid App Ballpark Revenue'}
+)
+
+fig.update_layout(
+    yaxis=dict(type='log'),
+    xaxis={'categoryorder':'min ascending'}
+)
+
+fig.update_xaxes(tickangle=45)
+
+fig.show()
+```
+
+**Solution: App Revenue by Category**
+
+If an Android app costs $30,000 to develop, then the average app in very few categories would cover that development cost. The median paid photography app earned about $20,000. Many more app’s revenues were even lower - meaning they would need other sources of revenue like advertising or in-app purchases to make up for their development costs. However, certain app categories seem to contain a large number of outliers that have much higher (estimated) revenue - for example in Medical, Personalisation, Tools, Game, and Family.
+
+![Chart with comments](https://img-b.udemycdn.com/redactor/raw/2020-10-11_13-55-50-fba0062772e999739ca28119fd0cecda.png)
+
+So, if you were to list a paid app, how should you price it? To help you decide we can look at how your competitors in the same category price their apps.
+
+```py
+df_paid_apps = df_apps_clean[df_apps_clean['Type'] == 'Paid']
+
+box = px.box(df_paid_apps, 
+              x='Category', 
+              y='Revenue_Estimate',
+              title='How Much Can Paid Apps Earn?')
+  
+box.update_layout(xaxis_title='Category',
+                  yaxis_title='Paid App Ballpark Revenue',
+                  xaxis={'categoryorder':'min ascending'},
+                  yaxis=dict(type='log'))
+  
+  
+box.show()
+```
+
+**Challenge**
+What is the median price for a paid app? Then compare pricing by category by creating another box plot. But this time examine the prices (instead of the revenue estimates) of the paid apps. I recommend using `{categoryorder':'max descending'}` to sort the categories.
+
+```py
+df_paid_apps.Price.median()
+```
+
+**$2.99** is the median price for a paid app.
+
+```py
+fig = px.box(
+    df_paid_apps, 
+    x='Category', 
+    y="Price", 
+    title='Price Examination by Category',
+    labels={'Revenue_Estimate':'Paid App Ballpark Revenue'}
+)
+
+fig.update_layout(
+    yaxis=dict(type='log'),
+    xaxis={'categoryorder':'max descending'}
+)
+
+fig.update_xaxes(tickangle=45)
+
+fig.show()
+```
+
+**Solution: App Pricing by Category**
+
+The median price for an Android app is $2.99.
+
+```py
+df_paid_apps.Price.median()
+```
+
+However, some categories have higher median prices than others. This time we see that Medical apps have the most expensive apps as well as a median price of $5.49. In contrast, Personalisation apps are quite cheap on average at $1.49. Other categories which higher median prices are Business ($4.99) and Dating ($6.99). It seems like customers who shop in these categories are not so concerned about paying a bit extra for their apps.
+
+```py
+box = px.box(df_paid_apps,
+              x='Category',
+              y="Price",
+              title='Price per Category')
+  
+box.update_layout(xaxis_title='Category',
+                  yaxis_title='Paid App Price',
+                  xaxis={'categoryorder':'max descending'},
+                  yaxis=dict(type='log'))
+  
+box.show()
+```
+
+![Final](https://img-b.udemycdn.com/redactor/raw/2020-10-11_13-58-35-1c571e911d585782aabbb42b2bb96baf.png)
 
 # Learning Points & Summary
