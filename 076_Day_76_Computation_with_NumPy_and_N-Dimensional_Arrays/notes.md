@@ -405,5 +405,140 @@ c12 = 1\*1 + 3\*8 = 1 + 24 = 25
 c33 = 6\*3 + 2\*5 = 18 + 10 = 28
 
 # Manipulating Images as ndarrays
+Images are nothing other than a collection of pixels. And each pixel is nothing other than value for a colour. And any colour can be represented as a combination of red, green, and blue (RGB). 
+
+![RGB](https://img-b.udemycdn.com/redactor/raw/2020-10-12_17-25-44-d5854190572f3330c9e306fbf2933923.gif)
+
+## Import Statements
+![Import Statements](https://img-b.udemycdn.com/redactor/raw/2020-10-12_17-19-35-d1bcbb657bc7436583140c99856b1347.png)
+
+You should have these two import statements at the top. Scipy and PIL will help us work with images.
+
+The Scipy library contains an image of a racoon under 'miscellaneous' (misc). We an fetch it like so:
+```py
+    img = misc.face()
+```
+and display it using Matplotlib's `.imshow()`
+
+```py
+plt.imshow(img)
+```
+
+## Challenge
+What is the data type of `img`? Also, what is the shape of `img` and how many dimensions does it have? What is the resolution of the image?
+
+- `img` is an `ndarray` data type
+- `img` dimensions = `(768, 1024, 3)`
+- `img` resolution = 1024x768
+
+**Solution: An image as a ndarray**
+Let us question the nature of our reality and take a look under the surface. Here's what our "image" actually looks like:  
+![Matrix](https://img-b.udemycdn.com/redactor/raw/2020-10-13_09-28-44-6f41078c913d2304ad5e606add8704e2.png)
+
+We can now clearly see that we're dealing with a ndarray. And it's a 3 dimensional array at that.
+
+![Solution](https://img-b.udemycdn.com/redactor/raw/2020-10-12_17-42-09-192012f781f92f80a849dc1ea3212494.png)
+
+There are three matrices stacked on top of each other - one for the red values, one for the green values and one for the blue values. Each matrix has a 768 rows and 1024 columns, which makes sense since 768x1024 is the resolution of the image. 
+
+## Challenge
+Now can you try and convert the image to black and white? All you need need to do is use a [formula](https://en.wikipedia.org/wiki/Grayscale#Colorimetric_(perceptual_luminance-preserving)_conversion_to_grayscale). 
+
+![Formula Image](https://img-b.udemycdn.com/redactor/raw/2020-10-12_17-56-16-aff5999394e88abae2995c6d700a8cb1.png)
+
+Y_linear is what we're after - our black and white image. However, this formula only works if our red, green and blue values are between 0 and 1 - namely in sRGB format. Currently the values in our `img` range from 0 to 255. So:
+- Divide all the values by 255 to convert them to sRGB. 
+- Multiply the sRGB array by the `grey_vals` array (provided) to convert the image to grayscale.
+- Finally use Matplotlib's [`.imshow()`](https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.imshow.html) with the colormap parameter set to gray `cmap=gray` to display the result.
+
+**My Code**
+```py
+grey_vals = np.array([0.2126, 0.7152, 0.0722])
+sRGB = img / 255
+grey_img = sRGB @ grey_vals #np.matmul(sRGB, grey_vals)
+plt.imshow(grey_img, cmap='gray')
+```
+
+**Solution: Converting an image to grayscale**
+The first step is a division by a scalar
+```py
+    sRGB_array = img / 255
+```
+Here NumPy will use broadcasting to divide all the values in our ndarray by 255.
+
+Next, we use matrix multiplication to multiply our two ndarrays together.
+```py
+    grey_vals = np.array([0.2126, 0.7152, 0.0722])
+```
+These are the values given by the formula above
+```py
+    img_gray = sRGB_array @ grey_vals
+```
+We can either multiply them together with the @ operator or the `.matmul()` function.
+```py
+    img_gray = sRGB_array @ grey_vals
+
+    img_gray = np.matmul(sRGB_array, grey_vals)
+```
+Finally, to show the image we use Matplotlib
+```py
+    plt.imshow(img_gray, cmap='gray')
+```
+The `cmap` parameter is important here. If we leave it out the function will not know that is dealing with a black and white image. 
+
+## Challenge
+Can you manipulate the images by doing some operations on the underlying ndarrays? See if you can change the values in the ndarray so that:
+1. You flip the grayscale image upside down
+2. Rotate the colour image
+3. Invert (i.e., solarize) the colour image. To do this you need to convert all the pixels to their "opposite" value, so black (0) becomes white (255).
+
+**My Code**
+```py
+upside_down_grey_img = grey_img[::-1]
+plt.imshow(upside_down_grey_img, cmap='gray')
+
+plt.imshow(np.rot90(img))
+
+plt.imshow(np.invert(img))
+```
+
+**Solution: Manipulating the ndarray to change the image**
+For the first challenge, all you need to do is reverse the order of the rows and the columns in the NumPy array with the `.flip()` function:
+
+![Flipped Array Image](https://img-b.udemycdn.com/redactor/raw/2020-10-13_09-55-11-fefab18ee7919d2c38c006905c90db86.png)
+
+You can display the upside down image in a single line of code:
+```py
+    plt.imshow(np.flip(img_gray), cmap='gray')
+```
+To rotate the image, all you need to do is rotate the array with `.rot90()`
+
+![Rotated Array Image](https://img-b.udemycdn.com/redactor/raw/2020-10-13_10-00-59-8f4764f22d74c4902ad3e1a9929330d1.png)
+
+This will rotate our image too:
+`plt.imshow(np.,rot90(img))`
+
+Inverting the colour image is a bit more tricky. It involved making use of NumPy's ability to broadcast when doing operations with a scalar. In this case, our scalar is 255 - the maximum value for a pixel in RGB (see gif at the very top). If we subtract the values of our `img` from 255, then we get the opposite value for each pixel: 
+
+```py
+    solar_img = 255 - img
+    plt.imshow(solar_img)
+```
+
+## Use Your Own Images
+I've provided a .jpg file in the starting .zip file, so you can try your code out with an image that isn't a racoon 🦝. The key is that your image should have 3 channels (red-green-blue). If you use a .png file with 4 channels there are additional pre-processing steps involved to replicate what we're doing here.
+
+How do you open an image and put it into a NumPy array?
+![PIL to Open Image](https://img-b.udemycdn.com/redactor/raw/2020-10-13_10-29-27-3a3e2d19291e4b76effc62168f2023cd.png)
+
+First, make sure you've added the image to your project. All you need to do is use the PIL library to open the image and then create the ndarray using the image. You should see that your ndarray has 3 dimensions. The shape will be the resolution of your image. 
+
+![Macarons Image Dimension and Shape](https://img-b.udemycdn.com/redactor/raw/2020-10-13_10-31-07-65d5d16e9295629db82713dc42220031.png)
+
+Now feel free to manipulate your own images as you see fit. If you discover something particularly cool, be sure to share in the comments below! 👇 I'd love to see your hard work 😎
+
+![Macarons](https://img-b.udemycdn.com/redactor/raw/2020-10-13_10-34-04-6e3c1ebc7c0899aefd0d78ad8e899634.png)
+
+![Shiny Macarons](https://img-b.udemycdn.com/redactor/raw/2020-10-13_10-34-04-6e3c1ebc7c0899aefd0d78ad8e899634.png)
 
 # Learning Points & Summary
