@@ -309,6 +309,101 @@ That's pretty cool, right?! We've just generated a 128x128 pixel image of random
 
 # Broadcasting, Scalars, and Matrix Multiplication
 
+## Linear Alegbra with Vectors
+NumPy is designed to do math (and do it well!). This means that NumPy will treat vectors, matrices and tensors in a way that a mathematician would expect. For example, if you had two vectors:
+```py
+    v1 = np.array([4, 5, 2, 7])
+    v2 = np.array([2, 1, 3, 3])
+```
+And you add them together
+```py
+    v1 + v2
+```
+The result will be a ndarray where all the elements have been added together. 
+
+`array([ 6, 6, 5, 10])`
+
+In contrast, if we had two Python Lists
+```py
+    list1 = [4, 5, 2, 7]
+    list2 = [2, 1, 3, 3]
+```
+adding them together would just concatenate the lists.
+```py
+    list1 + list2
+    # output: [4, 5, 2, 7, 2, 1, 3, 3]
+```
+Multiplying the two vectors together also results in an element by element operation:
+```py
+    v1 * v2
+```
+Gives us `array([ 8, 5, 6, 21])` since 4x2=8, 5x1=5 and so on. And for a Python List, this operation would not work at all.
+```py
+    list1 * list2 # error!
+```
+
+## Broadcasting
+Now, oftentimes you'll want to do some sort of operation between an array and a single number. In mathematics, this single number is often called a **scalar**. For example, you might want to multiply every value in your NumPy array by 2:
+
+![Scalar Image](https://img-b.udemycdn.com/redactor/raw/2020-10-12_16-01-36-b9c2fefd91ad6764599526cd883cc721.gif)
+
+In order to achieve this result, NumPy will make the shape of the smaller array - our scalar - compatible with the larger array. This is what the documentation refers to when it mentions the term "broadcasting".
+
+The same rules about 'expanding' the smaller ndarray hold true for 2 or more dimensions. We can see this with a 2-Dimensional Array:
+```py
+    array_2d = np.array([[1, 2, 3, 4], 
+                         [5, 6, 7, 8]])
+```
+The scalar operates on an element by element basis.
+
+![Broadcast 2-Dim Array Image](https://img-b.udemycdn.com/redactor/raw/2020-10-12_16-13-09-11f207876f5bb5d4a1e542da2558d4e9.png)
+
+The documentation on broadcasting also shows us a few more examples:
+
+![Broadcast 2-Dim Array Image 2](https://img-b.udemycdn.com/redactor/raw/2020-10-12_16-07-56-fbba1b975a8b7e2ad2cc5323ebe4d771.png)
+
+## Matrix Multiplication
+But what if we're not multiplying our ndarray by a single number? What if we multiply it by another vector or a 2-dimensional array? In this case, we follow [the rules of linear algebra](https://en.wikipedia.org/wiki/Matrix_multiplication#Illustration). 
+
+![Wikipedia's Example of Linear Algebra](https://img-b.udemycdn.com/redactor/raw/2020-10-12_17-01-09-7243f82f4dd88bec877e3206fb9d9add.png)
+
+```py
+    a1 = np.array([[1, 3],
+                   [0, 1],
+                   [6, 2],
+                   [9, 7]])
+     
+    b1 = np.array([[4, 1, 3],
+                   [5, 8, 5]])
+```
+
+**Challenge:** Let's multiply `a1` with `b1`. Looking at the Wikipedia example above, work out the values for c12 and c33 on paper. Then use the `.matmul()` function or the @ operator to check your work.
+
+Worked out on Paper: 
+- c12 = 25 (1\*1+3\*8)
+- c33 = 28 (6\*3+2\*5)
+
+```py
+np.matmul(a1, b1)
+```
+
+**Solution: Matrix multiplication with NumPy**
+The solution code is pretty straightforward
+
+```py
+c = np.matmul(a1,b1)
+print(f'Matrix c has {c.shape[0]} rows and {c.shape[1]} columns.')
+c
+
+a1 @ b1
+```
+
+But how did the calculations arrive at 25 for c12 and 28 for c33? Substituting the number into the formula we get:
+
+c12 = 1\*1 + 3\*8 = 1 + 24 = 25
+
+c33 = 6\*3 + 2\*5 = 18 + 10 = 28
+
 # Manipulating Images as ndarrays
 
 # Learning Points & Summary
