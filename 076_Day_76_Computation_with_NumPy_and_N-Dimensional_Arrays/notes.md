@@ -1,5 +1,33 @@
 # Day 76: Advanced - Computation with NumPy and N-Dimensional Arrays
 
+- [Day 76: Advanced - Computation with NumPy and N-Dimensional Arrays](#day-76-advanced---computation-with-numpy-and-n-dimensional-arrays)
+- [What We'll Make](#what-well-make)
+- [NumPy's `ndarray` - Incredible Power at Your Fingertips!](#numpys-ndarray---incredible-power-at-your-fingertips)
+  - [1-Dimension](#1-dimension)
+  - [2-Dimensions](#2-dimensions)
+  - [N-Dimensions](#n-dimensions)
+    - [Challenge](#challenge)
+- [Generating and Manipulating ndarrays](#generating-and-manipulating-ndarrays)
+  - [Challenge 1](#challenge-1)
+  - [Challenge 2](#challenge-2)
+  - [Challenge 3](#challenge-3)
+  - [Challenge 4](#challenge-4)
+  - [Challenge 5](#challenge-5)
+  - [Challenge 6](#challenge-6)
+  - [Challenge 7](#challenge-7)
+  - [Challenge 8](#challenge-8)
+- [Broadcasting, Scalars, and Matrix Multiplication](#broadcasting-scalars-and-matrix-multiplication)
+  - [Linear Alegbra with Vectors](#linear-alegbra-with-vectors)
+  - [Broadcasting](#broadcasting)
+  - [Matrix Multiplication](#matrix-multiplication)
+- [Manipulating Images as ndarrays](#manipulating-images-as-ndarrays)
+  - [Import Statements](#import-statements)
+  - [Challenge](#challenge-1)
+  - [Challenge](#challenge-2)
+  - [Challenge](#challenge-3)
+  - [Use Your Own Images](#use-your-own-images)
+- [Learning Points & Summary](#learning-points--summary)
+
 # What We'll Make
 No Data Science course can be complete without learning NumPy (Numerical Python). NumPy is a Python library that’s used in almost every field of science and engineering. It’s practically **THE** standard for working with numerical data in Python. The case studies for how NumPy is being used speak for themselves 😮 
 
@@ -542,3 +570,15 @@ Now feel free to manipulate your own images as you see fit. If you discover some
 ![Shiny Macarons](https://img-b.udemycdn.com/redactor/raw/2020-10-13_10-34-04-6e3c1ebc7c0899aefd0d78ad8e899634.png)
 
 # Learning Points & Summary
+In this lesson we looked at how to:
+- Create arrays manually with `np.array()`
+- Generate arrays using  `.arange()`, `.random()`, and `.linspace()`
+- Analyse the shape and dimensions of a ndarray
+- Slice and subset a ndarray based on its indices
+- Do linear algebra like operations with scalars and matrix multiplication
+- Use NumPys broadcasting to make ndarray shapes compatible
+- Manipulate images in the form of ndarrays
+
+You can download the completed code for today in this lesson. 
+
+Oh, and congratulations on completing one of the most mathematical lessons in the course!  Good stuff!
