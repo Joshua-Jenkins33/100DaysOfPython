@@ -7,6 +7,9 @@
   - [Challenge 2](#challenge-2)
   - [Challenge 3](#challenge-3)
 - [Investigate the Films that had Zero Revenue](#investigate-the-films-that-had-zero-revenue)
+  - [Challenge 1](#challenge-1-1)
+  - [Challenge 2](#challenge-2-1)
+  - [Challenge 3](#challenge-3-1)
 - [Filter on Multiple Conditions: International Films](#filter-on-multiple-conditions-international-films)
 - [Seaborn Data Visualization: Bubble Charts](#seaborn-data-visualization-bubble-charts)
 - [Floor Division: A Trick to Convert Years to Decades](#floor-division-a-trick-to-convert-years-to-decades)
@@ -141,6 +144,133 @@ When we check `.info()` again we see that the columns now have the desired data 
 
 
 # Investigate the Films that had Zero Revenue
+Now that we've done some legwork on cleaning our data, we can investigate our data set more thoroughly. 
+
+## Challenge 1
+1. What is the average production budget of the films in the data set?
+  - $31,113,737.58
+2. What is the average worldwide gross revenue of films?
+  - $88,855,421.96
+4. What were the minimums for worldwide and domestic revenue?
+  - Worldwide: $2,358,918,982.00
+  - Domestic: $630,662,225.00
+5. Are the bottom 25% of films actually profitable or do they lose money?
+  - The bottom 25% of films lose money by about $60 and $17.6 million respectively
+7. What are the highest production budget and highest worldwide gross revenue of any film?
+  - Highest Production Budget: $425,000,000
+  - Highest Worldwide Gross Revenue: $2.78 billion
+8. How much revenue did the lowest and highest budget films make?
+  - Highest Budget Revenue: $2.3 billion
+  - Lowest Budget Revenue: $179,941.00
+
+**My Code**
+```py
+# 1. What is the average production budget of the films in the data set?
+data['USD_Production_Budget'].mean()
+
+# 2. What is the average worldwide gross revenue of films?
+data['USD_Worldwide_Gross'].mean()
+
+# 3. What were the minimums for worldwide and domestic revenue?
+data.describe()
+
+def calc_ww_revenue(row):
+    revenue = row.USD_Production_Budget-row.USD_Worldwide_Gross
+    return revenue
+
+def calc_dom_revenue(row):
+    revenue = row.USD_Production_Budget-row.USD_Domestic_Gross
+    return revenue
+
+data['Worldwide_Revenue'] = data.apply(calc_ww_revenue, axis=1)
+data['Domestic_Revenue'] = data.apply(calc_dom_revenue, axis=1)
+data
+
+data.describe()
+
+# 6. How much revenue did the lowest and highest budget films make?
+             
+data.agg(Lowest_Film=('USD_Production_Budget', min), Highest_Film=('USD_Production_Budget', max))
+
+data.sort_values('USD_Production_Budget', ascending=False)[:1]
+```
+
+**Solution for Challenge 1**
+We can answer many of the questions with a single command: `.describe()`. 
+
+![Describe Image](https://img-b.udemycdn.com/redactor/raw/2020-10-14_17-25-22-50638b2907fc1a16098f440072858223.png)
+
+The average film costs about $31m to make and makes around 3x that (or ~$89m) in worldwide revenue. So that's encouraging.
+
+But quite a lot of films lose money too. In fact, all the films in the bottom quartile lose money, since the average cost is $5 million and they only bring in $3.8m in worldwide revenue!
+
+The minimum domestic and worldwide revenue is $0. That makes sense. If a film never gets screened or is cancelled, then this is the number we would expect to see here.
+
+On the other hand, the highest production budget was $425,000,000 and the highest worldwide revenue was $2,783,918,982. $2.7 Billion revenue! Holy smokes.
+
+So which film was the lowest budget film in the dataset?
+
+![Lowest Budget Film](https://img-b.udemycdn.com/redactor/raw/2020-10-14_17-28-28-0e643636fa2dfc616b2624c049e3be3e.png)
+
+I've ... never heard of this film. But it looks like a real money maker. It grossed $181,041 with a measly $1,100 budget. 😮 Wow. Talk about return on investment! 
+
+![My Date With Drew](https://img-b.udemycdn.com/redactor/raw/2020-10-14_17-31-29-814c8fa514cdd86e226534cd68167830.png)
+
+And the highest budget film in the dataset is:
+
+![Highest Budget Film](https://img-b.udemycdn.com/redactor/raw/2020-10-14_17-29-16-1e10adb271c1211de0b264b1c35ecbd7.png)
+
+![Avatar](https://img-b.udemycdn.com/redactor/raw/2020-10-14_17-35-51-45a833f04cef1a441bdc004a84391593.png)
+
+Sigh, I remember watching this film in the cinema with 3D glasses 🤓 and not wanting the film to ever end! I would have been quite content living with those blue people. 😊
+
+## Challenge 2
+How many films grossed $0 domestically (i.e., in the United States)? What were the highest budget films that grossed nothing?
+- 512 films grossed $0 domestically
+- Singularity, Aquaman, A Wrinkle in Time, Amusement Park, Don Gato el inicio de la pandilla
+
+**My Code**
+
+```py
+print(len(data[data['USD_Domestic_Gross'] == 0]))
+zero_domestic = data[data['USD_Domestic_Gross'] == 0]
+zero_domestic.sort_values('USD_Production_Budget', ascending=False).head()
+```
+
+**Solution to Challenge 2: No domestic revenue**
+We see that there are 512 films in the dataset that had no revenue in the United States. However, the highest budget films with no revenue have a release date AFTER the date on which the dataset was compiled (May 1st, 2018).
+```py
+    zero_domestic = data[data.USD_Domestic_Gross == 0]
+    print(f'Number of films that grossed $0 domestically {len(zero_domestic)}')
+    zero_domestic.sort_values('USD_Production_Budget', ascending=False)
+```
+
+![Movies weren't out yet](https://img-b.udemycdn.com/redactor/raw/2020-10-14_17-45-10-325d5e70022e4c7919caf7e6713d14ce.png)
+
+## Challenge 3
+How many films grossed $0 worldwide? What are the highest budget films that had no revenue internationally (i.e., the biggest flops)?
+- 357 films grossed $0 internationally
+- Singularity, Aquaman, A Wrinkle in Tim, Amusement Park, The Ridiculous 6
+
+**My Code**
+```py
+print(len(data[data['USD_Worldwide_Gross'] == 0]))
+zero_worldwide = data[data['USD_Worldwide_Gross'] == 0]
+zero_worldwide.sort_values('USD_Production_Budget', ascending=False).head()
+```
+
+**Solution to Challenge 3: No worldwide revenue**
+When we check worldwide revenue instead, we see that there are 357 films that made no money internationally. Once again, some of the films have not been released yet at the time the data was compiled. However, 512 versus 357. Why is there a difference? 
+
+The reason some international films were never screened in the United States.  In fact, we can see an example of this in our previous screenshot. "Don Gato, el inicio de la pandilla" made about $4.5 million dollars in the box office, but nothing in the United States. Perhaps they should have screened it there too, considering it cost $80 million to make!
+```py
+    zero_worldwide = data[data.USD_Worldwide_Gross == 0]
+    print(f'Number of films that grossed $0 worldwide {len(zero_worldwide)}')
+    zero_worldwide.sort_values('USD_Production_Budget', ascending=False)
+```
+
+![International Grossing Films not in US](https://img-b.udemycdn.com/redactor/raw/2020-10-14_17-49-17-c0c42e8a463d6d79a09dadfe670a1b07.png)
+
 
 # Filter on Multiple Conditions: International Films
 
