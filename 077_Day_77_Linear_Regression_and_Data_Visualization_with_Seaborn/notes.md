@@ -16,6 +16,10 @@
     - [Challenge](#challenge-1)
     - [Bonus Challenge: Films that Lost Money](#bonus-challenge-films-that-lost-money)
 - [Seaborn Data Visualization: Bubble Charts](#seaborn-data-visualization-bubble-charts)
+  - [Import Seaborn](#import-seaborn)
+  - [Seaborn Scatter Plots](#seaborn-scatter-plots)
+  - [From Scatter Plot to Bubble Chart](#from-scatter-plot-to-bubble-chart)
+  - [Challenge](#challenge-2)
 - [Floor Division: A Trick to Convert Years to Decades](#floor-division-a-trick-to-convert-years-to-decades)
 - [Plotting Linear Regressions with Seaborn](#plotting-linear-regressions-with-seaborn)
 - [Use scikit-learn to Run Your Own Regression](#use-scikit-learn-to-run-your-own-regression)
@@ -383,6 +387,151 @@ or the .query() function
 In both cases, we see that a whopping 37.2% 😮 of films do not recoup their production budget at the box office. 💸💸💸 Who knew that film finance could be so risky! 😬
 
 # Seaborn Data Visualization: Bubble Charts
+We're now ready to visualise our data. Today I want to introduce you to another popular data visualisation tool that you can use alongside plotly and Matplotlib: [Seaborn](https://seaborn.pydata.org/). Seaborn is built on top of Matplotlib and it makes creating certain visualisations very convenient. 
+
+![Seaborn Example](https://img-b.udemycdn.com/redactor/raw/2020-10-15_09-09-20-72497b72e13443b2cebd18af668ac37e.png)
+
+## Import Seaborn
+
+The first step is adding Seaborn to our notebook. By convention we'll use the name `sns`.
+
+![Import Image](https://img-b.udemycdn.com/redactor/raw/2020-10-15_09-10-22-4722ef6ffbcef591bc19aa7b71133683.png)
+
+## Seaborn Scatter Plots
+To create a [.scatterplot()](https://seaborn.pydata.org/generated/seaborn.scatterplot.html?highlight=scatterplot#seaborn.scatterplot), all we need to do is supply our DataFrame and the column names that we'd like to see on our axes.
+```py
+    sns.scatterplot(data=data_clean,
+                    x='USD_Production_Budget', 
+                    y='USD_Worldwide_Gross')
+```
+
+That should look familiar. 😊 Because Seaborn is built on top of Matplotlib, we can dive into the Matplotlib layer anytime to configure our chart. For example, we can increase the size of our figure:
+
+```py
+plt.figure(figsize=(8,4), dpi=200)
+
+sns.scatterplot(data=data_clean,
+                x='USD_Production_Budget', 
+                y='USD_Worldwide_Gross')
+
+plt.show()
+```
+
+And to style our chart we can simply configure the `Axes` object that is returned from `sns.scatterplot()`.
+
+![Returns Axes](https://img-b.udemycdn.com/redactor/raw/2020-10-15_09-19-14-d55c7a6c5b664184458469f081502617.png)
+
+Here's how:
+```py
+plt.figure(figsize=(8,4), dpi=200)
+  
+ax = sns.scatterplot(data=data_clean,
+                      x='USD_Production_Budget', 
+                      y='USD_Worldwide_Gross')
+  
+ax.set(ylim=(0, 3000000000),
+        xlim=(0, 450000000),
+        ylabel='Revenue in $ billions',
+        xlabel='Budget in $100 millions')
+  
+plt.show()
+```
+
+Here we're diving into the Matplotb layer to set the limits on the axes and change the labels. 
+
+![Scatter Plot](https://img-b.udemycdn.com/redactor/raw/2020-10-15_09-21-28-2f57d90c5f1f97686b5c48b765b21051.png)
+
+## From Scatter Plot to Bubble Chart
+But the reason we're using Seaborn is because of the `hue` and `size` parameters that make it very easy to create a bubble chart. These parameters allow us to colour the data and change their size according to one of the columns in our DataFrame. 
+
+```py
+    plt.figure(figsize=(8,4), dpi=200)
+    ax = sns.scatterplot(data=data_clean,
+                         x='USD_Production_Budget', 
+                         y='USD_Worldwide_Gross',
+                         hue='USD_Worldwide_Gross', # colour
+                         size='USD_Worldwide_Gross',) # dot size
+     
+    ax.set(ylim=(0, 3000000000),
+           xlim=(0, 450000000),
+           ylabel='Revenue in $ billions',
+           xlabel='Budget in $100 millions',)
+     
+    plt.show()
+```
+
+![Shmancy Bubble Chart](https://img-b.udemycdn.com/redactor/raw/2020-10-15_09-28-08-831897dbfc869643665e710decb79e5f.png)
+
+Now our higher grossing movies are bigger and darker on our chart. That's super handy. But Seaborn offers a number of convenient styling options as well.
+
+To set the styling on a single chart (as opposed to all the charts in the entire notebook) we can use Python's `with` keyword. We've seen `with` used already when it comes to opening files in previous lessons. 
+
+```py
+    plt.figure(figsize=(8,4), dpi=200)
+     
+    # set styling on a single chart
+    with sns.axes_style('darkgrid'):
+      ax = sns.scatterplot(data=data_clean,
+                           x='USD_Production_Budget', 
+                           y='USD_Worldwide_Gross',
+                           hue='USD_Worldwide_Gross',
+                           size='USD_Worldwide_Gross')
+     
+      ax.set(ylim=(0, 3000000000),
+            xlim=(0, 450000000),
+            ylabel='Revenue in $ billions',
+            xlabel='Budget in $100 millions')
+```
+
+![Chart from Above Code](https://img-b.udemycdn.com/redactor/raw/2020-10-15_09-33-57-2840113022769b3f9be9fe8dc4667693.png)
+
+In addition to `'darkgrid'`, Seaborn has a number of [built-in themes](https://python-graph-gallery.com/104-seaborn-themes/). so you can style your chart very quickly. Try out `'whitegrid'`, `'dark'`,  or `'ticks'` for example. 
+
+## Challenge
+Now that you've seen how to create a beautiful bubble chart in Seaborn, it's time to create your own. Can you write the code to replicate this chart? Notice how we are actually representing THREE dimensions in this chart: the budget, the release date, and the worldwide revenue. This is what makes bubble charts so awesomely informative. 
+
+**My Code**
+```py
+plt.figure(figsize=(8,4), dpi=200)
+  
+# set styling on a single chart
+with sns.axes_style('darkgrid'):
+  ax = sns.scatterplot(data=data_clean,
+                        x='Release_Date', 
+                        y='USD_Worldwide_Gross',
+                        hue='USD_Worldwide_Gross',
+                        size='USD_Worldwide_Gross')
+  
+  ax.set(ylim=(0, 3000000000),
+        xlim=(data_clean.Release_Date.min(), data_clean.Release_Date.max()),
+        ylabel='Budget in $100 millions',
+        xlabel='Year')
+```
+
+**Solution: Movie Budgets over Time**
+Alright, I hope that was fairly straightforward. All you needed to do is change a few arguments:
+```py
+    plt.figure(figsize=(8,4), dpi=200)
+     
+    with sns.axes_style("darkgrid"):
+        ax = sns.scatterplot(data=data_clean, 
+                        x='Release_Date', 
+                        y='USD_Production_Budget',
+                        hue='USD_Worldwide_Gross',
+                        size='USD_Worldwide_Gross',)
+     
+        ax.set(ylim=(0, 450000000),
+               xlim=(data_clean.Release_Date.min(), data_clean.Release_Date.max()),
+               xlabel='Year',
+               ylabel='Budget in $100 millions')
+```
+
+**Analysis**
+What do we see here? What is this chart telling us? Well, first off, movie budgets have just exploded in the last 40 years or so. Up until the 1970s, the film industry appears to have been in an entirely different era. Budgets started growing fast from the 1980s onwards and continued to grow through the 2000s. Also, the industry has grown massively, producing many more films than before. The number of data points is so dense from 2000 onwards that they are overlapping. 
+
+![Graph Explanation](https://img-b.udemycdn.com/redactor/raw/2020-10-15_10-00-28-26cc75fe26fee70f2445c638aa490791.png)
+
+
 
 # Floor Division: A Trick to Convert Years to Decades
 
