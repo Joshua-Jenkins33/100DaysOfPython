@@ -845,5 +845,17 @@ Or, using the regression object, you could also work it out like this:
 ```
 (The colon : and dot . in a print statement is quite handy for controlling the number of digits you'd like to show up in the output)
 
-
 # Learning Points & Summary
+Today was a pretty packed lesson where we introduced a lot of new concepts. In this lesson we looked at how to:
+- Use nested loops to remove unwanted characters from multiple columns
+- Filter Pandas DataFrames based on multiple conditions using both `.loc[]` and `.query()`
+- Create bubble charts using the Seaborn Library
+- Style Seaborn charts using the pre-built styles and by modifying Matplotlib parameters
+- Use floor division (i.e., integer division) to convert years to decades
+- Use Seaborn to superimpose a linear regressions over our data
+- Make a judgement if our regression is good or bad based on how well the model fits our data and the r-squared metric
+- Run regressions with scikit-learn and calculate the coefficients. 
+
+You can download the completed code for today in this lesson. 
+
+Well done on completing the next step in your data science journey 👏👏👏 Upwards and onwards!
