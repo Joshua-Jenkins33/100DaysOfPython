@@ -11,6 +11,13 @@
   - [Challenge 3](#challenge-3)
     - [Solution 3: Type Conversions](#solution-3-type-conversions)
 - [Plotly Bar & Donut Charts: Analyze Prize Categories & Women Winning Prizes](#plotly-bar--donut-charts-analyze-prize-categories--women-winning-prizes)
+  - [Challenge 1: Come up with 3 Questions](#challenge-1-come-up-with-3-questions)
+  - [Challenge 2](#challenge-2-1)
+  - [Challenge 3](#challenge-3-1)
+  - [Challenge 4](#challenge-4)
+  - [Challenge 5](#challenge-5)
+  - [Challenge 6](#challenge-6)
+  - [Challenge 7](#challenge-7)
 - [Using Matplotlib to Visualize Trends over Time](#using-matplotlib-to-visualize-trends-over-time)
 - [A Choropleth Map and the Countries with the Most Prizes](#a-choropleth-map-and-the-countries-with-the-most-prizes)
 - [Create Sunburst Charts for a Detailed Regional Breakdown of Research Locations](#create-sunburst-charts-for-a-detailed-regional-breakdown-of-research-locations)
@@ -218,9 +225,213 @@ Now we can check if our type conversions were successful:
 
 ![Solution 3 Answer 1](https://img-b.udemycdn.com/redactor/raw/2020-10-20_11-32-10-f5d62149b40ac16398ffdbdf516c5530.png)
 
-
-
 # Plotly Bar & Donut Charts: Analyze Prize Categories & Women Winning Prizes
+
+## Challenge 1: Come up with 3 Questions
+A big part of data science is coming up with questions that you'd like to explore. This is the most difficult aspect to teach in a tutorial because it's completely open-ended and requires some creativity. Often times you will be asking questions of the data, that it actually cannot answer - and that's ok. That's all part of the process of discovery.
+
+Pause here for a moment and think about the kind of data you saw in the columns. Write down at least 3 questions that you'd like to explore as part of this analysis. For example, your question might go like: "What percentage of the Nobel laureates were women?" or "How many prizes were given out in each category". **Practice coming up with a few of your own questions.**
+
+In the upcoming lessons, you might find that we will write the code to answer some of your questions. And if not, your questions make for a great exercise to take this analysis even further.
+
+The challenges below are all based on questions we're going to ask the data.
+
+**My Questions**
+- Which countries most commonly produce Nobel Lauretes?
+- Have nobel prizes been awarded more often in certain time periods?
+- Do some organizations produce more nobel prize lauretes than tohers?
+- Are you more likely to earn a greater prize share in certain categories?
+- Do organizations often achieve the nobel prize?
+
+
+## Challenge 2
+Create a [donut chart using plotly](https://plotly.com/python/pie-charts/) which shows how many prizes went to men compared to how many prizes went to women. What percentage of all the prizes went to women?
+
+**My Code**
+```py
+df_gender_stats = df_data[df_data['sex'].notnull()]
+
+fig = px.pie(df_gender_stats, values='share_pct', names='sex', title='Percentage of Male vs. Female Laureates', hole=.5)
+fig.show()
+```
+
+**Solution 2: Creating a Donut Chart with Plotly**
+To create the chart we use the our `.value_counts()` method together with plotly's `.pie()` function. We see that out of all the Nobel laureates since 1901, only about 6.2% were women.
+```py
+    biology = df_data.sex.value_counts()
+    fig = px.pie(labels=biology.index, 
+                 values=biology.values,
+                 title="Percentage of Male vs. Female Winners",
+                 names=biology.index,
+                 hole=0.4,)
+     
+    fig.update_traces(textposition='inside', textfont_size=15, textinfo='percent')
+     
+    fig.show()
+```
+
+## Challenge 3
+- What are the names of the first 3 female Nobel laureates?
+  - Marie Curie
+  - Baroness Bertha Sophie
+  - Selma Ottilia
+- What did the win the prize for?
+  - Physica, Peace, Literature
+- What do you see in their `birth_country`? Were they part of an organisation?
+  - They were standalones and in Russia/Europe
+
+**My Code**
+```py
+df_females = df_gender_stats[df_gender_stats['sex']=='Female'].sort_values('year')
+df_females.head()
+```
+
+**Solution 3: The first 3 women to win**
+Even without looking at the data, you might have already guessed one of the famous names: Marie Curie.
+```py
+    df_data[df_data.sex == 'Female'].sort_values('year', ascending=True)[:3]
+```
+
+![First Women Winners](https://img-b.udemycdn.com/redactor/raw/2020-10-20_11-59-16-2880c50d998356973cfa975e30bd642c.png)
+
+
+## Challenge 4
+Did some people get a Nobel Prize more than once? If so, who were they?
+- The Red Cross
+- Frederick Sanger
+- Linus Carl Pauling
+- John Bardeen
+- United Nations High Commissioner for Refugees
+- Marie Curie
+
+**My Code**
+```py
+pd.set_option("display.max_rows", False)
+df_data['full_name'].value_counts()
+```
+
+**Solution 4: The Repeat Winners**
+Winning a Nobel prize is quite an achievement. However, some folks have actually won the prize multiple times. To find them, we can use many different approaches. One approach is to look for duplicates in the full_name column:
+```py
+    is_winner = df_data.duplicated(subset=['full_name'], keep=False)
+    multiple_winners = df_data[is_winner]
+    print(f'There are {multiple_winners.full_name.nunique()}' \
+          ' winners who were awarded the prize more than once.')
+```
+There are 6 winners who were awarded the prize more than once.
+```py
+    col_subset = ['year', 'category', 'laureate_type', 'full_name']
+    multiple_winners[col_subset]
+```
+Only 4 of the repeat laureates were individuals.
+
+We see that Marie Curie actually got the Nobel prize twice - once in physics and once in chemistry. Linus Carl Pauling got it first in chemistry and later for peace given his work in promoting nuclear disarmament. Also, the International Red Cross was awarded the Peace prize a total of 3 times. The first two times were both during the devastating World Wars. 
+
+## Challenge 5
+- In how many categories are prizes awarded?
+  - 6 categories
+- Create a plotly bar chart with the number of prizes awarded by category.
+- Use the color scale called `Aggrnyl` to colour the chart, but don't show a color axis.
+- Which category has the most number of prizes awarded?
+  - Medicine
+- Which category has the fewest number of prizes awarded?
+  - Economics
+
+**My Code**
+```py
+len(pd.unique(df_data['category']))
+
+df_category = df_data.groupby(['category'])['prize'].count().reset_index(name='count').sort_values('count', ascending=False)
+df_category
+
+fig = px.bar(df_category, x='category', y='share_pct', color="category", color_continuous_scale='Aggrnyl')
+fig.update_traces(showlegend=False)
+fig.show()
+```
+
+**Solution 5: Number of Prizes per Category**
+To find the number of unique categories in a column we can use:
+```py
+    df_data.category.nunique()
+```
+To generate the vertical plotly bar chart, we again use .value_counts():
+```py
+    prizes_per_category = df_data.category.value_counts()
+    v_bar = px.bar(
+            x = prizes_per_category.index,
+            y = prizes_per_category.values,
+            color = prizes_per_category.values,
+            color_continuous_scale='Aggrnyl',
+            title='Number of Prizes Awarded per Category')
+     
+    v_bar.update_layout(xaxis_title='Nobel Prize Category', 
+                        coloraxis_showscale=False,
+                        yaxis_title='Number of Prizes')
+    v_bar.show()
+```
+
+![Number of Prizes Awarded per Category](https://img-b.udemycdn.com/redactor/raw/2020-10-20_13-59-47-6fea83b45bae6cda8e421d02b71aa380.png)
+
+
+
+## Challenge 6
+- When was the first prize in the field of Economics awarded?
+  - 1969
+- Who did the prize go to?
+  - Jan Tinbergen
+
+**My Code**
+```py
+df_data[df_data['category']=='Economics'].sort_values('year').head()
+```
+
+**Solution 6: The Economics Prize**
+The chart above begs the question: "Why are there so few prizes in the field of economics?". Looking at the first couple of winners in the economics category, we have our answer:
+```py
+    df_data[df_data.category == 'Economics'].sort_values('year')[:3]
+```
+The economics prize is much newer. It was first awarded in 1969, compared to 1901 for physics. 
+
+![Economics](https://img-b.udemycdn.com/redactor/raw/2020-10-20_14-03-25-9b4e50252c31bbc38d8171905a26b9a5.png)
+
+## Challenge 7
+Create a [plotly bar chart](https://plotly.com/python/bar-charts/) that shows the split between men and women by category.
+- Hover over the bar chart. How many prizes went to women in Literature compared to Physics?
+  - 4 in Physics
+  - 16 in Literature
+
+**My Code**
+```py
+df_category_by_sex = df_data.groupby(['category', 'sex'])['prize'].count().reset_index(name='count').sort_values('count', ascending=False)
+df_category_by_sex
+
+fig = px.bar(df_category_by_sex, x="category", y="count", color="sex")
+fig.show()
+```
+
+**Solution 7: Male and Female Winners by Category**
+We already saw that overall, only 6.2% of Nobel prize winners were female. Does this vary by category?
+```py
+    cat_men_women = df_data.groupby(['category', 'sex'], 
+                                   as_index=False).agg({'prize': pd.Series.count})
+    cat_men_women.sort_values('prize', ascending=False, inplace=True)
+```
+We can combine `.groupby()` and `.agg()` with the `.count()` function. This way we can count the number of men and women by prize category.
+
+We can then use `.color` the parameter in the `.bar()` function to mark the number of men and women on the chart:
+
+```py
+v_bar_split = px.bar(x = cat_men_women.category,
+                      y = cat_men_women.prize,
+                      color = cat_men_women.sex,
+                      title='Number of Prizes Awarded per Category split by Men and Women')
+  
+v_bar_split.update_layout(xaxis_title='Nobel Prize Category', 
+                          yaxis_title='Number of Prizes')
+v_bar_split.show()
+```
+
+We see that overall the imbalance is pretty large with physics, economics, and chemistry. Women are somewhat more represented in categories of Medicine, Literature and Peace. Splitting bar charts like this is an incredibly powerful way to show a more granular picture. 
 
 # Using Matplotlib to Visualize Trends over Time
 
