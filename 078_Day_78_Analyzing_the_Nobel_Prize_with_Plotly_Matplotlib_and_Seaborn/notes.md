@@ -19,6 +19,10 @@
   - [Challenge 6](#challenge-6)
   - [Challenge 7](#challenge-7)
 - [Using Matplotlib to Visualize Trends over Time](#using-matplotlib-to-visualize-trends-over-time)
+  - [Challenge 1](#challenge-1-1)
+    - [Solution 1: Number of Prizes Awarded over Time](#solution-1-number-of-prizes-awarded-over-time)
+  - [Challenge 2](#challenge-2-2)
+    - [Solution 2: The Prize Share of Laureates over Time](#solution-2-the-prize-share-of-laureates-over-time)
 - [A Choropleth Map and the Countries with the Most Prizes](#a-choropleth-map-and-the-countries-with-the-most-prizes)
 - [Create Sunburst Charts for a Detailed Regional Breakdown of Research Locations](#create-sunburst-charts-for-a-detailed-regional-breakdown-of-research-locations)
 - [Unearthing Patterns in the laureate Age at the Time of the Award](#unearthing-patterns-in-the-laureate-age-at-the-time-of-the-award)
@@ -434,6 +438,274 @@ v_bar_split.show()
 We see that overall the imbalance is pretty large with physics, economics, and chemistry. Women are somewhat more represented in categories of Medicine, Literature and Peace. Splitting bar charts like this is an incredibly powerful way to show a more granular picture. 
 
 # Using Matplotlib to Visualize Trends over Time
+Now let's look at how things have changed over time. This will give us a chance to review what we learnt about creating charts with two y-axes in Matplotlib and generating arrays with NumPy. 
+
+## Challenge 1
+
+Are more prizes awarded recently than when the prize was first created? Show the trend in awards visually.
+- Count the number of prizes awarded every year.
+- Create a 5 year rolling average of the number of prizes (Hint: see previous lessons analysing Google Trends).
+- Using Matplotlib superimpose the rolling average on a scatter plot.
+- Show a tick mark on the x-axis for every 5 years from 1900 to 2020. (Hint: you'll need to use NumPy).
+
+![Line Chart in Years](https://img-b.udemycdn.com/redactor/raw/2020-10-20_14-15-10-c99698bd9d7749499bb42a4763d446a6.png)
+
+- Use the [named colours](https://matplotlib.org/3.1.0/gallery/color/named_colors.html) to draw the data points in `dodgerblue` while the rolling average is coloured in `crimson`.
+
+![Graph](https://img-b.udemycdn.com/redactor/raw/2020-10-20_14-15-24-c67d3b9baeaa22b2f28b6d3a2202d77a.png)
+
+- Looking at the chart, did the first and second world wars have an impact on the number of prizes being given out?
+- What could be the reason for the trend in the chart?
+
+**Count the number of prizes awarded every year.**
+```py
+df_prize_count_by_year = df_data.groupby('year')['prize'].count().reset_index(name='prize_count')
+df_prize_count_by_year
+```
+
+**Create a 5 year rolling average of the number of prizes (Hint: see previous lessons analysing Google Trends).**
+```py
+rolling_df = df_prize_count_by_year['prize_count'].rolling(window=5).mean()
+rolling_df
+```
+
+**Using Matplotlib superimpose the rolling average on a scatter plot.**
+```py
+plt.scatter(x=df_prize_count_by_year.year, y=df_prize_count_by_year.prize_count, c='dodgerblue')
+plt.plot(df_prize_count_by_year.year, rolling_df.values, c='crimson')
+
+plt.show()
+```
+
+**Show a tick mark on the x-axis for every 5 years from 1900 to 2020. (Hint: you'll need to use NumPy).**
+I didn't know the answer to this one.
+
+```py
+five_year_increments = np.arange(1900, 2021, step=5)
+```
+
+- **Using Matplotlib superimpose the rolling average on a scatter plot.**
+- **Show a tick mark on the x-axis for every 5 years from 1900 to 2020. (Hint: you'll need to use NumPy).**
+- **Use the [named colours](https://matplotlib.org/3.1.0/gallery/color/named_colors.html) to draw the data points in `dodgerblue` while the rolling average is coloured in `crimson`.**
+```py
+five_year_increments = np.arange(1900, 2021, step=5)
+plt.figure(figsize=(16,8), dpi=200)
+plt.title('Number of Nobel Prizes Awarded per Year', fontsize=18)
+plt.yticks(fontsize=14)
+plt.xticks(ticks=five_year_increments, 
+           fontsize=14, 
+           rotation=45)
+
+ax = plt.gca() # get current axis
+ax.set_xlim(1900, 2020)
+
+
+plt.scatter(x=df_prize_count_by_year.index, y=df_prize_count_by_year.values, c='dodgerblue')
+plt.plot(df_prize_count_by_year.index, rolling_df.values, c='crimson')
+
+           
+plt.show()
+```
+
+**Looking at the chart, did the first and second world wars have an impact on the number of prizes being given out?**
+- More prizes were awarded as a result of the world wars
+
+**What could be the reason for the trend in the chart?**
+- People aiming for peace, discoveries to get an edge in the war
+
+### Solution 1: Number of Prizes Awarded over Time
+First, we have to count the number of Nobel prizes that are awarded each year. 
+
+```py
+prize_per_year = df_data.groupby(by='year').count().prize 
+```
+
+This just involves grouping the data so that we can count the number of entries per year. To calculate the 5-year moving average we use `.rolling()` and `.mean()` like we did with the Google Trend data. 
+
+```py
+moving_average = prize_per_year.rolling(window=5).mean()
+```
+
+Now we can create a Matplotlib chart that superimposes the two:
+```py
+plt.scatter(x=prize_per_year.index, 
+            y=prize_per_year.values, 
+            c='dodgerblue',
+            alpha=0.7,
+            s=100,)
+  
+plt.plot(prize_per_year.index, 
+        moving_average.values, 
+        c='crimson', 
+        linewidth=3,)
+  
+plt.show()
+```
+
+![Resulting Graph](https://img-b.udemycdn.com/redactor/raw/2020-10-20_14-23-51-6e82d0a2a593ae5f05b2562d18daed03.png)
+
+With the help of a little styling, this chart could look better. To create 5-year tick marks on the x-axis, we generate an array using NumPy:
+
+```py
+np.arange(1900, 2021, step=5)
+```
+
+Then we tap into functions like the `.figure()`, the `.title()`, the `.xticks()`, and `.yticks()` to fine-tune the chart.
+
+In addition, we will shortly be adding a second y-axis, so we can use an `Axes` object to draw our scatter and line plots. 
+
+```py
+plt.figure(figsize=(16,8), dpi=200)
+plt.title('Number of Nobel Prizes Awarded per Year', fontsize=18)
+plt.yticks(fontsize=14)
+plt.xticks(ticks=np.arange(1900, 2021, step=5), 
+            fontsize=14, 
+            rotation=45)
+  
+ax = plt.gca() # get current axis
+ax.set_xlim(1900, 2020)
+  
+ax.scatter(x=prize_per_year.index, 
+            y=prize_per_year.values, 
+            c='dodgerblue',
+            alpha=0.7,
+            s=100,)
+  
+ax.plot(prize_per_year.index, 
+        moving_average.values, 
+        c='crimson', 
+        linewidth=3,)
+  
+plt.show()
+```
+
+![Resulting Graph](https://img-b.udemycdn.com/redactor/raw/2020-10-20_14-20-53-0c21b93b7886ff45ea6503747813ff1c.png)
+
+## Challenge 2
+Investigate if more prizes are shared than before.
+- Calculate the average prize share of the winners on a year by year basis.
+- Calculate the 5 year rolling average of the percentage share.
+- Copy-paste the cell from the chart you created above.
+- Modify the code to add a secondary axis to your Matplotlib chart.
+- Plot the rolling average of the prize share on this chart.
+- See if you can invert the secondary y-axis to make the relationship even more clear.
+
+```py
+# Copy-paste the cell from the chart you created above.
+five_year_increments = np.arange(1900, 2021, step=5)
+plt.figure(figsize=(16,8), dpi=200)
+plt.title('Number of Nobel Prizes Awarded per Year', fontsize=18)
+plt.yticks(fontsize=14)
+plt.xticks(ticks=five_year_increments, 
+           fontsize=14, 
+           rotation=45)
+
+ax1 = plt.gca() # get current axis
+ax1.set_xlim(1900, 2020)
+
+# Modify the code to add a secondary axis to your Matplotlib chart.
+ax2 = ax1.twinx()
+ax2.set_ylabel('Prize Share Percentage')
+
+# See if you can invert the secondary y-axis to make the relationship even more clear.
+ax2.invert_yaxis()
+
+
+ax1.scatter(x=df_prize_count_by_year.index, y=df_prize_count_by_year.values, c='dodgerblue')
+
+# Plot the rolling average of the prize share on this chart. 
+ax1.plot(df_prize_count_by_year.index, rolling_df.values, c='crimson')
+
+# Adding prize share plot on second axis
+ax2.plot(avg_prize_share_by_year.index, avg_prize_share_rolling.values, c='grey')
+           
+plt.show()
+```
+
+### Solution 2: The Prize Share of Laureates over Time
+Now we can work out the rolling average of the percentage share of the prize. If more prizes are given out, perhaps it is because the prize is split between more people. 
+
+```py
+yearly_avg_share = df_data.groupby(by='year').agg({'share_pct': pd.Series.mean})
+share_moving_average = yearly_avg_share.rolling(window=5).mean()
+```
+
+If more people get the prize, then the average share should go down, right? 
+
+```py
+plt.figure(figsize=(16,8), dpi=200)
+plt.title('Number of Nobel Prizes Awarded per Year', fontsize=18)
+plt.yticks(fontsize=14)
+plt.xticks(ticks=np.arange(1900, 2021, step=5), 
+            fontsize=14, 
+            rotation=45)
+  
+ax1 = plt.gca()
+ax2 = ax1.twinx() # create second y-axis
+ax1.set_xlim(1900, 2020)
+  
+ax1.scatter(x=prize_per_year.index, 
+            y=prize_per_year.values, 
+            c='dodgerblue',
+            alpha=0.7,
+            s=100,)
+  
+ax1.plot(prize_per_year.index, 
+        moving_average.values, 
+        c='crimson', 
+        linewidth=3,)
+  
+# Adding prize share plot on second axis
+ax2.plot(prize_per_year.index, 
+        share_moving_average.values, 
+        c='grey', 
+        linewidth=3,)
+  
+plt.show()
+```
+
+![Resulting Graph](https://img-b.udemycdn.com/redactor/raw/2020-10-20_14-31-42-191579962fb7cb3a64f2c97d6f78c438.png)
+
+To see the relationship between the number of prizes and the laureate share even more clearly we can invert the second y-axis. 
+
+```py
+plt.figure(figsize=(16,8), dpi=200)
+plt.title('Number of Nobel Prizes Awarded per Year', fontsize=18)
+plt.yticks(fontsize=14)
+plt.xticks(ticks=np.arange(1900, 2021, step=5), 
+            fontsize=14, 
+            rotation=45)
+  
+ax1 = plt.gca()
+ax2 = ax1.twinx()
+ax1.set_xlim(1900, 2020)
+  
+# Can invert axis
+ax2.invert_yaxis()
+  
+ax1.scatter(x=prize_per_year.index, 
+            y=prize_per_year.values, 
+            c='dodgerblue',
+            alpha=0.7,
+            s=100,)
+  
+ax1.plot(prize_per_year.index, 
+        moving_average.values, 
+        c='crimson', 
+        linewidth=3,)
+  
+ax2.plot(prize_per_year.index, 
+        share_moving_average.values, 
+        c='grey', 
+        linewidth=3,)
+  
+plt.show()
+```
+
+What do we see on the chart? Well, there is clearly an upward trend in the number of prizes being given out as more and more prizes are shared. Also, more prizes are being awarded from 1969 onwards because of the addition of the economics category. We also see that very few prizes were awarded during the first and second world wars. Note that instead of there being a zero entry for those years, we instead see the effect of the wards as missing blue dots. 
+
+![Resulting Graph](https://img-b.udemycdn.com/redactor/raw/2020-10-20_14-38-11-076469c853c7b83bc6a9ec20fc1a0aaf.png)
+
 
 # A Choropleth Map and the Countries with the Most Prizes
 
