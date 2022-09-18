@@ -33,6 +33,14 @@
   - [Challenge 4: Prizes by Country over Time](#challenge-4-prizes-by-country-over-time)
     - [Solution 4: Country Prizes over Time](#solution-4-country-prizes-over-time)
 - [Create Sunburst Charts for a Detailed Regional Breakdown of Research Locations](#create-sunburst-charts-for-a-detailed-regional-breakdown-of-research-locations)
+  - [Challenge 1](#challenge-1-2)
+    - [Solution 1: The Top Research Organisations](#solution-1-the-top-research-organisations)
+  - [Challenge 2](#challenge-2-3)
+    - [Solution 2: Research Cities](#solution-2-research-cities)
+  - [Challenge 3](#challenge-3-2)
+    - [Solution 3: Laureate Birth Cities](#solution-3-laureate-birth-cities)
+  - [Challenge 4](#challenge-4-1)
+    - [Solution 4: The Sunburst Chart](#solution-4-the-sunburst-chart)
 - [Unearthing Patterns in the laureate Age at the Time of the Award](#unearthing-patterns-in-the-laureate-age-at-the-time-of-the-award)
 - [Learning Points & Summary](#learning-points--summary)
 
@@ -908,6 +916,134 @@ What we see is that the United States really started to take off after the Secon
 All this analysis of different countries makes me curious about where the actual research is happening. Where are the cities and organisations located where people actually make discoveries? 
 
 # Create Sunburst Charts for a Detailed Regional Breakdown of Research Locations
+
+## Challenge 1
+Many Nobel laureates are affiliated with a university, a laboratory, or a research organisation (apart from Literature and Peace prize winners as we've seen). But the world is a big place. Which research institutions had the most Nobel laureates working there at the time of making the discovery?
+
+Create a bar chart showing the organisations affiliated with the Nobel laureates. It should looks something like this:
+
+![Bar Chart](https://img-b.udemycdn.com/redactor/raw/2020-10-20_16-18-43-4bf4936075c466a83bf4fee81d4bcbd5.png)
+
+- Which organisations make up the top 20?
+- How many Nobel prize winners are affiliated with the University of Chicago and Harvard University?
+
+### Solution 1: The Top Research Organisations
+This one should be pretty simple:
+```py
+top20_orgs = df_data.organization_name.value_counts()[:20]
+top20_orgs.sort_values(ascending=True, inplace=True)
+```
+
+Our chart includes many of the usual suspects:
+```py
+org_bar = px.bar(x = top20_orgs.values,
+                  y = top20_orgs.index,
+                  orientation='h',
+                  color=top20_orgs.values,
+                  color_continuous_scale=px.colors.sequential.haline,
+                  title='Top 20 Research Institutions by Number of Prizes')
+  
+org_bar.update_layout(xaxis_title='Number of Prizes', 
+                      yaxis_title='Institution',
+                      coloraxis_showscale=False)
+org_bar.show()
+```
+
+![Bar Chart](https://img-b.udemycdn.com/redactor/raw/2020-10-20_16-32-06-e8df8d97281819d8f0359c11bac9bfb8.png)
+
+## Challenge 2
+Each research organisation is located in a particular city. Are some cities hot spots for scientific discoveries? Where do major discoveries tend to take place?
+- Create another plotly bar chart graphing the top 20 organisation cities of the research institutions associated with a Nobel laureate.
+- Where is the number one hotspot for discoveries in the world?
+- Which city in Europe has had the most discoveries?
+
+### Solution 2: Research Cities
+```py
+top20_org_cities = df_data.organization_city.value_counts()[:20]
+top20_org_cities.sort_values(ascending=True, inplace=True)
+city_bar2 = px.bar(x = top20_org_cities.values,
+                  y = top20_org_cities.index,
+                  orientation='h',
+                  color=top20_org_cities.values,
+                  color_continuous_scale=px.colors.sequential.Plasma,
+                  title='Which Cities Do the Most Research?')
+  
+city_bar2.update_layout(xaxis_title='Number of Prizes', 
+                        yaxis_title='City',
+                        coloraxis_showscale=False)
+city_bar2.show()
+```
+
+Cambridge Massachusets and New York in the United States lead the pack:
+![Results](https://img-b.udemycdn.com/redactor/raw/2020-10-20_16-33-45-b33d120ab774aace3fda3b522a405341.png)
+
+## Challenge 3
+Contrast the above chart with the birth city of the Nobel laureates. Would you expect to see a similar ranking for where the laureates are born versus where most discoveries are made? Would you expect to see the most populous cities producing the highest number of Nobel laureates? 
+- Create a plotly bar chart graphing the top 20 birth cities of Nobel laureates.
+- Use a named colour scale called `Plasma` for the chart.
+- What percentage of the United States prizes came from Nobel laureates born in New York?
+- How many Nobel laureates were born in London, Paris and Vienna?
+- Out of the top 5 cities, how many are in the United States?
+
+### Solution 3: Laureate Birth Cities
+```py
+top20_cities = df_data.birth_city.value_counts()[:20]
+top20_cities.sort_values(ascending=True, inplace=True)
+city_bar = px.bar(x=top20_cities.values,
+                  y=top20_cities.index,
+                  orientation='h',
+                  color=top20_cities.values,
+                  color_continuous_scale=px.colors.sequential.Plasma,
+                  title='Where were the Nobel Laureates Born?')
+  
+city_bar.update_layout(xaxis_title='Number of Prizes', 
+                        yaxis_title='City of Birth',
+                        coloraxis_showscale=False)
+city_bar.show()
+```
+
+A higher population definitely means that there's a higher chance of a Nobel laureate to be born there. New York, Paris, and London are all very populous. However, Vienna and Budapest are not and still produced many prize winners. That said, much of the ground-breaking research does not take place in big population centres, so the list of birth cities is quite different from the list above. Cambridge Massachusets, Stanford, Berkely and Cambridge (UK) are all the places where many discoveries are made, but they are not the birthplaces of laureates. 
+
+![Results](https://img-b.udemycdn.com/redactor/raw/2020-10-20_16-40-44-6ffe0befd6b184a767c184fb64906fda.png)
+
+## Challenge 4
+- Create a DataFrame that groups the number of prizes by organisation.
+- Then use the [plotly documentation to create a sunburst chart](https://plotly.com/python/sunburst-charts/)
+- Click around in your chart, what do you notice about Germany and France?
+  
+Here's what you're aiming for:
+![Sunburst Chart](https://img-b.udemycdn.com/redactor/raw/2020-10-20_16-28-14-33e9e87ab3c8bed913f451342e7af3fe.png)
+
+### Solution 4: The Sunburst Chart
+Each country has a number of cities, which contain a number of cities, which in turn contain the research organisations. The sunburst chart is perfect for representing this relationship. It will give us an idea of how geographically concentrated scientific discoveries are!
+
+```py
+country_city_org = df_data.groupby(by=['organization_country', 
+                                        'organization_city', 
+                                        'organization_name'], as_index=False).agg({'prize': pd.Series.count})
+  
+country_city_org = country_city_org.sort_values('prize', ascending=False)
+```
+
+![Resulting Dataframe](https://img-b.udemycdn.com/redactor/raw/2020-10-20_16-43-55-88d224f6d6086a8e9231579966fde144.png)
+
+```py
+burst = px.sunburst(country_city_org, 
+                    path=['organization_country', 'organization_city', 'organization_name'], 
+                    values='prize',
+                    title='Where do Discoveries Take Place?',
+                    )
+  
+burst.update_layout(xaxis_title='Number of Prizes', 
+                    yaxis_title='City',
+                    coloraxis_showscale=False)
+  
+burst.show()
+```
+
+France is a great example of concentration. Practically all the organisations affiliated with Nobel prize winners are in Paris. In contrast, scientific discoveries are much more spread out across Germany. Meanwhile, the UK is dominated by Cambridge and London.
+
+![Drilldown](https://img-b.udemycdn.com/redactor/raw/2020-10-20_16-47-52-801621189ef9ffc4c83025bac35b9861.gif)
 
 # Unearthing Patterns in the laureate Age at the Time of the Award
 
