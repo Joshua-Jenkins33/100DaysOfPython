@@ -19,6 +19,15 @@
   - [Challenge 2: Calculate the Proportion of Deaths at Each Clinic](#challenge-2-calculate-the-proportion-of-deaths-at-each-clinic)
     - [My Code](#my-code-4)
     - [Solution to Challenge 2](#solution-to-challenge-2-1)
+- [The Effect of Handwashing](#the-effect-of-handwashing)
+  - [Challenge 1: The Effect of Handwashing](#challenge-1-the-effect-of-handwashing)
+    - [My Code](#my-code-5)
+    - [Solution to Challenge 1](#solution-to-challenge-1-2)
+  - [Challenge 2: Calculate a Rolling Average of the Death Rate](#challenge-2-calculate-a-rolling-average-of-the-death-rate)
+    - [My Code](#my-code-6)
+    - [Solution to Challenge 2](#solution-to-challenge-2-2)
+  - [Challenge 3: Highlighting Subsections of a Line Chart](#challenge-3-highlighting-subsections-of-a-line-chart)
+    - [Solution to Challenge 3](#solution-to-challenge-3-1)
 
 # What You Will Make Today
 **Your Story**
@@ -380,3 +389,133 @@ At this point, Dr Semmelweis was so frustrated he went on holiday to Venice. Per
 Looking at the pathologist's symptoms, Semmelweis realised the pathologist died from the same thing as the women he had autopsied.  This was his breakthrough: anyone could get sick from childbed fever, not just women giving birth!
 
 This is what led to Semmelweis' new theory. Perhaps there were little pieces or particles of a corpse that the doctors and medical students were getting on their hands while dissecting the cadavers during an autopsy. And when the doctors delivered the babies in clinic 1, these particles would get inside the women giving birth who would then develop the disease and die.
+
+# The Effect of Handwashing
+In June 1846, Dr Semmelweis ordered everyone on his medical staff to start cleaning their hands and instruments not just with soap and water but with a chlorine solution (he didn't know it at the time, but chlorine is an amazing disinfectant). The reason Dr Semmelweis actually chose the chlorine was that he wanted to get rid of any smell on doctors' hands after an autopsy. No one knew anything about bacteria, germs or viruses at the time. 
+
+## Challenge 1: The Effect of Handwashing
+- Add a column called "pct_deaths" to `df_monthly` that has the percentage of deaths per birth for each row.
+- Create two subsets from the `df_monthly` data: before and after Dr Semmelweis ordered washing hand.
+- Calculate the average death rate prior to June 1846.
+- Calculate the average death rate after June 1846.
+
+### My Code
+```py
+# Add a column called "pct_deaths" to df_monthly that has the percentage of deaths per birth for each row. 
+df_monthly['pct_deaths'] = df_monthly.deaths / df_monthly.births
+df_monthly
+
+# Create two subsets from the df_monthly data: before and after Dr Semmelweis ordered washing hand.
+df_pre_handwashing = df_monthly[df_monthly.date < handwashing_start]
+df_pre_handwashing
+
+df_post_handwashing = df_monthly[df_monthly.date > handwashing_start]
+df_post_handwashing
+
+# Calculate the average death rate prior to June 1846.
+print(f'Average Death Rate prior to June 1846: {df_pre_handwashing.pct_deaths.mean()}')
+
+# Calculate the average death rate after June 1846.
+print(f'Average Death Rate after June 1846: {df_post_handwashing.pct_deaths.mean()}')
+```
+
+### Solution to Challenge 1
+We can add a column with the proportion of deaths per birth like so:
+```py
+df_monthly['pct_deaths'] = df_monthly.deaths/df_monthly.births
+```
+Then we can create two subsets based on the `handwashing_start` date. 
+```py
+before_washing = df_monthly[df_monthly.date < handwashing_start]
+after_washing = df_monthly[df_monthly.date >= handwashing_start]
+```
+The death rate per birth dropped dramatically after handwashing started - from close to 10.53% to 2.15%. We can use the colon and dot inside a print statement to determine the number of digits we'd like to print out from a number. 
+```py
+bw_rate = before_washing.deaths.sum() / before_washing.births.sum() * 100
+aw_rate = after_washing.deaths.sum() / after_washing.births.sum() * 100
+print(f'Average death rate before 1847 was {bw_rate:.4}%')
+print(f'Average death rate AFTER 1847 was {aw_rate:.3}%')
+```
+
+## Challenge 2: Calculate a Rolling Average of the Death Rate
+Create a DataFrame that has the 6-month rolling average death rate prior to mandatory handwashing.
+
+*Hint:* You'll need to set the dates as the index in order to avoid the date column being dropped during the calculation
+
+### My Code
+```py
+df_roll_death = df_pre_handwashing.set_index('date')
+
+df_roll_death = df_roll_death.rolling(window=6).mean()
+df_roll_death
+```
+
+### Solution to Challenge 2
+To work out the moving 6-month average we first set the date column as the index. Then we can use the same Pandas functions as in the Google Trends notebook. 
+```py
+roll_df = before_washing.set_index('date')
+roll_df = roll_df.rolling(window=6).mean()
+```
+
+## Challenge 3: Highlighting Subsections of a Line Chart
+Copy-paste and then modify the Matplotlib chart from before to plot the monthly death rates (instead of the total number of births and deaths). The chart should look something like this:
+
+![Desired Outcome](https://img-b.udemycdn.com/redactor/raw/2020-10-23_12-27-28-063144e4acbc37b96bfd66f6f25f75f3.png)
+
+- Add 3 separate lines to the plot: the death rate before handwashing, after handwashing, and the 6-month moving average before handwashing.
+- Show the monthly death rate before handwashing as a thin dashed black line.
+- Show the moving average as a thicker, crimson line.
+- Show the rate after handwashing as a skyblue line with round markers.
+- Look at the [code snippet in the documentation to see how you can add a legend](https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.legend.html) to the chart.
+
+Blegh. Hate these types of graphs. My efforts weren't even close.
+
+### Solution to Challenge 3
+After copy-pasting the previous code for the Matplotlib chart, we just need to change a few things. First, we remove the twin axes. And instead, we plot the three different lines on the same axis. To create the legend, we supply a label to the `.plot()` function and capture return value in a variable. It's important to notice that `.plot()` returns more than one thing, so we need to use a comma (`,`) since we're only grabbing the first item. We can then feed these handles into `plt.legend()`.
+
+```py
+# handle overall size and axis
+plt.figure(figsize=(14,8), dpi=200)
+plt.title('Percentage of Monthly Deaths over Time', fontsize=18)
+plt.yticks(fontsize=14)
+plt.xticks(fontsize=14, rotation=45)
+ 
+plt.ylabel('Percentage of Deaths', color='crimson', fontsize=18)
+
+# deal with dates on the x-axis to display nicely
+ax = plt.gca()
+ax.xaxis.set_major_locator(years)
+ax.xaxis.set_major_formatter(years_fmt)
+ax.xaxis.set_minor_locator(months)
+ax.set_xlim([df_monthly.date.min(), df_monthly.date.max()])
+
+plt.grid(color='grey', linestyle='--')
+
+# never seen this comma thing before...
+ma_line, = plt.plot(roll_df.index, 
+                    roll_df.pct_deaths, 
+                    color='crimson', 
+                    linewidth=3, 
+                    linestyle='--',
+                    label='6m Moving Average')
+
+bw_line, = plt.plot(before_washing.date, 
+                    before_washing.pct_deaths,
+                    color='black', 
+                    linewidth=1, 
+                    linestyle='--', 
+                    label='Before Handwashing')
+
+aw_line, = plt.plot(after_washing.date, 
+                    after_washing.pct_deaths, 
+                    color='skyblue', 
+                    linewidth=3, 
+                    marker='o',
+                    label='After Handwashing')
+
+plt.legend(handles=[ma_line, bw_line, aw_line],
+           fontsize=18)
+ 
+plt.show()
+```
+
