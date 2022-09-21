@@ -12,6 +12,13 @@
   - [Challenge 3: Visualise the Total Number of Births 🤱 and Deaths 💀 over Time](#challenge-3-visualise-the-total-number-of-births--and-deaths--over-time)
     - [My Code](#my-code-2)
     - [Solution to Challenge 3](#solution-to-challenge-3)
+- [Analysing the Yearly Data Split By Clinic](#analysing-the-yearly-data-split-by-clinic)
+  - [Challenge 1: The Yearly Data Split by Clinic](#challenge-1-the-yearly-data-split-by-clinic)
+    - [My Code](#my-code-3)
+    - [Solution to Challenge 1](#solution-to-challenge-1-1)
+  - [Challenge 2: Calculate the Proportion of Deaths at Each Clinic](#challenge-2-calculate-the-proportion-of-deaths-at-each-clinic)
+    - [My Code](#my-code-4)
+    - [Solution to Challenge 2](#solution-to-challenge-2-1)
 
 # What You Will Make Today
 **Your Story**
@@ -241,3 +248,135 @@ plt.show()
 ![Final Chart](https://img-b.udemycdn.com/redactor/raw/2020-10-23_11-16-35-039658c53b985fcbb11f9ffa26d074fd.png)
 
 What we see is that something happened after 1847. The total number of deaths seems to have dropped, despite an increasing number of births! 🤔
+
+# Analysing the Yearly Data Split By Clinic
+**Welcome to your workplace...**
+
+There are two maternity wards at the Vienna General Hospital: clinic 1 and clinic 2. Clinic 1 was staffed by all-male doctors and medical students, and clinic 2 was staffed by female midwives.
+
+## Challenge 1: The Yearly Data Split by Clinic
+Let's turn our attention to the annual data. Use plotly to create line charts of the births and deaths of the two different clinics at the Vienna General Hospital.
+- Which clinic is bigger or more busy judging by the number of births?
+- Has the hospital had more patients over time?
+- What was the highest number of deaths recorded in clinic 1 and clinic 2?
+
+### My Code
+This didn't work.
+
+```py
+# Which clinic is bigger or more busy judging by the number of births?
+df_yearly[['clinic', 'births']].groupby(['clinic']).mean('births')
+
+# Has the hospital had more patients over time? 
+df_yearly[['clinic', 'births']].groupby(['clinic']).sum('births')
+
+# What was the highest number of deaths recorded in clinic 1 and clinic 2?
+df_yearly[['clinic', 'deaths']].groupby(['clinic']).max('deaths')
+
+fig, ax1 = plt.subplots(figsize=(14,8), dpi=200)
+#ax2 = ax1.twinx()
+ax1.grid(color='grey', linestyle='--')
+
+ax1.plot(df_yearly.year, df_yearly.births, color='skyblue', linewidth=3)
+#ax2.plot(df_yearly.year, df_yearly.deaths, color='crimson', linewidth=2, linestyle='dashed')
+```
+
+### Solution to Challenge 1
+To show two line charts side by side we can use plotly and provide the clinic column as the `color`. 
+
+```py
+line = px.line(df_yearly, 
+                x='year', 
+                y='births',
+                color='clinic',
+                title='Total Yearly Births by Clinic')
+  
+line.show()
+```
+
+We see that more and more women gave birth at the hospital over the years. Clinic 1, which was staffed by male doctors and medical students was also the busier or simply the larger ward. More births took place in clinic 1 than in clinic 2. 
+
+![Results](https://img-b.udemycdn.com/redactor/raw/2020-10-23_11-31-13-b5897c5011eadac9f54e6956b30d4f97.png)
+
+We also see that, not only were more people born in clinic 1, more people also died in clinic 1. 
+
+```py
+line = px.line(df_yearly, 
+                x='year', 
+                y='deaths',
+                color='clinic',
+                title='Total Yearly Deaths by Clinic')
+  
+line.show()
+```
+
+![Results](https://img-b.udemycdn.com/redactor/raw/2020-10-23_11-32-45-1f1c814dd89d9e8102ff7642a53a3ecd.png)
+
+To compare apples and apples, we need to look at the proportion of deaths per clinic. 
+
+## Challenge 2: Calculate the Proportion of Deaths at Each Clinic
+Calculate the proportion of maternal deaths per clinic. That way we can compare like with like.
+
+- Work out the percentage of deaths for each row in the `df_yearly` DataFrame by adding a column called "pct_deaths".
+- Calculate the average maternal death rate for clinic 1 and clinic 2 (i.e., the total number of deaths per the total number of births).
+- Create another plotly line chart to see how the percentage varies year over year with the two different clinics.
+- Which clinic has a higher proportion of deaths?
+- What is the highest monthly death rate in clinic 1 compared to clinic 2?
+
+### My Code
+```py
+df_yearly['pct_deaths'] = df_yearly.deaths / df_yearly.births
+df_yearly
+
+clinic_1_avg_maternal_death_rate = df_yearly.groupby('clinic').mean('pct_deaths')
+clinic_1_avg_maternal_death_rate
+
+# Clinic 1 has higher proportion
+# Clinic 1 has a high of 16% compared to Clinic 2's almost 8%
+```
+
+### Solution to Challenge 2
+We can add a new column that has the percentage of deaths for each row like this: 
+```py
+df_yearly['pct_deaths'] = df_yearly.deaths / df_yearly.births
+```
+The average death rate for the entire time period for clinic 1 is:
+```py
+clinic_1 = df_yearly[df_yearly.clinic == 'clinic 1']
+avg_c1 = clinic_1.deaths.sum() / clinic_1.births.sum() * 100
+print(f'Average death rate in clinic 1 is {avg_c1:.3}%.')
+```
+9.92%. In comparison, clinic 2 which was staffed by midwives had a much lower death rate of 3.88% over the course of the entire period. Hmm... 🤔
+```py
+clinic_2 = df_yearly[df_yearly.clinic == 'clinic 2']
+avg_c2 = clinic_2.deaths.sum() / clinic_2.births.sum() * 100
+print(f'Average death rate in clinic 2 is {avg_c2:.3}%.')
+```
+Once again, let's see this on a chart
+```py
+line = px.line(df_yearly, 
+                x='year', 
+                y='pct_deaths',
+                color='clinic',
+                title='Proportion of Yearly Deaths by Clinic')
+  
+line.show()
+```
+
+1842 was a rough year. About 16% of women died in clinic 1 and about 7.6% of women died in clinic 2. 
+
+![Results](https://img-b.udemycdn.com/redactor/raw/2020-10-23_11-48-48-f1ea588ddc802796ce504f8cae08a844.png)
+
+Still, clinic 2 had a consistently lower death rate than clinic 1! This is what puzzled and frustrated Dr Semmelweis. 
+
+**The story continues...**
+
+At first, Dr Semmelweis thought that the position of the women giving birth was the issue. In clinic 2, the midwives' clinic, women gave birth on their sides. In the doctors' clinic, women gave birth on their backs. So, Dr. Semmelweis, had women in the doctors' clinic give birth on their sides. However, this had no effect on the death rate.
+
+Next, Dr Semmelweis noticed that whenever someone on the ward died, a priest would walk through clinic 1, past the women's beds ringing a bell 🔔. Perhaps the priest and the bell ringing terrified the women so much after birth that they developed a fever, got sick and died. Dr Semmelweis had the priest change his route and stop ringing the bell 🔕. Again, this had no effect.
+
+At this point, Dr Semmelweis was so frustrated he went on holiday to Venice. Perhaps a short break would clear his head. When Semmelweis returned from his vacation, he was told that one of his colleagues, a pathologist, had fallen ill and died. His friend had pricked his finger while doing an autopsy on a woman who had died from childbed fever and subsequently got very sick himself and died. 😮
+
+Looking at the pathologist's symptoms, Semmelweis realised the pathologist died from the same thing as the women he had autopsied.  This was his breakthrough: anyone could get sick from childbed fever, not just women giving birth!
+
+This is what led to Semmelweis' new theory. Perhaps there were little pieces or particles of a corpse that the doctors and medical students were getting on their hands while dissecting the cadavers during an autopsy. And when the doctors delivered the babies in clinic 1, these particles would get inside the women giving birth who would then develop the disease and die.
