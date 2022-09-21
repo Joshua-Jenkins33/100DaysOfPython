@@ -44,6 +44,7 @@
   - [Challenge 5: Use a T-Test to Show Statistical Significance](#challenge-5-use-a-t-test-to-show-statistical-significance)
     - [My Code](#my-code-11)
     - [Solution to Challenge 5](#solution-to-challenge-5)
+- [Learning Points & Summary](#learning-points--summary)
 
 # What You Will Make Today
 **Your Story**
@@ -740,3 +741,5 @@ t_stat, p_value = stats.ttest_ind(a=before_washing.pct_deaths,
 print(f'p-palue is {p_value:.10f}')
 print(f't-statstic is {t_stat:.4}')
 ```
+
+# Learning Points & Summary
